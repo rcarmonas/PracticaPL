@@ -1,15 +1,9 @@
 /*
- Ejemplo 5
-
-	Incluye 
-	Se ha incluido un contador de instrucciones reconocidas
-
-	Gramatica de las expresiones aritmeticas.
-
-	El analizador lexico y el analizador sintactico 
-	estan definidos en ficheros diferentes
-
-	Este fichero contiene la definicion del analizador sintactico
+	Trabajo de Prácticas: Procesadores de Lenguaje
+		Rafael Carmona Sánchez
+		Antonio Cubero Fernández
+		José Manuel Herruzo Ruiz
+	Analizador sintáctico.
 */
 
 
@@ -34,17 +28,39 @@ options
 
 //Reglas:
 
-asignacion : IDENT OP_ASIG expresionNum PUNTO_COMA
-	;
+asignacion : IDENT OP_ASIG (expresionNum | expresionAlfaNum) PUNTO_COMA
+		;
+		
+		
 expresionNum : sumando ( (OP_MAS | OP_MENOS) sumando)* 
-          ;
+        ;
 
 sumando : factor ( ( OP_PRODUCTO| OP_DIVISION) factor)* 
-         ;
+        ;
+
+expresionAlfaNum : factorAlfaNum (OP_MAS factorAlfaNum)*
+		;
+		
+factorAlfaNum : IDENT | LIT_CADENA
+		;
+		
+factor : LIT_NUMERO
+      | IDENT
+      | PARENT_IZ expresionNum PARENT_DE
+		;
+
+
+		
+leer : LEER PARENT_IZ IDENT PARENT_DE PUNTO_COMA
+		;
 
 
 
-// Zona de reglas gramaticales
+
+
+
+
+
 tipo : TIPO_REAL
 		| TIPO_VOID
 		| TIPO_ENTERO
@@ -116,8 +132,4 @@ componentes: (componente)+
 componente: CORCHETE_IZ expresionNum CORCHETE_DE
            ;
 
-factor: NUMERO
-      | IDENT (componentes)?
-      | PARENT_IZ expresionNum PARENT_DE
-      ;
 
