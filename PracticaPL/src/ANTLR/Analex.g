@@ -178,6 +178,12 @@ OP_INCREMENTO : "++"
 	      ;
 OP_DECREMENTO : "--" 
 	      ;
+	      
+PARENT_IZ : "("
+		;
+
+PARENT_DE : ")"
+		;
 
 //Comentarios:
 protected COMENTARIO1: '#' (~ ('\n'|'\r') )*	
