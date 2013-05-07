@@ -26,9 +26,9 @@ options{
 	// No se tiene en cuenta la diferencia entre mayúsculas y minúsculas en los literales (palabras reservadas)
 	caseSensitiveLiterals = false;
 }
-// FIN DE LA ZONA DE OPCIONES DEL ANALIZADOR LÉXICO
+// FIN DE LA ZONA DE OPCIONES DEL ANALIZADOR LEXICO
 
-// DECLARACIÓN DE TOKENS PREDEFINIDOS
+// DECLARACION DE TOKENS PREDEFINIDOS
 
 tokens
 {
@@ -66,7 +66,7 @@ tokens
 	LIT_ENTERO;
 	LIT_CADENA;
 }
-// FIN DE LA DECLARACIÓN DE TOKENS PREDEFINIDOS
+// FIN DE LA DECLARACION DE TOKENS PREDEFINIDOS
 
 // ZONA DE REGLAS
 
@@ -203,4 +203,4 @@ COMENTARIO:
 	  ;
 
 
-// FIN DE LA ZONA DE REGLAS LÉXICAS
+// FIN DE LA ZONA DE REGLAS LEXICAS
