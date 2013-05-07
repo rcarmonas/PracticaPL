@@ -54,7 +54,11 @@ factor : LIT_NUMERO
 leer : LEER PARENT_IZ IDENT PARENT_DE PUNTO_COMA
 		;
 
+leerCadena : LEER_CADENA PARENT_IZ IDENT PARENT_DE PUNTO_COMA
+		;
 
+lectura : leer | leerCadena
+		;
 
 
 
