@@ -14,7 +14,7 @@
 
 
 // Analizador sintáctico
-
+header{package ANTLR;}
 class Anasint extends Parser;
 
 options 
@@ -30,6 +30,19 @@ options
   // Atributo de Anasint para contar las instrucciones reconocidas
   int contador = 0;
 }
+
+
+//Reglas:
+
+asignacion : IDENT OP_ASIG expresionNum PUNTO_COMA
+	;
+expresionNum : sumando ( (OP_MAS | OP_MENOS) sumando)* 
+          ;
+
+sumando : factor ( ( OP_PRODUCTO| OP_DIVISION) factor)* 
+         ;
+
+
 
 // Zona de reglas gramaticales
 tipo : TIPO_REAL
@@ -68,13 +81,12 @@ declaracion: tipo lista_identificadores PUNTO_COMA
 lista_identificadores: (OP_PRODUCTO)* IDENT (COMA (OP_PRODUCTO)* IDENT)*
 	;
 
-asignacion : IDENT (componentes)? OP_ASIG expresion PUNTO_COMA
-	;
+
 
 do_while : RES_HACER LLAVE_IZ instrucciones LLAVE_DE RES_MIENTRAS condicion PUNTO_COMA
 	;
 
-condicion : PARENT_IZ expresion operador_logico expresion PARENT_DE
+condicion : PARENT_IZ expresionNum operador_logico expresionNum PARENT_DE
 	;
 
 si_entonces : RES_SI condicion LLAVE_IZ instrucciones LLAVE_DE (RES_SI_NO LLAVE_IZ instrucciones LLAVE_DE)?
@@ -98,25 +110,14 @@ instrucciones :
 	      ;
 
 
-
-
-
-
-
-expresion : sumando ( (OP_MAS | OP_MENOS) sumando)* 
-          ;
-
-sumando : factor ( ( OP_PRODUCTO| OP_DIVISION) factor)* 
-         ;
-
 componentes: (componente)+
 	   ;
 
-componente: CORCHETE_IZ expresion CORCHETE_DE
+componente: CORCHETE_IZ expresionNum CORCHETE_DE
            ;
 
 factor: NUMERO
       | IDENT (componentes)?
-      | PARENT_IZ expresion PARENT_DE
+      | PARENT_IZ expresionNum PARENT_DE
       ;
 
