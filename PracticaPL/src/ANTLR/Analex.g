@@ -12,7 +12,7 @@ class Analex extends Lexer;
 
 
 options{
-	//importVocab = Anasint;
+	importVocab = Anasint;
 
 	// Se indica que los literales se comprueben localmente
 	testLiterals=false;
