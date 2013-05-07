@@ -1,61 +1,200 @@
-header{
-	package ANTLR;
-}
+/*
+	Trabajo de Prácticas: Procesadores de Lenguaje
+		Rafael Carmona Sánchez
+		Antonio Cubero Fernández
+		José Manuel Herruzo Ruiz
+	Analizador léxico.
+*/
 
-class MicroCalcLexer extends Lexer;
 
-BLANCO : (' ' | '\t')
-		{ $setType(Token.SKIP); };
+header{package ANTLR;}
+class Analex extends Lexer;
 
-OP_MAS : '+';
 
-OP_MENOS: '-';
-
-OP_PRODUCTO: '*';
-
-OP_COCIENTE: '/';
-
-PARENT_AB: '(';
-
-PARENT_CE: ')';
-
-NUMERO: ('0'..'9')+('.'('0'..'9')+)?;
-
-class MicroCalcParser extends Parser;
 options{
-	buildAST = true;
+	//importVocab = Anasint;
+
+	// Se indica que los literales se comprueben localmente
+	testLiterals=false;
+
+	// lookahead: número de símbolos de anticipación
+	k=2;
+
+	// No se tiene en cuenta la diferencia entre mayúsculas y minúsculas en los identificadores
+	caseSensitive=false;
+
+	// No se tiene en cuenta la diferencia entre mayúsculas y minúsculas en los literales (palabras reservadas)
+	caseSensitiveLiterals = false;
 }
+// FIN DE LA ZONA DE OPCIONES DEL ANALIZADOR LÉXICO
 
-expresion: expSuma;
+// DECLARACIÓN DE TOKENS PREDEFINIDOS
 
-expSuma: expResta (OP_MAS^ expResta)*;
+tokens
+{
+	//Palabras reservadas
+	MOD = "__mod";
+	O = "__o";
+	Y = "__y";
+	NO = "__no";
+	LEER = "leer";
+	LEER_CADENA = "leer_cadena";
+	ESCRIBIR = "escribir";
+	ESCRIBIR_CADENA = "escribir_cadena";
+	SI = "si";
+	ENTONCES = "entonces";
+	SINO = "si_no";
+	FIN_SI = "fin_si";
+	MIENTRAS = "mientras";
+	HACER = "hacer";
+	FIN_MIENTRAS = "fin_mientras";
+	REPETIR = "repetir";
+	HASTA = "hasta";
+	PARA = "para";
+	DESDE = "desde";
+	PASO = "paso";
+	FIN_PARA = "fin_para";
+	BORRAR = "borrar";
+	LUGAR = "lugar";
 
-expResta: expProducto (OP_MENOS^ expProducto)*;
+	// Literales lógicos
+	LIT_CIERTO = "true" ;
+	LIT_FALSO = "false" ;
 
-expProducto: expCociente (OP_PRODUCTO^ expCociente)*;
+	// Literales numericos
+	LIT_REAL ; 
+	LIT_ENTERO;
+	LIT_CADENA;
+}
+// FIN DE LA DECLARACIÓN DE TOKENS PREDEFINIDOS
 
-expCociente: expBase (OP_COCIENTE^ expBase)*;
+// ZONA DE REGLAS
 
-expBase: NUMERO
-	| PARENT_AB! expresion PARENT_CE!
+// Tipos de retorno de carro o salto de línea
+protected NL :
+	(
+		// MS-DOS
+		// Se usa un predicado sintáctico para resolver el conflicto
+		 ("\r\n") => "\r\n" 
+
+		// UNIX
+		| '\n'
+
+		// MACINTOSH
+		| '\r' 	
+
+	)
+		{ newline(); }
 	;
 
-class MicroCalcTreeParser extends TreeParser;
+// Regla para ignorar los blancos.
 
-expresion returns [float result=0]
-{ float izq=0,der=0; }
-	: n:NUMERO
-		{ result = new Float(n.getText()).floatValue(); }
-	| #(OP_MAS izq=expresion der=expresion)
-		{ result = izq+der; }
-	| #(OP_MENOS izq=expresion der=expresion)
-		{ result = izq-der; }
-	| #(OP_PRODUCTO izq=expresion der=expresion)
-		{ result =izq*der; }
-	| #(OP_COCIENTE izq=expresion der=expresion)
-		{
-		if(der==0.0)
-			throw new ArithmeticException("Division por cero");
-		result=izq/der;
-		}
+BLANCO :
+		 ( ' '
+		 | '\t'
+		 | NL
+		 ) 	 { $setType(Token.SKIP); }
+		 ;
+
+//  Letras
+protected LETRA : 'a'..'z'
+		// Se comenta esta línea porque se ha usado la opción caseSensitive=false;
+//		| 'A'..'Z'
+		;
+		
+
+
+// Dígitos 
+protected DIGITO : '0'..'9'
+                 ;
+
+// Regla para reconocer los identificadores y palabras reservadas
+IDENT
+	// Se indica que se compruebe si un identificador es una palabra reservada
+	options {testLiterals=true;} 
+	: LETRA(LETRA|DIGITO|('_'(LETRA|DIGITO)))*
 	;
+
+//Número:
+LIT_NUMERO :
+		((DIGITO)+'.') => (DIGITO)+'.'(DIGITO)* ('e'( '+' | '-' )? (DIGITO)+ )?	{$setType(LIT_REAL);}
+		| (DIGITO)+	{$setType(LIT_ENTERO);}
+       ;
+      
+// Cadena que permite incluir saltos de línea
+LIT_CADENA: '\''! 
+                ( options {greedy=false;}: ~('\\')
+                 | "\\\'")* 
+            '\''!
+          ;
+
+//Operadores aritméticos
+
+OP_SUMA : '+'
+	;
+
+OP_RESTA : '-'
+	;
+	
+OP_PRODUCTO : '*'
+	;
+	
+OP_DIVISION : '/'
+	;
+
+OP_POTENCIA : "**"
+	;
+
+// Separadores 
+PUNTO_COMA : ';' 
+	;
+
+
+//Operadores relacionales
+OP_IGUAL : "==" 
+	 ;
+
+OP_DISTINTO : "<>" 
+	    ;
+
+OP_ASIG : '=' 
+	;
+
+OP_MENOR : '<' 
+	 ;
+
+OP_MAYOR : '>' 
+	 ;
+
+OP_MENOR_IGUAL : "<=" 
+	       ;
+
+OP_MAYOR_IGUAL : ">=" 
+	       ;
+
+//Operadores adicionales
+
+OP_INCREMENTO : "++" 
+	      ;
+OP_DECREMENTO : "--" 
+	      ;
+
+//Comentarios:
+protected COMENTARIO1: '#' (~ ('\n'|'\r') )*	
+		     ;
+
+protected COMENTARIO2: 
+			'{'
+			   (options {greedy=false;} : . )* 
+		        '}'			 
+   		      ; 
+// Los comentarios se ignoran
+COMENTARIO:
+	  (
+	    COMENTARIO1 
+	  | COMENTARIO2 
+          )		{ $setType(Token.SKIP); }
+	  ;
+
+
+// FIN DE LA ZONA DE REGLAS LÉXICAS
