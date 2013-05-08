@@ -12,7 +12,7 @@ class Analex extends Lexer;
 
 
 options{
-	//importVocab = Anasint;
+	importVocab = Anasint;
 
 	// Se indica que los literales se comprueben localmente
 	testLiterals=false;
@@ -27,6 +27,62 @@ options{
 	caseSensitiveLiterals = false;
 }
 // FIN DE LA ZONA DE OPCIONES DEL ANALIZADOR LEXICO
+
+
+//Código auxiliar:
+
+{		
+	private TablaSimbolos tablaSimbolos = new TablaSimbolos();
+	
+	public TablaSimbolos getTablaSimbolos()
+	{
+		return tablaSimbolos;
+	}
+	
+	public void setTablaSimbolos(TablaSimbolos tabla)
+	{
+		tablaSimbolos= tabla;
+	}
+
+	private void insertarIdentificador(String nombre, String tipo, String valorCadena)
+		{
+			
+			// Busca el identificador en la tabla de sÃ­mbolos
+			int indice = tablaSimbolos.existeSimbolo(nombre);
+
+			// Si encuentra el identificador, le modifica su valor
+			if (indice >= 0)
+			{
+				tablaSimbolos.getSimbolo(indice).setValor(valorCadena);
+			}
+			// Si no lo encuentra, lo inserta en la tabla de sÃ­mbolos
+			else
+			{
+				// Se crea la variable
+				Variable v = new Variable (nombre,"float",valorCadena);
+
+				// Se inserta la variable en la tabla de sÃ­mbolos
+				tablaSimbolos.insertarSimbolo(v);
+			}
+		}
+
+	private	void mostrarExcepcion(RecognitionException re)
+	{
+		System.out.println("Error en la linea " + re.getLine() + " --> " + re.getMessage());
+		//reportError(re);
+		try {
+			//Consume the token problem
+			consume(); 
+    			consumeUntil(PUNTO_COMA);
+			} 
+		catch (Exception e) 
+			{
+			}
+	}
+}
+
+
+
 
 
 tokens
@@ -177,6 +233,12 @@ OP_INCREMENTO : "++"
 	      ;
 OP_DECREMENTO : "--" 
 	      ;
+	      
+PARENT_IZ : "("
+		;
+
+PARENT_DE : ")"
+		;
 
 //Comentarios:
 protected COMENTARIO1: '#' (~ ('\n'|'\r') )*	
