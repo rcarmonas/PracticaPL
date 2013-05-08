@@ -29,8 +29,52 @@ options{
 // FIN DE LA ZONA DE OPCIONES DEL ANALIZADOR LEXICO
 
 
+
+
+
+
+
+tokens
+{
+	//Palabras reservadas
+	MOD = "__mod";
+	O = "__o";
+	Y = "__y";
+	NO = "__no";
+	LEER = "leer";
+	LEER_CADENA = "leer_cadena";
+	ESCRIBIR = "escribir";
+	ESCRIBIR_CADENA = "escribir_cadena";
+	SI = "si";
+	ENTONCES = "entonces";
+	SINO = "si_no";
+	FIN_SI = "fin_si";
+	MIENTRAS = "mientras";
+	HACER = "hacer";
+	FIN_MIENTRAS = "fin_mientras";
+	REPETIR = "repetir";
+	HASTA = "hasta";
+	PARA = "para";
+	DESDE = "desde";
+	PASO = "paso";
+	FIN_PARA = "fin_para";
+	BORRAR = "borrar";
+	LUGAR = "lugar";
+
+	// Literales lógicos
+	LIT_CIERTO = "true" ;
+	LIT_FALSO = "false" ;
+
+	// Literales numericos
+	LIT_REAL ; 
+	LIT_ENTERO;
+	LIT_CADENA;
+}
+// FIN DE LA DECLARACION DE TOKENS PREDEFINIDOS
+
 //Código auxiliar:
 
+<<<<<<< HEAD
 
 // DECLARACION DE TOKENS PREDEFINIDOS
 
@@ -70,6 +114,57 @@ tokens
 	LIT_ENTERO;
 }
 // FIN DE LA DECLARACION DE TOKENS PREDEFINIDOS
+=======
+{		
+	private TablaSimbolos tablaSimbolos = new TablaSimbolos();
+	
+	public TablaSimbolos getTablaSimbolos()
+	{
+		return tablaSimbolos;
+	}
+	
+	public void setTablaSimbolos(TablaSimbolos tabla)
+	{
+		tablaSimbolos= tabla;
+	}
+
+	private void insertarIdentificador(String nombre, String tipo, String valorCadena)
+		{
+			
+			// Busca el identificador en la tabla de sÃ­mbolos
+			int indice = tablaSimbolos.existeSimbolo(nombre);
+
+			// Si encuentra el identificador, le modifica su valor
+			if (indice >= 0)
+			{
+				tablaSimbolos.getSimbolo(indice).setValor(valorCadena);
+			}
+			// Si no lo encuentra, lo inserta en la tabla de sÃ­mbolos
+			else
+			{
+				// Se crea la variable
+				Variable v = new Variable (nombre,"float",valorCadena);
+
+				// Se inserta la variable en la tabla de sÃ­mbolos
+				tablaSimbolos.insertarSimbolo(v);
+			}
+		}
+
+	private	void mostrarExcepcion(RecognitionException re)
+	{
+		System.out.println("Error en la linea " + re.getLine() + " --> " + re.getMessage());
+		//reportError(re);
+		try {
+			//Consume the token problem
+			consume(); 
+    			consumeUntil(PUNTO_COMA);
+			} 
+		catch (Exception e) 
+			{
+			}
+	}
+}
+>>>>>>> branch 'master' of https://github.com/rcarmonas/PracticaPL.git
 
 // ZONA DE REGLAS
 
