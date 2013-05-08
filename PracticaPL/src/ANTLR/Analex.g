@@ -43,9 +43,9 @@ tokens
 	ESCRIBIR = "escribir";
 	ESCRIBIR_CADENA = "escribir_cadena";
 	SI = "si";
-	ENTONCES = "entonces";
-	SINO = "si_no";
-	FIN_SI = "fin_si";
+    ENTONCES = "entonces";
+    SI_NO = "si_no";
+    FIN_SI = "fin_si";
 	MIENTRAS = "mientras";
 	HACER = "hacer";
 	FIN_MIENTRAS = "fin_mientras";
@@ -173,6 +173,7 @@ IDENT
 		}
 	}
 	;
+
 
 //Número:
 LIT_NUMERO :

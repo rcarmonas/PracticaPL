@@ -313,7 +313,7 @@ escribirCadena
 escritura : escribir | escribirCadena
 		;
 
-instruccion : escritura | lectura | asignacion
+instruccion : escritura | lectura | asignacion | sentencia_si
 		;
 
 
@@ -395,8 +395,33 @@ condicion
 	;
 
 
+sentencia_si
+	// Variable local
+	 {boolean valor;}
+	 : SI valor=condicion
+	   ENTONCES 
+		(
+		 // Si la condición es verdadera, se ejecuta el consecuente
+		 {valor==true}? (instruccion)+
+		 // Si hay parte alternativa, se omite
+			(
+			  SI_NO
+				 (options {greedy=false;}:.)+
+			)?
+		|
+		 // Si la condición es false, se omite el consecuente
+  		  {valor==false}? (options {greedy=false;}:.)+
 
-prog: (instruccion|condicion)+
+		 // Si hay parte alternativa, se ejecuta
+			(
+			 SI_NO
+				(instruccion)+
+			)?
+		)
+		FIN_SI
+	;
+
+prog: (instruccion)+
 	;
 
 
