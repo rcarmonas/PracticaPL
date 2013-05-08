@@ -31,58 +31,6 @@ options{
 
 //Código auxiliar:
 
-{		
-	private TablaSimbolos tablaSimbolos = new TablaSimbolos();
-	
-	public TablaSimbolos getTablaSimbolos()
-	{
-		return tablaSimbolos;
-	}
-	
-	public void setTablaSimbolos(TablaSimbolos tabla)
-	{
-		tablaSimbolos= tabla;
-	}
-
-	private void insertarIdentificador(String nombre, String tipo, String valorCadena)
-		{
-			
-			// Busca el identificador en la tabla de sÃ­mbolos
-			int indice = tablaSimbolos.existeSimbolo(nombre);
-
-			// Si encuentra el identificador, le modifica su valor
-			if (indice >= 0)
-			{
-				tablaSimbolos.getSimbolo(indice).setValor(valorCadena);
-			}
-			// Si no lo encuentra, lo inserta en la tabla de sÃ­mbolos
-			else
-			{
-				// Se crea la variable
-				Variable v = new Variable (nombre,"float",valorCadena);
-
-				// Se inserta la variable en la tabla de sÃ­mbolos
-				tablaSimbolos.insertarSimbolo(v);
-			}
-		}
-
-	private	void mostrarExcepcion(RecognitionException re)
-	{
-		System.out.println("Error en la linea " + re.getLine() + " --> " + re.getMessage());
-		//reportError(re);
-		try {
-			//Consume the token problem
-			consume(); 
-    			consumeUntil(PUNTO_COMA);
-			} 
-		catch (Exception e) 
-			{
-			}
-	}
-}
-
-
-
 
 // DECLARACION DE TOKENS PREDEFINIDOS
 
@@ -120,11 +68,14 @@ tokens
 	// Literales numericos
 	LIT_REAL ; 
 	LIT_ENTERO;
-	LIT_CADENA;
 }
 // FIN DE LA DECLARACION DE TOKENS PREDEFINIDOS
 
 // ZONA DE REGLAS
+
+{
+	
+}
 
 // Tipos de retorno de carro o salto de línea
 protected NL :
@@ -173,8 +124,8 @@ IDENT
 
 //Número:
 LIT_NUMERO :
-		((DIGITO)+'.') => (DIGITO)+'.'(DIGITO)* ('e'( '+' | '-' )? (DIGITO)+ )?	{$setType(LIT_REAL);}
-		| (DIGITO)+	{$setType(LIT_ENTERO);}
+		((DIGITO)+'.') => (DIGITO)+'.'(DIGITO)* ('e'( '+' | '-' )? (DIGITO)+ )?
+		| (DIGITO)+
        ;
       
 // Cadena que permite incluir saltos de línea

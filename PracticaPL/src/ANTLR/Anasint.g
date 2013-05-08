@@ -41,7 +41,7 @@ sumando : factor ( ( OP_PRODUCTO| OP_DIVISION) factor)*
 expresionAlfaNum : factorAlfaNum (OP_MAS factorAlfaNum)*
 		;
 		
-factorAlfaNum : IDENT | LIT_CADENA
+factorAlfaNum : LIT_CADENA
 		;
 		
 factor : LIT_NUMERO
@@ -60,6 +60,13 @@ leerCadena : LEER_CADENA PARENT_IZ IDENT PARENT_DE PUNTO_COMA
 lectura : leer | leerCadena
 		;
 
+escribir : ESCRIBIR PARENT_IZ IDENT PARENT_DE PUNTO_COMA
+		;
+
+escribirCadena : ESCRIBIR_CADENA PARENT_IZ IDENT PARENT_DE PUNTO_COMA
+		;
+escritura : escribir | escribirCadena
+		;
 
 
 
