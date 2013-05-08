@@ -1,0 +1,3 @@
+leer_cadena(a);
+a = a + 'asdf';
+escribir_cadena(a);

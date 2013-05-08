@@ -8,7 +8,11 @@
 
 
 // Analizador sintáctico
-header{package ANTLR;}
+header{
+	package ANTLR;
+	import java.util.Scanner;
+
+	}
 class Anasint extends Parser;
 
 options 
@@ -19,128 +23,303 @@ options
 
 }
 
-// Nuevos atributos de la clase Anasint
-{
-  // Atributo de Anasint para contar las instrucciones reconocidas
-  int contador = 0;
-}
+// Nuevos atributos de la clase Anasin
+{		
+	private class Expresion
+	{
+		public String tipo;
+		public String _valor;
+	}	
+	private TablaSimbolos tablaSimbolos;
+	
+	public void setTablaSimbolos(TablaSimbolos t)
+	{
+		tablaSimbolos = t;	
+	}
+	
+	public TablaSimbolos getTablaSimbolos()
+	{
+		return tablaSimbolos;
+	}
+	private void insertarIdentificador(String nombre, String tipo, String valorCadena)
+		{
+			
+			// Busca el identificador en la tabla de símbolos
+			int indice = tablaSimbolos.existeSimbolo(nombre);
 
+			// Si encuentra el identificador, le modifica su valor
+			if (indice >= 0)
+			{
+				tablaSimbolos.getSimbolo(indice).setValor(valorCadena);
+				tablaSimbolos.getSimbolo(indice).setTipo(tipo);
+			}
+			// Si no lo encuentra, lo inserta en la tabla de símbolos
+			else
+			{
+				// Se crea la variable
+				Variable v = new Variable (nombre,tipo,valorCadena);
+
+				// Se inserta la variable en la tabla de símbolos
+				tablaSimbolos.insertarSimbolo(v);
+			}
+		}
+		
+	private String tipo(String nombre)
+		{
+			int indice = tablaSimbolos.existeSimbolo(nombre);
+			
+			Variable aux = tablaSimbolos.getSimbolo(indice);
+		
+			return aux.getTipo();
+		}
+}
 
 //Reglas:
 
-asignacion : IDENT OP_ASIG (expresionNum | expresionAlfaNum) PUNTO_COMA
-		;
+asignacion
+	//Variable local
+	{Expresion e;
+	String id;}
+	:id=identificador OP_ASIG
+	(
+		e=expresion
+		{	
+			String nombre = id;
+			insertarIdentificador(nombre, e.tipo, e._valor);
+	 		System.out.println("Asignación =>" + nombre + "=" + e._valor);
+		}	
+	)
+	PUNTO_COMA
+	;
+		
+identificador
+	returns [String resultado ="";]
+	:
+	(
+	i:IDENT{resultado = i.getText();}
+	|
+	ic:IDEN_CADENA{resultado = ic.getText();}
+	|
+	in:IDEN_NUMERO{resultado = in.getText();}
+	)
+	{System.out.println("Identificador=>" + resultado);}
+	
+	;
+		
+expresion
+	returns [Expresion resultado = new Expresion();]
+	{double n; String c;}
+	:	
+	(
+	c=expresionAlfaNum
+	{
+		resultado.tipo = "cadena";
+		resultado._valor = c;
+	}
+	 |
+	 n=expresionNum
+	 {
+	 	resultado.tipo = "numero";
+		resultado._valor = String.valueOf(n);
+	 }
+	 )
+	 	{System.out.println("Expresion=>" + resultado._valor);}
+	;
 		
 		
-expresionNum : sumando ( (OP_MAS | OP_MENOS) sumando)* 
-        ;
+expresionNum 
+	//Valor que devuelve
+	returns [double resultado = (double)0.0;]
+	//Variables locales
+	{double e1, e2;}
+	: e1=sumando{resultado = e1;}
+	(
+		//Suma
+		(
+			OP_MAS e2 = sumando
+			{
+				resultado = resultado + e2;	
+			}
+		)
+		|
+		(//Resta
+			OP_MENOS e2 = sumando
+				{
+					resultado = resultado - e2;
+				}
+		)
+	)*
+	{System.out.println("ExpresionNum=>" + resultado);}
+	
+	;
 
-sumando : factor ( ( OP_PRODUCTO| OP_DIVISION) factor)* 
-        ;
 
-expresionAlfaNum : factorAlfaNum (OP_MAS factorAlfaNum)*
+sumando
+    //Valor que devuelve
+	returns [double resultado = (double)0.0;]
+	//Variables locales
+	{double e1=-1, e2=-1;}
+	: (e1=factor{resultado = e1;})
+	(
+		//Suma
+		(
+			OP_PRODUCTO e2 = factor
+			{
+				resultado = resultado * e2;	
+			}
+		)
+		|
+		(//Resta
+			OP_DIVISION e2 = factor
+				{
+					resultado = resultado / e2;
+				}
+		)
+	)*
+	{System.out.println("Sumando=>" + resultado);}
+	;
+
+expresionAlfaNum
+	//Valor que devuelve
+	returns [String resultado = "";]
+	//Variables locales
+	{String e1, e2;}
+	: e1=factorAlfaNum{resultado = e1;}
+		//Suma
+		(
+			OP_MAS e2 = factorAlfaNum
+			{
+				resultado = resultado + e2;	
+			}
+		)*
+	{System.out.println("ExpresionAlfa=>" + resultado);}
+	;
+		
+factorAlfaNum
+	//Valor que devuelve
+	returns [String resultado = "";]
+	//Variables locales
+	{String e;}
+	:
+	((
+		l:LIT_CADENA
+		{
+			resultado = l.getText();	
+		}
+	)|(
+		i:IDEN_CADENA
+		{
+			// Busca el identificador en la tabla de símbolos
+			int indice = tablaSimbolos.existeSimbolo(i.getText());
+			// Si encuentra el identificador, devuelve su valor
+			if (indice >= 0)
+			{
+				// Se recupera el valor almacenado como cadena
+				String valorCadena = tablaSimbolos.getSimbolo(indice).getValor();
+
+				// La cadena se convierte a número real
+				resultado = valorCadena;
+			}
+			else
+				System.err.println("Error: el identificador " + i.getText() + " está indefinido");
+		})
+	)
+		{System.out.println("FactorAlfa=>" + resultado);}
+	
 		;
 		
-factorAlfaNum : LIT_CADENA
-		;
-		
-factor : LIT_NUMERO
-      | IDENT
-      | PARENT_IZ expresionNum PARENT_DE
+factor 
+	//Valor que devuelve:
+	returns [double resultado = (double)0.0;]
+		{double e;}
+	: 
+	(
+		(n:LIT_NUMERO
+		{
+			{resultado = new Double(n.getText()).doubleValue();}
+		}
+      )| (
+      	i:IDEN_NUMERO
+      	{
+      					// Busca el identificador en la tabla de símbolos
+			int indice = tablaSimbolos.existeSimbolo(i.getText());
+
+			// Si encuentra el identificador, devuelve su valor
+			if (indice >= 0)
+			{
+				// Se recupera el valor almacenado como cadena
+				String valorCadena = tablaSimbolos.getSimbolo(indice).getValor();
+
+				// La cadena se convierte a número real
+				resultado = Double.parseDouble(valorCadena);
+			}
+			else
+				System.err.println("Error: el identificador " + i.getText() + " está indefinido");
+      	}
+      )|( PARENT_IZ e=expresionNum PARENT_DE
+      	  {
+	      	resultado = e;	      	
+	      } 
+	   ))
+	   	{System.out.println("factor=>" + resultado);}
 		;
 
 
 		
-leer : LEER PARENT_IZ IDENT PARENT_DE PUNTO_COMA
+leer 
+	//Variables locales
+	{String id;}
+	: LEER PARENT_IZ id=identificador PARENT_DE PUNTO_COMA
+	{
+		Scanner entrada = new Scanner(System.in);
+		int valor = entrada.nextInt();
+		//TODO Controlar fallo
+		insertarIdentificador(id, "numero", String.valueOf(valor));
+	}
 		;
 
-leerCadena : LEER_CADENA PARENT_IZ IDENT PARENT_DE PUNTO_COMA
+leerCadena 
+	//Variables locales
+	{String id;}
+	: LEER_CADENA PARENT_IZ id=identificador PARENT_DE PUNTO_COMA
+	{
+		Scanner entrada = new Scanner(System.in);
+		String valorCadena = entrada.next();
+		insertarIdentificador(id, "cadena", valorCadena);
+	}
 		;
 
 lectura : leer | leerCadena
 		;
 
-escribir : ESCRIBIR PARENT_IZ IDENT PARENT_DE PUNTO_COMA
-		;
-
-escribirCadena : ESCRIBIR_CADENA PARENT_IZ IDENT PARENT_DE PUNTO_COMA
-		;
-escritura : escribir | escribirCadena
-		;
-
-
-
-
-
-tipo : TIPO_REAL
-		| TIPO_VOID
-		| TIPO_ENTERO
-		| TIPO_BOOLEANO
+escribir 
+		//Variables locales
+		{double e;}
+		: ESCRIBIR PARENT_IZ e=expresionNum PARENT_DE PUNTO_COMA
 		{
-			System.out.println("Reconocido tipo");
+			System.out.println(String.valueOf(e));
+		}
+		;
+
+escribirCadena 
+		//Variables locales
+		{String s;}
+		: ESCRIBIR_CADENA PARENT_IZ s=expresionAlfaNum PARENT_DE PUNTO_COMA
+		{
+			System.out.println(s);
 		}
 		;
 		
-operador_logico : OP_Y
-					| OP_O
-					| OP_IGUAL
-					| OP_DISTINTO
-					| OP_MENOR
-					| OP_MAYOR
-					| OP_MENOR_IGUAL
-					| OP_MAYOR_IGUAL
-	;
+escritura : escribir | escribirCadena
+		;
 
-funcion : tipo IDENT PARENT_IZ  (parametros)? PARENT_DE LLAVE_IZ instrucciones LLAVE_DE
-	;
-	
-parametro: tipo (OP_PRODUCTO)* IDENT
-	 ;
-parametros: parametro (COMA parametro)* 
-          ;
+instruccion : escritura | lectura | asignacion
+		;
 
-declaracion: tipo lista_identificadores PUNTO_COMA
-			{
-				System.out.println("Reconocida sentencia de declaración");
-			}
-            ;
-
-lista_identificadores: (OP_PRODUCTO)* IDENT (COMA (OP_PRODUCTO)* IDENT)*
+prog: (instruccion)+
 	;
 
 
 
-do_while : RES_HACER LLAVE_IZ instrucciones LLAVE_DE RES_MIENTRAS condicion PUNTO_COMA
-	;
-
-condicion : PARENT_IZ expresionNum operador_logico expresionNum PARENT_DE
-	;
-
-si_entonces : RES_SI condicion LLAVE_IZ instrucciones LLAVE_DE (RES_SI_NO LLAVE_IZ instrucciones LLAVE_DE)?
-	;
-
-instrucciones :
-	      (
-		      ( 
-			// Se usa un predicado sintactico para resolver el conflicto
-			(IDENT OP_ASIG) => asignacion
-		      | declaracion
-		      | do_while
-		      | si_entonces
-		      )
-			// Acción semántica
-			{
-				contador++;
-				System.out.println("Reconocida la instrucción nº "+ contador);
-			}
-              )*
-	      ;
-
-
-componentes: (componente)+
-	   ;
-
-componente: CORCHETE_IZ expresionNum CORCHETE_DE
-           ;
 
 
