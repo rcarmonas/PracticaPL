@@ -316,7 +316,87 @@ escritura : escribir | escribirCadena
 instruccion : escritura | lectura | asignacion
 		;
 
-prog: (instruccion)+
+
+condicionNum
+	//Valor devuelto
+	returns [boolean resultado = false;]
+	//Variables locales
+	{double e1=1, e2=1;}
+	:
+	e1=expresionNum
+	((
+		OP_IGUAL e2=expresionNum
+		{
+			resultado = e1==e2;
+		}
+	)|(
+		OP_DISTINTO e2=expresionNum
+		{
+			resultado = e1!=e2;
+		}
+	)|(
+		OP_MAYOR e2=expresionNum
+		{
+			resultado = e1>e2;
+		}
+	)|(
+		OP_MENOR e2=expresionNum
+		{
+			resultado = e1<e2;
+		}
+	)|(
+		OP_MAYOR_IGUAL e2=expresionNum
+		{
+			resultado = e1>=e2;
+		}
+	)|(
+		OP_MENOR_IGUAL e2=expresionNum
+		{
+			resultado = e1<=e2;
+		}	
+	)
+	)
+	{System.out.println("CondiciónNum=>" + resultado);}
+	;
+
+
+condicionAlfaNum
+	//Valor devuelto
+	returns [boolean resultado = false;]
+	//Variables locales
+	{String s1, s2;}
+	:
+	s1=expresionAlfaNum
+	((
+		OP_IGUAL s2=expresionAlfaNum
+		{
+			resultado = s1.equals(s2);
+		}
+	)|(
+		OP_DISTINTO s2=expresionAlfaNum
+		{
+			resultado = !s1.equals(s2);
+		}
+	)
+	)
+	{System.out.println("CondiciónAlfa=>" + resultado);}
+	;
+
+condicion
+	//Valor devuelto
+	returns [boolean resultado = false;]
+	//Variables locales
+	{boolean b;}
+	: (b=condicionAlfaNum)|(b=condicionNum)
+	{
+		resultado = b;
+		System.out.println("Condicion=>" +  resultado);
+	}
+	;
+
+
+
+prog: (instruccion|condicion)+
 	;
 
 

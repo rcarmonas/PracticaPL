@@ -1,3 +1,1 @@
-leer_cadena(a);
-a = a + 'asdf';
-escribir_cadena(a);
+2 + 3 > 2
