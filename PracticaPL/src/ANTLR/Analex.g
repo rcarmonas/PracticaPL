@@ -29,6 +29,49 @@ options{
 // FIN DE LA ZONA DE OPCIONES DEL ANALIZADOR LEXICO
 
 
+
+
+
+
+
+tokens
+{
+	//Palabras reservadas
+	MOD = "__mod";
+	O = "__o";
+	Y = "__y";
+	NO = "__no";
+	LEER = "leer";
+	LEER_CADENA = "leer_cadena";
+	ESCRIBIR = "escribir";
+	ESCRIBIR_CADENA = "escribir_cadena";
+	SI = "si";
+	ENTONCES = "entonces";
+	SINO = "si_no";
+	FIN_SI = "fin_si";
+	MIENTRAS = "mientras";
+	HACER = "hacer";
+	FIN_MIENTRAS = "fin_mientras";
+	REPETIR = "repetir";
+	HASTA = "hasta";
+	PARA = "para";
+	DESDE = "desde";
+	PASO = "paso";
+	FIN_PARA = "fin_para";
+	BORRAR = "borrar";
+	LUGAR = "lugar";
+
+	// Literales lógicos
+	LIT_CIERTO = "true" ;
+	LIT_FALSO = "false" ;
+
+	// Literales numericos
+	LIT_REAL ; 
+	LIT_ENTERO;
+	LIT_CADENA;
+}
+// FIN DE LA DECLARACION DE TOKENS PREDEFINIDOS
+
 //Código auxiliar:
 
 {		
@@ -80,48 +123,6 @@ options{
 			}
 	}
 }
-
-
-
-
-
-tokens
-{
-	//Palabras reservadas
-	MOD = "__mod";
-	O = "__o";
-	Y = "__y";
-	NO = "__no";
-	LEER = "leer";
-	LEER_CADENA = "leer_cadena";
-	ESCRIBIR = "escribir";
-	ESCRIBIR_CADENA = "escribir_cadena";
-	SI = "si";
-	ENTONCES = "entonces";
-	SINO = "si_no";
-	FIN_SI = "fin_si";
-	MIENTRAS = "mientras";
-	HACER = "hacer";
-	FIN_MIENTRAS = "fin_mientras";
-	REPETIR = "repetir";
-	HASTA = "hasta";
-	PARA = "para";
-	DESDE = "desde";
-	PASO = "paso";
-	FIN_PARA = "fin_para";
-	BORRAR = "borrar";
-	LUGAR = "lugar";
-
-	// Literales lógicos
-	LIT_CIERTO = "true" ;
-	LIT_FALSO = "false" ;
-
-	// Literales numericos
-	LIT_REAL ; 
-	LIT_ENTERO;
-	LIT_CADENA;
-}
-// FIN DE LA DECLARACION DE TOKENS PREDEFINIDOS
 
 // ZONA DE REGLAS
 
