@@ -25,7 +25,9 @@ public class ImagePanel extends JPanel{
 
     private BufferedImage image;
     String imagen[] = {"jugador", "jugador-viento", "jugador-olor", "jugador-viento-olor", "vacio", "viento", "olor", "viento-olor", "desconocido"};
-   
+    int iValor = 8;
+
+    @Deprecated
     public ImagePanel(String ruta) {
        try {                
           image = ImageIO.read(new File(ruta));
@@ -37,6 +39,7 @@ public class ImagePanel extends JPanel{
     public ImagePanel(int index) {
        try {                
           image = ImageIO.read(new File("img/" + imagen[index] + ".png"));
+          iValor = index;
        } catch (IOException ex) {
             ex.printStackTrace();
        }
@@ -48,4 +51,13 @@ public class ImagePanel extends JPanel{
         g.drawImage(image, 0, 0, null); // see javadoc for more info on the parameters            
     }
 
+	public int getiValor() {
+		return iValor;
+	}
+
+	public void setiValor(int iValor) {
+		this.iValor = iValor;
+	}
+
+    
 }

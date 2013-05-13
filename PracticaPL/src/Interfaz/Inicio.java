@@ -1,6 +1,8 @@
 package Interfaz;
 
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -23,6 +25,7 @@ public class Inicio {
 	Jugador jugador;
 	int matriz[][];
 	ImagePanel matrizIP[][];
+	int rejillaX, rejillaY;
 
 	int jugadorX, jugadorY;
 
@@ -44,6 +47,8 @@ public class Inicio {
 	public Inicio(int X, int Y){
 		int i, j;
 		jugadorX = jugadorY = 0;
+		rejillaX = X;
+		rejillaY = Y;
 
 		jugador = new Jugador();
 		matriz = new int[X][Y];
@@ -51,7 +56,7 @@ public class Inicio {
 
 		for(i=0; i<X; i++)
 			for(j=0; j<Y; j++){
-				matriz[i][j] = 0;
+				matriz[i][j] = 4;
 			}
 
 		for(i=0; i<X; i++)
@@ -72,33 +77,68 @@ public class Inicio {
 				matrizIP[i][j].setBounds(i*50+30, j*50+30, 50, 50);
 			}
 
-		JPanel jpBotones=new JPanel();
-		JButton izquierda=new JButton("<");
-		jpBotones.add(izquierda);
-		JButton arriba=new JButton("^");
-		jpBotones.add(arriba);
-		JButton abajo=new JButton("Abajo");
-		jpBotones.add(abajo);
-		JButton derecha=new JButton(">");
-		jpBotones.add(derecha);
+		JPanel jpBotones = new JPanel();
+
+		JButton JBIzquierda = new JButton("<");
+		jpBotones.add(JBIzquierda);
+
+		JButton JBArriba = new JButton("^");
+		jpBotones.add(JBArriba);
+
+		JButton JBAbajo = new JButton("Abajo");
+		jpBotones.add(JBAbajo);
+		
+		JButton JBDerecha = new JButton(">");
+		jpBotones.add(JBDerecha);
+		
+
+		JBAbajo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				mover(0, 1);
+			}
+		});
+		JBArriba.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				mover(0, -1);
+			}
+		});
+
+		JBDerecha.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				mover(1, 0);
+			}
+		});
+
+		JBIzquierda.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				mover(-1, 0);
+			}
+		});
+
 		jpBotones.setBounds(50*X+50, 20, 100, 100);
 		ventana.add(jpBotones);
 	}
 
-	boolean arriba(){
-		jugador.setY(jugador.getY() + 1);
-		return false;
-	}
-	boolean abajo(){
+	boolean mover(int iMovX, int iMovY){
+		//TODO comprobar bordes
 
-		return false;
-	}
-	boolean izquierda(){
+		if(jugadorX + iMovX >= 0 && jugadorX + iMovX < rejillaX && jugadorY + iMovY >= 0 && jugadorY + iMovY < rejillaY){
+			ventana.remove(matrizIP[jugadorX][jugadorY]);
+			matrizIP[jugadorX][jugadorY] = new ImagePanel(matriz[jugadorX][jugadorY]);
+			ventana.add(matrizIP[jugadorX][jugadorY]);
+			matrizIP[jugadorX][jugadorY].setBounds(jugadorX*50+30, jugadorY*50+30, 50, 50);
+	
+			jugadorX += iMovX;
+			jugadorY += iMovY;
 
-		return false;
-	}
-	boolean derecha(){
+			ventana.remove(matrizIP[jugadorX][jugadorY]);
+			matrizIP[jugadorX][jugadorY] = new ImagePanel(matriz[jugadorX][jugadorY] - 4);
+			ventana.add(matrizIP[jugadorX][jugadorY]);
+			matrizIP[jugadorX][jugadorY].setBounds(jugadorX*50+30, jugadorY*50+30, 50, 50);
+		}
+		else
+			return false;
 
-		return false;
+		return true;
 	}
 }
