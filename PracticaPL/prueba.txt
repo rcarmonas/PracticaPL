@@ -1,1 +1,8 @@
-2 + 3 > 2
+a = -5;
+repetir
+	a = a + 5;
+	escribir(a);
+hasta a<25
+b = 'prueba';
+a = b + 'asdf';
+escribir_cadena(a);

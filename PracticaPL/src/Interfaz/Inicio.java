@@ -1,7 +1,10 @@
 package Interfaz;
 
 import java.awt.EventQueue;
+
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 /*
  * Nomenclatura imagenes:
  * 	0 - Jugador
@@ -58,8 +61,7 @@ public class Inicio {
 
 		ventana = new JFrame();
 		ventana.setTitle("Mundo Wumpus");
-//		ventana.setBounds(100, 100, 926, 575);
-		ventana.setBounds(100, 100, X*50+70, Y*50+80);
+		ventana.setBounds(100, 100, X*50+300, Y*50+80);
 		ventana.setResizable(false);
 		ventana.setLayout(null);
 		ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -70,15 +72,17 @@ public class Inicio {
 				matrizIP[i][j].setBounds(i*50+30, j*50+30, 50, 50);
 			}
 
-/*		ImagePanel IP1;
-		IP1 = new ImagePanel("img/vacio.png");
-		ventana.add(IP1);
-
-		ImagePanel IP2 = new ImagePanel("img/olor.png");
-		ventana.add(IP2);
-
-		IP1.setBounds(50, 0, 50, 50);*/
-//		IP2.setBounds(50, 50, 50, 50);
+		JPanel jpBotones=new JPanel();
+		JButton izquierda=new JButton("<");
+		jpBotones.add(izquierda);
+		JButton arriba=new JButton("^");
+		jpBotones.add(arriba);
+		JButton abajo=new JButton("Abajo");
+		jpBotones.add(abajo);
+		JButton derecha=new JButton(">");
+		jpBotones.add(derecha);
+		jpBotones.setBounds(50*X+50, 20, 100, 100);
+		ventana.add(jpBotones);
 	}
 
 	boolean arriba(){
