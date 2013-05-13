@@ -84,6 +84,8 @@ options
 	private	void mostrarExcepcion(RecognitionException re)
 	{
 		System.out.println("Error en la línea " + re.getLine() + " --> " + re.getMessage());
+		if(debug)
+			this.tablaSimbolos.escribirSimbolos();
 		try {
 			consume(); 
     			consumeUntil(PUNTO_COMA);
@@ -116,6 +118,7 @@ asignacion
 	;
 	exception
  		catch [RecognitionException re] {
+ 			if(debug)System.out.println("Error en asignacion");
 			mostrarExcepcion(re);
 		 }
 
@@ -136,6 +139,7 @@ identificador
 	;
 	exception
  		catch [RecognitionException re] {
+ 			 if(debug)System.out.println("Error en identificador");
 			mostrarExcepcion(re);
 		 }
 
@@ -161,6 +165,7 @@ expresion
 	;
 	exception
  		catch [RecognitionException re] {
+ 			if(debug)System.out.println("Error en expresion");
 			mostrarExcepcion(re);
 		 }		
 		
@@ -192,6 +197,7 @@ expresionNum
 	;
 	exception
  		catch [RecognitionException re] {
+ 			if(debug)System.out.println("Error en expresionNum");
 			mostrarExcepcion(re);
 		 }
 
@@ -203,7 +209,7 @@ sumando
 	{double e1=-1, e2=-1;}
 	: (e1=factor{resultado = e1;})
 	(
-		//Suma
+		//Producto
 		(
 			OP_PRODUCTO e2 = factor
 			{
@@ -211,10 +217,17 @@ sumando
 			}
 		)
 		|
-		(//Resta
+		(//División
 			OP_DIVISION e2 = factor
 				{
 					resultado = resultado / e2;
+				}
+		)
+		|
+		(//Módulo
+			MOD e2 = factor
+				{
+					resultado = (int)resultado % (int)e2;
 				}
 		)
 	)*
@@ -222,6 +235,7 @@ sumando
 	;
 	exception
  		catch [RecognitionException re] {
+ 			if(debug)System.out.println("Error en sumando");
 			mostrarExcepcion(re);
 		 }
 		
@@ -243,6 +257,7 @@ expresionAlfaNum
 	;
 	exception
  		catch [RecognitionException re] {
+ 			if(debug)System.out.println("Error en expresion Alfa_num");
 			mostrarExcepcion(re);
 		 }
 				
@@ -280,6 +295,7 @@ factorAlfaNum
 		;
 	exception
  		catch [RecognitionException re] {
+ 			if(debug)System.out.println("Error en factorAlfaNum");
 			mostrarExcepcion(re);
 		 }
 				
@@ -325,6 +341,7 @@ factor
 	;
 	exception
  		catch [RecognitionException re] {
+ 			if(debug)System.out.println("Error en factor");
 			mostrarExcepcion(re);
 		 }
 
@@ -342,6 +359,7 @@ leer
 		;
 	exception
  		catch [RecognitionException re] {
+ 			if(debug)System.out.println("Error en leer");
 			mostrarExcepcion(re);
 		 }
 
@@ -405,7 +423,7 @@ instruccion :
 	escritura 
 	| lectura 
 	| asignacion 
-	| sentencia_si 
+	| sentencia_si
 	| bucle_mientras 
 	| bucle_repetir 
 	| bucle_para
@@ -462,6 +480,8 @@ condicionNum
 	;
 	exception
  		catch [RecognitionException re] {
+
+ 			if(debug)System.out.println("Error en condicionNum");
 			mostrarExcepcion(re);
 		 }
 
@@ -488,34 +508,96 @@ condicionAlfaNum
 	;
 	exception
  		catch [RecognitionException re] {
+ 			if(debug)System.out.println("Error en condicionAlfaNum");
 			mostrarExcepcion(re);
 		 }
 		
 		
-condicion
+factor_cond
 	//Valor devuelto
 	returns [boolean resultado = false;]
 	//Variables locales
-	{boolean b;}
-	: (b=condicionAlfaNum)|(b=condicionNum)
-	{
-		resultado = b;
-		if(debug)System.out.println("Condicion=>" +  resultado);
-	}
+	{boolean a, b;}
+	:(
+		(
+			(
+				(b=condicionAlfaNum)
+				|(b=condicionNum)
+			)
+			{
+				resultado = b;
+			}
+		)
+		|
+		(
+			CORCH_IZ b=condicion CORCH_DE
+			{
+				resultado = b;
+			}
+		)
+	)
+	{if(debug)System.out.println("FactorCondicion=>" +  resultado);}
 	;
 	exception
  		catch [RecognitionException re] {
+ 			 if(debug)System.out.println("Error en factor_cond");
+			mostrarExcepcion(re);
+		 }
+
+sumando_cond
+	returns [boolean resultado = false;]
+	{boolean a, b;}
+	:(a=factor_cond{resultado = a;})
+	(
+		OP_Y b = factor_cond
+		{
+			resultado = resultado && b;	
+		}
+	)*
+	{if(debug)System.out.println("Sumando_cond=>" + resultado);}
+	;
+	exception
+ 		catch [RecognitionException re] {
+ 			if(debug)System.out.println("Error en sumando_cond");
+			mostrarExcepcion(re);
+		 }
+	
+	
+condicion
+	returns [boolean resultado = false;]
+	{boolean a,b;}
+	:(
+		(a=sumando_cond{resultado = a;})
+		(
+			OP_O b=sumando_cond
+			{
+				resultado = resultado || b;
+			}	
+		)*
+	)
+	|
+	(
+		OP_NO b=condicion
+		{
+			resultado = !b;
+		}
+	)
+	{if(debug)System.out.println("Condición=>" + resultado);}
+	;
+	exception
+ 		catch [RecognitionException re] {
+			if(debug)System.out.println("Error en condicion");
 			mostrarExcepcion(re);
 		 }
 
 sentencia_si
 	// Variable local
 	 {boolean valor;}
-	 : SI valor=condicion
+	 : SI PARENT_IZ valor=condicion PARENT_DE
 	   ENTONCES 
 		(
 		 // Si la condición es verdadera, se ejecuta el consecuente
-		 {valor==true}? (instruccion)+
+		 {(valor)==true}? (instruccion)+
 		 // Si hay parte alternativa, se omite
 			(
 			  SI_NO
@@ -523,15 +605,15 @@ sentencia_si
 			)?
 		|
 		 // Si la condición es false, se omite el consecuente
-  		  {valor==false}? (options {greedy=false;}:.)+
-
+  		  {(valor)==false}? (options {greedy=false;}:.)+
 		 // Si hay parte alternativa, se ejecuta
 			(
 			 SI_NO
 				(instruccion)+
 			)?
 		)
-		FIN_SI
+		FIN_SI PUNTO_COMA
+			{if(debug)System.out.println("Sentencia if=>" + valor);}
 	;
 	exception
  		catch [RecognitionException re] {
@@ -551,10 +633,10 @@ bucle_mientras
 			( // Comienzo de las alternativas
 
 			  // Si la condición es falsa, se omite el cuerpo del bucle
-			 {valor == false}? (options {greedy=false;}:.)*  FIN_MIENTRAS
+			 {valor == false}? (options {greedy=false;}:.)*  FIN_MIENTRAS PUNTO_COMA
 
 			  // Si la condición es verdadera, se ejecutan las instrucciones del bucle
-			| {valor == true}? (instruccion)+  FIN_MIENTRAS
+			| {valor == true}? (instruccion)+  FIN_MIENTRAS PUNTO_COMA
 				// Se indica que se repita la ejecución del bucle_mientras
 				{
 				rewind(marca); 
@@ -577,7 +659,7 @@ bucle_repetir
 		{marca = mark();}
 		 REPETIR
 			( // Comienzo de las alternativas
-				 (instruccion)+  HASTA valor=condicion
+				 (instruccion)+  HASTA valor=condicion PUNTO_COMA
 				// Se indica que se repita la ejecución del bucle_mientras
 				{
 					if(valor)
@@ -619,9 +701,9 @@ cuerpo_bucle_para
 	HACER
 	( // Comienzo de las alternativas
 			  // Si la condición es falsa, se omite el cuerpo del bucle
-			 {valor == false}? (options {greedy=false;}:.)*  FIN_PARA
+			 {valor == false}? (options {greedy=false;}:.)*  FIN_PARA PUNTO_COMA
 			  // Si la condición es verdadera, se ejecutan las instrucciones del bucle
-			| {valor == true}? (instruccion)+  FIN_PARA
+			| {valor == true}? (instruccion)+  FIN_PARA PUNTO_COMA
 				{
 				insertarIdentificador(id, "numero", String.valueOf(n+p));
 				rewind(marca); 

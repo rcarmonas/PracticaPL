@@ -18,7 +18,7 @@ options{
 	testLiterals=false;
 
 	// lookahead: número de símbolos de anticipación
-	k=2;
+	k=3;
 
 	// No se tiene en cuenta la diferencia entre mayúsculas y minúsculas en los identificadores
 	caseSensitive=false;
@@ -34,15 +34,10 @@ options{
 tokens
 {
 	//Palabras reservadas
-	MOD = "__mod";
-	O = "__o";
-	Y = "__y";
-	NO = "__no";
 	LEER = "leer";
 	LEER_CADENA = "leer_cadena";
 	ESCRIBIR = "escribir";
 	ESCRIBIR_CADENA = "escribir_cadena";
-	SI = "si";
     ENTONCES = "entonces";
     SI_NO = "si_no";
     FIN_SI = "fin_si";
@@ -171,7 +166,22 @@ IDENT
 		}
 	}
 	;
+SI : "si"
+{System.out.println("Reconocido 'si'");}
+	;
 
+//Operadores lógicos y de módulo:
+MOD : "__mod"
+	;
+
+OP_O : "__o"
+	;
+
+OP_Y : "__y"
+	;
+
+OP_NO : "__no"
+	;
 
 //Número:
 LIT_NUMERO :
@@ -243,6 +253,12 @@ PARENT_IZ : "("
 		;
 
 PARENT_DE : ")"
+		;
+		
+CORCH_IZ : "["
+		;
+
+CORCH_DE : "]"
 		;
 
 //Comentarios:
