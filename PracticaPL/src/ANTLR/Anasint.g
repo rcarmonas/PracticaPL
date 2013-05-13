@@ -260,9 +260,14 @@ factor
       	  {
 	      	resultado = e;	      	
 	      } 
-	   ))
+	   )|( OP_MENOS e=factor
+	   	{
+	   		resultado = -e;
+	   	}
+	   ) 
+	   )
 	   	{System.out.println("factor=>" + resultado);}
-		;
+	;
 
 
 		
