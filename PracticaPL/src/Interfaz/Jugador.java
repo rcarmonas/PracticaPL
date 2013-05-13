@@ -4,9 +4,9 @@ public class Jugador {
 	int vidas;
 	int x, y;
 
-	Jugador(){
-		x = 0;
-		y = 0;
+	Jugador(int i,int j){
+		this.x = i;
+		this.y = j;
 		vidas = 3;
 	}
 

@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 /*
  * Nomenclatura imagenes:
@@ -23,17 +24,15 @@ import javax.swing.JPanel;
 public class Inicio {
 	public JFrame ventana;
 	Jugador jugador;
-	int matriz[][];
+	//int matriz[][];
 	ImagePanel matrizIP[][];
 	int rejillaX, rejillaY;
-
-	int jugadorX, jugadorY;
 
 	public static void main(String args[]) {
 		Runnable rAux = new Runnable() {
 			public void run() {
 				try {
-					Inicio window = new Inicio(6, 6);
+					Inicio window = new Inicio(10, 10);
 					window.ventana.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -46,24 +45,21 @@ public class Inicio {
 
 	public Inicio(int X, int Y){
 		int i, j;
-		jugadorX = jugadorY = 0;
-		rejillaX = X;
-		rejillaY = Y;
+		this.rejillaX = X;
+		this.rejillaY = Y;
 
-		jugador = new Jugador();
-		matriz = new int[X][Y];
+		jugador = new Jugador(0,0);
+		
 		matrizIP = new ImagePanel[X][Y];
-
-		for(i=0; i<X; i++)
-			for(j=0; j<Y; j++){
-				matriz[i][j] = 4;
-			}
-
+		
+		//inicializacion del tablero
 		for(i=0; i<X; i++)
 			for(j=0; j<Y; j++)
-				matrizIP[i][j] = new ImagePanel(8);
-		matrizIP[0][0] = new ImagePanel(0);
-
+				matrizIP[i][j] = new ImagePanel(8,4);
+		matrizIP[0][0] = new ImagePanel(0,4);
+		matrizIP[0][1]=new ImagePanel(8,5);
+		
+		//creacion de la ventana
 		ventana = new JFrame();
 		ventana.setTitle("Mundo Wumpus");
 		ventana.setBounds(100, 100, X*50+300, Y*50+80);
@@ -79,17 +75,19 @@ public class Inicio {
 
 		JPanel jpBotones = new JPanel();
 
+		JLabel lblControles=new JLabel("Controles");
+		jpBotones.add(lblControles);
+		JButton JBArriba = new JButton("Arriba");
+		jpBotones.add(JBArriba);
+		
 		JButton JBIzquierda = new JButton("<");
 		jpBotones.add(JBIzquierda);
-
-		JButton JBArriba = new JButton("^");
-		jpBotones.add(JBArriba);
-
-		JButton JBAbajo = new JButton("Abajo");
-		jpBotones.add(JBAbajo);
 		
 		JButton JBDerecha = new JButton(">");
 		jpBotones.add(JBDerecha);
+
+		JButton JBAbajo = new JButton("Abajo");
+		jpBotones.add(JBAbajo);
 		
 
 		JBAbajo.addActionListener(new ActionListener() {
@@ -115,26 +113,23 @@ public class Inicio {
 			}
 		});
 
-		jpBotones.setBounds(50*X+50, 20, 100, 100);
+		jpBotones.setBounds(50*X+100, 20, 100, 150);
 		ventana.add(jpBotones);
 	}
 
 	boolean mover(int iMovX, int iMovY){
-		//TODO comprobar bordes
 
-		if(jugadorX + iMovX >= 0 && jugadorX + iMovX < rejillaX && jugadorY + iMovY >= 0 && jugadorY + iMovY < rejillaY){
-			ventana.remove(matrizIP[jugadorX][jugadorY]);
-			matrizIP[jugadorX][jugadorY] = new ImagePanel(matriz[jugadorX][jugadorY]);
-			ventana.add(matrizIP[jugadorX][jugadorY]);
-			matrizIP[jugadorX][jugadorY].setBounds(jugadorX*50+30, jugadorY*50+30, 50, 50);
-	
-			jugadorX += iMovX;
-			jugadorY += iMovY;
-
-			ventana.remove(matrizIP[jugadorX][jugadorY]);
-			matrizIP[jugadorX][jugadorY] = new ImagePanel(matriz[jugadorX][jugadorY] - 4);
-			ventana.add(matrizIP[jugadorX][jugadorY]);
-			matrizIP[jugadorX][jugadorY].setBounds(jugadorX*50+30, jugadorY*50+30, 50, 50);
+		ImagePanel aux=matrizIP[jugador.getX()][jugador.getY()];
+		if(jugador.getX() + iMovX >= 0 && jugador.getX() + iMovX < rejillaX && jugador.getY() + iMovY >= 0 && jugador.getY() + iMovY < rejillaY){
+			//quito al jugador de la casilla donde estaba
+			aux.cambiarImagen(aux.getiValor());
+			
+			jugador.setX(jugador.getX()+iMovX);
+			jugador.setY(jugador.getY()+iMovY);
+			aux=matrizIP[jugador.getX()][jugador.getY()];
+			
+			//pongo al jugador en la nueva casilla
+			aux.cambiarImagen(aux.getiValor()-4);
 		}
 		else
 			return false;
