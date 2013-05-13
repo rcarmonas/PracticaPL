@@ -29,53 +29,6 @@ options{
 // FIN DE LA ZONA DE OPCIONES DEL ANALIZADOR LEXICO
 
 
-
-
-
-
-
-tokens
-{
-	//Palabras reservadas
-	MOD = "__mod";
-	O = "__o";
-	Y = "__y";
-	NO = "__no";
-	LEER = "leer";
-	LEER_CADENA = "leer_cadena";
-	ESCRIBIR = "escribir";
-	ESCRIBIR_CADENA = "escribir_cadena";
-	SI = "si";
-	ENTONCES = "entonces";
-	SINO = "si_no";
-	FIN_SI = "fin_si";
-	MIENTRAS = "mientras";
-	HACER = "hacer";
-	FIN_MIENTRAS = "fin_mientras";
-	REPETIR = "repetir";
-	HASTA = "hasta";
-	PARA = "para";
-	DESDE = "desde";
-	PASO = "paso";
-	FIN_PARA = "fin_para";
-	BORRAR = "borrar";
-	LUGAR = "lugar";
-
-	// Literales lógicos
-	LIT_CIERTO = "true" ;
-	LIT_FALSO = "false" ;
-
-	// Literales numericos
-	LIT_REAL ; 
-	LIT_ENTERO;
-	LIT_CADENA;
-}
-// FIN DE LA DECLARACION DE TOKENS PREDEFINIDOS
-
-//Código auxiliar:
-
-<<<<<<< HEAD
-
 // DECLARACION DE TOKENS PREDEFINIDOS
 
 tokens
@@ -90,9 +43,9 @@ tokens
 	ESCRIBIR = "escribir";
 	ESCRIBIR_CADENA = "escribir_cadena";
 	SI = "si";
-	ENTONCES = "entonces";
-	SINO = "si_no";
-	FIN_SI = "fin_si";
+    ENTONCES = "entonces";
+    SI_NO = "si_no";
+    FIN_SI = "fin_si";
 	MIENTRAS = "mientras";
 	HACER = "hacer";
 	FIN_MIENTRAS = "fin_mientras";
@@ -112,9 +65,11 @@ tokens
 	// Literales numericos
 	LIT_REAL ; 
 	LIT_ENTERO;
+	
+	IDEN_CADENA;
+	IDEN_NUMERO;
 }
 // FIN DE LA DECLARACION DE TOKENS PREDEFINIDOS
-=======
 {		
 	private TablaSimbolos tablaSimbolos = new TablaSimbolos();
 	
@@ -123,15 +78,10 @@ tokens
 		return tablaSimbolos;
 	}
 	
-	public void setTablaSimbolos(TablaSimbolos tabla)
-	{
-		tablaSimbolos= tabla;
-	}
-
 	private void insertarIdentificador(String nombre, String tipo, String valorCadena)
 		{
 			
-			// Busca el identificador en la tabla de sÃ­mbolos
+			// Busca el identificador en la tabla de símbolos
 			int indice = tablaSimbolos.existeSimbolo(nombre);
 
 			// Si encuentra el identificador, le modifica su valor
@@ -139,38 +89,33 @@ tokens
 			{
 				tablaSimbolos.getSimbolo(indice).setValor(valorCadena);
 			}
-			// Si no lo encuentra, lo inserta en la tabla de sÃ­mbolos
+			// Si no lo encuentra, lo inserta en la tabla de símbolos
 			else
 			{
 				// Se crea la variable
 				Variable v = new Variable (nombre,"float",valorCadena);
 
-				// Se inserta la variable en la tabla de sÃ­mbolos
+				// Se inserta la variable en la tabla de símbolos
 				tablaSimbolos.insertarSimbolo(v);
 			}
 		}
-
-	private	void mostrarExcepcion(RecognitionException re)
-	{
-		System.out.println("Error en la linea " + re.getLine() + " --> " + re.getMessage());
-		//reportError(re);
-		try {
-			//Consume the token problem
-			consume(); 
-    			consumeUntil(PUNTO_COMA);
-			} 
-		catch (Exception e) 
+		
+	private String getTipo(String nombre)
+		{
+			
+			int indice = tablaSimbolos.existeSimbolo(nombre);
+			if(indice<0)
+				return null;
+			else
 			{
+				Variable aux = tablaSimbolos.getSimbolo(indice);
+			
+				return aux.getTipo();
 			}
-	}
+		}
 }
->>>>>>> branch 'master' of https://github.com/rcarmonas/PracticaPL.git
 
 // ZONA DE REGLAS
-
-{
-	
-}
 
 // Tipos de retorno de carro o salto de línea
 protected NL :
@@ -215,7 +160,20 @@ IDENT
 	// Se indica que se compruebe si un identificador es una palabra reservada
 	options {testLiterals=true;} 
 	: LETRA(LETRA|DIGITO|('_'(LETRA|DIGITO)))*
+	{
+		String aux = $getText;
+		String tipo = getTipo(aux);
+		//System.out.println("Identificador: " + tipo + " " + aux);
+		if(tipo != null)
+		{
+			if(tipo.equals("cadena"))
+				$setType(IDEN_CADENA);
+			else if(tipo.equals("numero"))
+				$setType(IDEN_NUMERO);
+		}
+	}
 	;
+
 
 //Número:
 LIT_NUMERO :
@@ -232,10 +190,10 @@ LIT_CADENA: '\''!
 
 //Operadores aritméticos
 
-OP_SUMA : '+'
+OP_MAS : '+'
 	;
 
-OP_RESTA : '-'
+OP_MENOS : '-'
 	;
 	
 OP_PRODUCTO : '*'

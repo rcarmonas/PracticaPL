@@ -8,8 +8,34 @@ public class Test
 {
 	public static void main(String args[]) 
 	{
+		
 		try 
 		{
+			/*
+			FileInputStream fichero = new FileInputStream(args[0]);
+			Analex lexer = new Analex(fichero);
+
+			System.out.println("Fichero: " + args[0]);
+
+			Token tok = lexer.nextToken();
+
+			while(tok.getType() != Token.EOF_TYPE)
+			{ 
+				System.out.println(
+						    "\n Lexema: " + tok.getText()  
+						  + "\n Tipo de token:" + tok.getType() 
+						  + "\n Línea: " + tok.getLine()   
+						  + "   Columna: " + tok.getColumn()  
+						  );
+
+				System.out.println(tok);
+
+				tok = lexer.nextToken();
+			}
+			*/
+			
+			
+			
 			// Se abre el fichero pasado como argumento de entrada
 			FileInputStream fichero =new FileInputStream(args[0]);
 
@@ -18,7 +44,7 @@ public class Test
 		
 			// Analizador sintáctico
 			Anasint anasint = new Anasint(analex);
-
+			anasint.setTablaSimbolos(analex.getTablaSimbolos());
 			// Se invoca a la función asociada al símbolo inicial
 			anasint.prog();	
 
