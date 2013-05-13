@@ -4,11 +4,11 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 /*
  * Nomenclatura imagenes:
- * 	0 - Vacio
- * 	1 - Jugador
- * 	2 - Jugador-Viento
- * 	3 - Jugador-Olor
- * 	4 - Jugador-Viento-Olor
+ * 	0 - Jugador
+ * 	1 - Jugador-Viento
+ * 	2 - Jugador-Olor
+ * 	3 - Jugador-Viento-Olor
+ * 	4 - Vacio
  * 	5 - Viento
  * 	6 - Olor
  * 	7 - Viento-Olor
@@ -20,6 +20,8 @@ public class Inicio {
 	Jugador jugador;
 	int matriz[][];
 	ImagePanel matrizIP[][];
+
+	int jugadorX, jugadorY;
 
 	public static void main(String args[]) {
 		Runnable rAux = new Runnable() {
@@ -38,6 +40,7 @@ public class Inicio {
 
 	public Inicio(int X, int Y){
 		int i, j;
+		jugadorX = jugadorY = 0;
 
 		jugador = new Jugador();
 		matriz = new int[X][Y];
@@ -45,14 +48,13 @@ public class Inicio {
 
 		for(i=0; i<X; i++)
 			for(j=0; j<Y; j++){
-				matriz[i][j] = 8;
+				matriz[i][j] = 0;
 			}
-
-		matriz[0][0] = 1;
 
 		for(i=0; i<X; i++)
 			for(j=0; j<Y; j++)
-				matrizIP[i][j] = new ImagePanel(matriz[i][j]);
+				matrizIP[i][j] = new ImagePanel(8);
+		matrizIP[0][0] = new ImagePanel(0);
 
 		ventana = new JFrame();
 		ventana.setTitle("Mundo Wumpus");
@@ -81,7 +83,6 @@ public class Inicio {
 
 	boolean arriba(){
 		jugador.setY(jugador.getY() + 1);
-		
 		return false;
 	}
 	boolean abajo(){

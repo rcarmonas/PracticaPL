@@ -10,11 +10,11 @@ import javax.swing.JPanel;
 
 /*
  * Nomenclatura imagenes:
- * 	0 - Vacio
- * 	1 - Jugador
- * 	2 - Jugador-Viento
- * 	3 - Jugador-Olor
- * 	4 - Jugador-Viento-Olor
+ * 	0 - Jugador
+ * 	1 - Jugador-Viento
+ * 	2 - Jugador-Olor
+ * 	3 - Jugador-Viento-Olor
+ * 	4 - Vacio
  * 	5 - Viento
  * 	6 - Olor
  * 	7 - Viento-Olor
@@ -24,8 +24,8 @@ import javax.swing.JPanel;
 public class ImagePanel extends JPanel{
 
     private BufferedImage image;
-    String imagen[] = {"vacio", "jugador", "jugador-viento", "jugador-olor", "jugador-viento-olor", "viento", "olor", "viento-olor", "desconocido"};
-
+    String imagen[] = {"jugador", "jugador-viento", "jugador-olor", "jugador-viento-olor", "vacio", "viento", "olor", "viento-olor", "desconocido"};
+   
     public ImagePanel(String ruta) {
        try {                
           image = ImageIO.read(new File(ruta));
