@@ -313,7 +313,7 @@ escribirCadena
 escritura : escribir | escribirCadena
 		;
 
-instruccion : escritura | lectura | asignacion | sentencia_si | bucle_mientras
+instruccion : escritura | lectura | asignacion | sentencia_si | bucle_mientras | bucle_repetir
 		;
 
 
@@ -441,6 +441,27 @@ bucle_mientras
 				{
 				rewind(marca); 
 				this.bucle_mientras();
+				}
+			) // Fin de las alternativas
+		
+		;
+
+bucle_repetir
+		// Variables locales
+		{boolean valor=true; int marca=-1;}
+		:
+		 // Se establece una marca para indicar el punto de inicio del bucle
+		{marca = mark();}
+		 REPETIR
+			( // Comienzo de las alternativas
+				 (instruccion)+  HASTA valor=condicion
+				// Se indica que se repita la ejecución del bucle_mientras
+				{
+					if(valor)
+					{
+						rewind(marca); 
+						this.bucle_repetir();
+					}
 				}
 			) // Fin de las alternativas
 		
