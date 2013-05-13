@@ -27,19 +27,10 @@ public class ImagePanel extends JPanel{
     String imagen[] = {"jugador", "jugador-viento", "jugador-olor", "jugador-viento-olor", "vacio", "viento", "olor", "viento-olor", "desconocido"};
     int iValor = 8;
 
-    @Deprecated
-    public ImagePanel(String ruta) {
-       try {                
-          image = ImageIO.read(new File(ruta));
-       } catch (IOException ex) {
-            ex.printStackTrace();
-       }
-    }
-
-    public ImagePanel(int index) {
+    public ImagePanel(int index,int valor) {
        try {                
           image = ImageIO.read(new File("img/" + imagen[index] + ".png"));
-          iValor = index;
+          iValor = valor;
        } catch (IOException ex) {
             ex.printStackTrace();
        }
@@ -58,6 +49,15 @@ public class ImagePanel extends JPanel{
 	public void setiValor(int iValor) {
 		this.iValor = iValor;
 	}
-
+	public void cambiarImagen(int index)
+	{
+		try {
+			image = ImageIO.read(new File("img/" + imagen[index] + ".png"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.paintComponent(getGraphics());
+	}
     
 }
