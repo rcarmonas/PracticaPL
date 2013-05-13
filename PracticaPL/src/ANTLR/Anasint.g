@@ -318,7 +318,7 @@ escribirCadena
 escritura : escribir | escribirCadena
 		;
 
-instruccion : escritura | lectura | asignacion | sentencia_si | bucle_mientras | bucle_repetir
+instruccion : escritura | lectura | asignacion | sentencia_si | bucle_mientras | bucle_repetir | bucle_para
 		;
 
 
@@ -471,6 +471,57 @@ bucle_repetir
 			) // Fin de las alternativas
 		
 		;
+
+cuerpo_bucle_para
+	[String id]
+	{double h, p, n;
+	boolean valor;
+	int marca=-1;}
+	:
+	{
+		marca = mark();
+		int indice = tablaSimbolos.existeSimbolo(id);
+		String valorCadena = tablaSimbolos.getSimbolo(indice).getValor();
+		n = Double.parseDouble(valorCadena);
+	}
+	HASTA h = expresionNum
+	PASO p = expresionNum
+	{
+		if((p<0 && n>h)|(p>0 && n<h))
+			valor = true;
+		else
+			valor = false;
+		
+	}
+	HACER
+	( // Comienzo de las alternativas
+			  // Si la condición es falsa, se omite el cuerpo del bucle
+			 {valor == false}? (options {greedy=false;}:.)*  FIN_PARA
+			  // Si la condición es verdadera, se ejecutan las instrucciones del bucle
+			| {valor == true}? (instruccion)+  FIN_PARA
+				{
+				insertarIdentificador(id, "numero", String.valueOf(n+p));
+				rewind(marca); 
+				this.cuerpo_bucle_para(id);
+				}
+	) 
+	;
+
+bucle_para
+		// Variables locales
+		{boolean valor;
+		String id;
+		double d;
+		double h;
+		double p;}
+		:
+		PARA id=identificador
+		DESDE d=expresionNum
+		{
+			insertarIdentificador(id, "numero", String.valueOf(d));
+		}
+		cuerpo_bucle_para[id]
+	;
 
 prog: (instruccion)+
 	;

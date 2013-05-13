@@ -1,8 +1,7 @@
-a = -5;
-repetir
-	a = a + 5;
-	escribir(a);
-hasta a<25
-b = 'prueba';
-a = b + 'asdf';
-escribir_cadena(a);
+para a
+	desde 1
+	hasta 10
+	paso 1
+	hacer
+		escribir(a);
+fin_para
