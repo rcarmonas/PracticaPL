@@ -318,7 +318,16 @@ escribirCadena
 escritura : escribir | escribirCadena
 		;
 
-instruccion : escritura | lectura | asignacion | sentencia_si | bucle_mientras | bucle_repetir | bucle_para
+instruccion : 
+	escritura 
+	| lectura 
+	| asignacion 
+	| sentencia_si 
+	| bucle_mientras 
+	| bucle_repetir 
+	| bucle_para
+	| borrar
+	| lugar
 		;
 
 
@@ -522,6 +531,21 @@ bucle_para
 		}
 		cuerpo_bucle_para[id]
 	;
+
+borrar: BORRAR PUNTO_COMA
+	{
+		System.out.printf("\33[2J");
+	}
+	;
+
+lugar
+	{double x, y;}
+	: LUGAR PARENT_IZ x=expresionNum COMA y=expresionNum PARENT_DE PUNTO_COMA
+	{
+		System.out.printf("\033[%d;%dH",(int)x,(int)y);
+	}
+	;
+
 
 prog: (instruccion)+
 	;

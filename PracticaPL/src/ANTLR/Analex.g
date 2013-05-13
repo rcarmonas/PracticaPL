@@ -209,6 +209,8 @@ OP_POTENCIA : "**"
 PUNTO_COMA : ';' 
 	;
 
+COMA : ','
+	;
 
 //Operadores relacionales
 OP_IGUAL : "==" 
