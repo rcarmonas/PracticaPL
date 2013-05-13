@@ -18,12 +18,13 @@ import javax.swing.JPanel;
  * 	5 - Viento
  * 	6 - Olor
  * 	7 - Viento-Olor
+ * 	8 - Desconocido
  */
 
 public class ImagePanel extends JPanel{
 
     private BufferedImage image;
-    String imagen[] = {"vacio", "Jugador", "Jugador-Viento", "Jugador-Olor", "Jugador-Viento-Olor", "Viento", "Olor", "Viento-Olor"};
+    String imagen[] = {"vacio", "jugador", "jugador-viento", "jugador-olor", "jugador-viento-olor", "viento", "olor", "viento-olor", "desconocido"};
 
     public ImagePanel(String ruta) {
        try {                

@@ -12,6 +12,7 @@ import javax.swing.JFrame;
  * 	5 - Viento
  * 	6 - Olor
  * 	7 - Viento-Olor
+ * 	8 - Desconocido
  */
 
 public class Inicio {
@@ -23,12 +24,12 @@ public class Inicio {
 	public static void main(String args[]) {
 		Runnable rAux = new Runnable() {
 			public void run() {
-					try {
-						Inicio window = new Inicio(6, 6);
-						window.ventana.setVisible(true);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
+				try {
+					Inicio window = new Inicio(6, 6);
+					window.ventana.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		};
 
@@ -37,15 +38,14 @@ public class Inicio {
 
 	public Inicio(int X, int Y){
 		int i, j;
-		
-		//TODO parametros iniciales: tamaño matriz
+
 		jugador = new Jugador();
 		matriz = new int[X][Y];
 		matrizIP = new ImagePanel[X][Y];
 
 		for(i=0; i<X; i++)
 			for(j=0; j<Y; j++){
-				matriz[i][j] = 0;
+				matriz[i][j] = 8;
 			}
 
 		matriz[0][0] = 1;
@@ -56,14 +56,16 @@ public class Inicio {
 
 		ventana = new JFrame();
 		ventana.setTitle("Mundo Wumpus");
-		ventana.setBounds(100, 100, 926, 575);
+//		ventana.setBounds(100, 100, 926, 575);
+		ventana.setBounds(100, 100, X*50+70, Y*50+80);
 		ventana.setResizable(false);
 		ventana.setLayout(null);
+		ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		for(i=0; i<X; i++)
 			for(j=0; j<Y; j++){
 				ventana.add(matrizIP[i][j]);
-				matrizIP[i][j].setBounds(i*50, j*50, 50, 50);
+				matrizIP[i][j].setBounds(i*50+30, j*50+30, 50, 50);
 			}
 
 /*		ImagePanel IP1;
