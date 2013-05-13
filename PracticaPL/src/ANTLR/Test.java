@@ -4,11 +4,13 @@ package ANTLR;
 import java.io.*;
 import antlr.*;
 
+
+
 public class Test 
 {
 	public static void main(String args[]) 
 	{
-		
+		boolean debug = false;
 		try 
 		{
 			/*
@@ -46,11 +48,15 @@ public class Test
 			Anasint anasint = new Anasint(analex);
 			anasint.setTablaSimbolos(analex.getTablaSimbolos());
 			// Se invoca a la función asociada al símbolo inicial
+			anasint.setDebug(debug);
 			anasint.prog();	
 
 			// Se muestran los identificadores reconocidos
-			System.out.println("\n\nContenido de la Tabla de Símbolos");
-			anasint.getTablaSimbolos().escribirSimbolos();
+			if(debug)
+			{
+				System.out.println("\n\nContenido de la Tabla de Símbolos");
+				anasint.getTablaSimbolos().escribirSimbolos();
+			}
 		}
 
 

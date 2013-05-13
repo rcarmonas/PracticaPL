@@ -25,22 +25,38 @@ options
 
 // Nuevos atributos de la clase Anasin
 {		
+	//Variable que activa o desactiva la muestra de información de debug
+	boolean debug = false;
+	
+	//Función para activar o desactivar la información adicional
+	public void setDebug(boolean debug)
+	{
+		this.debug = debug;
+	}
+	
+	//Clase para representar una expresión tanto numérica como alfanumérica
 	private class Expresion
 	{
 		public String tipo;
 		public String _valor;
-	}	
+	
+	}
+	//Tabla de símbolos usada
 	private TablaSimbolos tablaSimbolos;
 	
+	//Método para establecer la tabla de símbolos usada por esta clase
 	public void setTablaSimbolos(TablaSimbolos t)
 	{
 		tablaSimbolos = t;	
 	}
 	
+	//Función que devuelve la tabla de símbolos de la clase
 	public TablaSimbolos getTablaSimbolos()
 	{
 		return tablaSimbolos;
 	}
+	
+	//Inserta o sobreescribe un identificador en la tabla de símbolos
 	private void insertarIdentificador(String nombre, String tipo, String valorCadena)
 		{
 			
@@ -64,18 +80,24 @@ options
 			}
 		}
 		
-	private String tipo(String nombre)
-		{
-			int indice = tablaSimbolos.existeSimbolo(nombre);
-			
-			Variable aux = tablaSimbolos.getSimbolo(indice);
-		
-			return aux.getTipo();
-		}
+	//Muestra una excepción por consola
+	private	void mostrarExcepcion(RecognitionException re)
+	{
+		System.out.println("Error en la línea " + re.getLine() + " --> " + re.getMessage());
+		try {
+			consume(); 
+    			consumeUntil(PUNTO_COMA);
+			} 
+		catch (Exception e) 
+			{
+			}
+	}
 }
 
 //Reglas:
 
+
+//Asignación tanto numérica como alfanumérica
 asignacion
 	//Variable local
 	{Expresion e;
@@ -86,12 +108,19 @@ asignacion
 		{	
 			String nombre = id;
 			insertarIdentificador(nombre, e.tipo, e._valor);
-	 		System.out.println("Asignación =>" + nombre + "=" + e._valor);
+			if(debug)
+	 			System.out.println("Asignación =>" + nombre + "=" + e._valor);
 		}	
 	)
 	PUNTO_COMA
 	;
-		
+	exception
+ 		catch [RecognitionException re] {
+			mostrarExcepcion(re);
+		 }
+
+
+//Un identificador, tanto sin tipo, como númerico o alfanumérico
 identificador
 	returns [String resultado ="";]
 	:
@@ -102,10 +131,15 @@ identificador
 	|
 	in:IDEN_NUMERO{resultado = in.getText();}
 	)
-	{System.out.println("Identificador=>" + resultado);}
+	{if(debug)System.out.println("Identificador=>" + resultado);}
 	
 	;
-		
+	exception
+ 		catch [RecognitionException re] {
+			mostrarExcepcion(re);
+		 }
+
+//Expresión, tanto numérica como alfanumérica	
 expresion
 	returns [Expresion resultado = new Expresion();]
 	{double n; String c;}
@@ -123,10 +157,14 @@ expresion
 		resultado._valor = String.valueOf(n);
 	 }
 	 )
-	 	{System.out.println("Expresion=>" + resultado._valor);}
+	 	{if(debug)System.out.println("Expresion=>" + resultado._valor);}
 	;
+	exception
+ 		catch [RecognitionException re] {
+			mostrarExcepcion(re);
+		 }		
 		
-		
+//Expresión numérica
 expresionNum 
 	//Valor que devuelve
 	returns [double resultado = (double)0.0;]
@@ -149,9 +187,13 @@ expresionNum
 				}
 		)
 	)*
-	{System.out.println("ExpresionNum=>" + resultado);}
+	{if(debug)System.out.println("ExpresionNum=>" + resultado);}
 	
 	;
+	exception
+ 		catch [RecognitionException re] {
+			mostrarExcepcion(re);
+		 }
 
 
 sumando
@@ -176,9 +218,14 @@ sumando
 				}
 		)
 	)*
-	{System.out.println("Sumando=>" + resultado);}
+	{if(debug)System.out.println("Sumando=>" + resultado);}
 	;
-
+	exception
+ 		catch [RecognitionException re] {
+			mostrarExcepcion(re);
+		 }
+		
+//Expresión alfanumérica
 expresionAlfaNum
 	//Valor que devuelve
 	returns [String resultado = "";]
@@ -192,9 +239,13 @@ expresionAlfaNum
 				resultado = resultado + e2;	
 			}
 		)*
-	{System.out.println("ExpresionAlfa=>" + resultado);}
+	{if(debug)System.out.println("ExpresionAlfa=>" + resultado);}
 	;
-		
+	exception
+ 		catch [RecognitionException re] {
+			mostrarExcepcion(re);
+		 }
+				
 factorAlfaNum
 	//Valor que devuelve
 	returns [String resultado = "";]
@@ -224,10 +275,14 @@ factorAlfaNum
 				System.err.println("Error: el identificador " + i.getText() + " está indefinido");
 		})
 	)
-		{System.out.println("FactorAlfa=>" + resultado);}
+		{if(debug)System.out.println("FactorAlfa=>" + resultado);}
 	
 		;
-		
+	exception
+ 		catch [RecognitionException re] {
+			mostrarExcepcion(re);
+		 }
+				
 factor 
 	//Valor que devuelve:
 	returns [double resultado = (double)0.0;]
@@ -266,9 +321,12 @@ factor
 	   	}
 	   ) 
 	   )
-	   	{System.out.println("factor=>" + resultado);}
+	   	{if(debug)System.out.println("factor=>" + resultado);}
 	;
-
+	exception
+ 		catch [RecognitionException re] {
+			mostrarExcepcion(re);
+		 }
 
 		
 leer 
@@ -282,6 +340,11 @@ leer
 		insertarIdentificador(id, "numero", String.valueOf(valor));
 	}
 		;
+	exception
+ 		catch [RecognitionException re] {
+			mostrarExcepcion(re);
+		 }
+
 
 leerCadena 
 	//Variables locales
@@ -293,10 +356,18 @@ leerCadena
 		insertarIdentificador(id, "cadena", valorCadena);
 	}
 		;
-
+	exception
+ 		catch [RecognitionException re] {
+			mostrarExcepcion(re);
+		 }
+		
 lectura : leer | leerCadena
 		;
-
+	exception
+ 		catch [RecognitionException re] {
+			mostrarExcepcion(re);
+		 }
+		
 escribir 
 		//Variables locales
 		{double e;}
@@ -305,7 +376,11 @@ escribir
 			System.out.println(String.valueOf(e));
 		}
 		;
-
+	exception
+ 		catch [RecognitionException re] {
+			mostrarExcepcion(re);
+		 }
+		
 escribirCadena 
 		//Variables locales
 		{String s;}
@@ -314,9 +389,17 @@ escribirCadena
 			System.out.println(s);
 		}
 		;
-		
+	exception
+ 		catch [RecognitionException re] {
+			mostrarExcepcion(re);
+		 }
+			
 escritura : escribir | escribirCadena
 		;
+	exception
+ 		catch [RecognitionException re] {
+			mostrarExcepcion(re);
+		 }
 
 instruccion : 
 	escritura 
@@ -329,6 +412,11 @@ instruccion :
 	| borrar
 	| lugar
 		;
+	exception
+ 		catch [RecognitionException re] {
+			mostrarExcepcion(re);
+		 }
+		
 
 
 condicionNum
@@ -370,9 +458,12 @@ condicionNum
 		}	
 	)
 	)
-	{System.out.println("CondiciónNum=>" + resultado);}
+	{if(debug)System.out.println("CondiciónNum=>" + resultado);}
 	;
-
+	exception
+ 		catch [RecognitionException re] {
+			mostrarExcepcion(re);
+		 }
 
 condicionAlfaNum
 	//Valor devuelto
@@ -393,9 +484,14 @@ condicionAlfaNum
 		}
 	)
 	)
-	{System.out.println("CondiciónAlfa=>" + resultado);}
+	{if(debug)System.out.println("CondiciónAlfa=>" + resultado);}
 	;
-
+	exception
+ 		catch [RecognitionException re] {
+			mostrarExcepcion(re);
+		 }
+		
+		
 condicion
 	//Valor devuelto
 	returns [boolean resultado = false;]
@@ -404,10 +500,13 @@ condicion
 	: (b=condicionAlfaNum)|(b=condicionNum)
 	{
 		resultado = b;
-		System.out.println("Condicion=>" +  resultado);
+		if(debug)System.out.println("Condicion=>" +  resultado);
 	}
 	;
-
+	exception
+ 		catch [RecognitionException re] {
+			mostrarExcepcion(re);
+		 }
 
 sentencia_si
 	// Variable local
@@ -434,7 +533,12 @@ sentencia_si
 		)
 		FIN_SI
 	;
-
+	exception
+ 		catch [RecognitionException re] {
+			mostrarExcepcion(re);
+		 }
+		
+		
 bucle_mientras
 		// Variables locales
 		{boolean valor; int marca=-1;}
@@ -459,7 +563,12 @@ bucle_mientras
 			) // Fin de las alternativas
 		
 		;
-
+	exception
+ 		catch [RecognitionException re] {
+			mostrarExcepcion(re);
+		 }
+		
+		
 bucle_repetir
 		// Variables locales
 		{boolean valor=true; int marca=-1;}
@@ -480,7 +589,12 @@ bucle_repetir
 			) // Fin de las alternativas
 		
 		;
-
+	exception
+ 		catch [RecognitionException re] {
+			mostrarExcepcion(re);
+		 }
+		
+		
 cuerpo_bucle_para
 	[String id]
 	{double h, p, n;
@@ -515,7 +629,12 @@ cuerpo_bucle_para
 				}
 	) 
 	;
-
+	exception
+ 		catch [RecognitionException re] {
+			mostrarExcepcion(re);
+		 }
+		
+		
 bucle_para
 		// Variables locales
 		{boolean valor;
@@ -531,13 +650,23 @@ bucle_para
 		}
 		cuerpo_bucle_para[id]
 	;
-
+	exception
+ 		catch [RecognitionException re] {
+			mostrarExcepcion(re);
+		 }
+		
+		
 borrar: BORRAR PUNTO_COMA
 	{
 		System.out.printf("\33[2J");
 	}
 	;
-
+	exception
+ 		catch [RecognitionException re] {
+			mostrarExcepcion(re);
+		 }
+		
+		
 lugar
 	{double x, y;}
 	: LUGAR PARENT_IZ x=expresionNum COMA y=expresionNum PARENT_DE PUNTO_COMA
@@ -545,11 +674,17 @@ lugar
 		System.out.printf("\033[%d;%dH",(int)x,(int)y);
 	}
 	;
-
+	exception
+ 		catch [RecognitionException re] {
+			mostrarExcepcion(re);
+		 }
 
 prog: (instruccion)+
 	;
-
+	exception
+ 		catch [RecognitionException re] {
+			mostrarExcepcion(re);
+		 }
 
 
 
