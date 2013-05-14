@@ -39,7 +39,11 @@ options
 	{
 		public String tipo;
 		public String _valor;
-	
+		public Expresion()
+		{
+			this.tipo = "numero";
+			this._valor = "0";
+		}
 	}
 	//Tabla de símbolos usada
 	private TablaSimbolos tablaSimbolos;
@@ -87,8 +91,9 @@ options
 		if(debug)
 			this.tablaSimbolos.escribirSimbolos();
 		try {
-			consume(); 
+				consume(); 
     			consumeUntil(PUNTO_COMA);
+    			consume();
 			} 
 		catch (Exception e) 
 			{
@@ -103,13 +108,13 @@ options
 asignacion
 	[boolean ejecutar]
 	//Variable local
-	{Expresion e;
-	String id;}
-	:id=identificador OP_ASIG
+	{Expresion e;}
+	:
+	id:IDENT OP_ASIG
 	(
-		e=expresion
+		e=expresion[ejecutar]
 		{	
-			String nombre = id;
+			String nombre = id.getText();
 			if(ejecutar)
 				insertarIdentificador(nombre, e.tipo, e._valor);
 			if(debug)
@@ -120,271 +125,240 @@ asignacion
 	;
 	exception
  		catch [RecognitionException re] {
- 			if(debug)System.out.println("Error en asignacion");
-			mostrarExcepcion(re);
-		 }
-
-
-//Un identificador, tanto sin tipo, como númerico o alfanumérico
-identificador
-	returns [String resultado ="";]
-	:
-	(
-	i:IDENT{resultado = i.getText();}
-	|
-	ic:IDEN_CADENA{resultado = ic.getText();}
-	|
-	in:IDEN_NUMERO{resultado = in.getText();}
-	)
-	{if(debug)System.out.println("Identificador=>" + resultado);}
-	
-	;
-	exception
- 		catch [RecognitionException re] {
- 			 if(debug)System.out.println("Error en identificador");
+ 			if(debug&&ejecutar)System.out.println("Error en asignacion");
+ 			if(ejecutar)
 			mostrarExcepcion(re);
 		 }
 
 //Expresión, tanto numérica como alfanumérica	
 expresion
+	[boolean ejecutar]
 	returns [Expresion resultado = new Expresion();]
-	{double n; String c;}
-	:	
-	(
-	c=expresionAlfaNum
-	{
-		resultado.tipo = "cadena";
-		resultado._valor = c;
-	}
-	 |
-	 n=expresionNum
-	 {
-	 	resultado.tipo = "numero";
-		resultado._valor = String.valueOf(n);
-	 }
-	 )
-	 	{if(debug)System.out.println("Expresion=>" + resultado._valor);}
-	;
-	exception
- 		catch [RecognitionException re] {
- 			if(debug)System.out.println("Error en expresion");
-			mostrarExcepcion(re);
-		 }		
-		
-//Expresión numérica
-expresionNum 
-	//Valor que devuelve
-	returns [double resultado = (double)0.0;]
-	//Variables locales
-	{double e1, e2;}
-	: e1=sumando{resultado = e1;}
+	{Expresion e1, e2;}
+	:e1=sumando[ejecutar]{resultado = e1;}
 	(
 		//Suma
 		(
-			OP_MAS e2 = sumando
+			OP_MAS e2 = sumando[ejecutar]
 			{
-				resultado = resultado + e2;	
+				double val1 = Double.parseDouble(resultado._valor);
+				double val2 = Double.parseDouble(e2._valor);
+				if(ejecutar && resultado.tipo.equals(e2.tipo) && resultado.tipo.equals("numero"))
+					resultado._valor = String.valueOf(val1+val2);
+				else if(ejecutar)
+					throw new RecognitionException();
 			}
 		)
 		|
 		(//Resta
-			OP_MENOS e2 = sumando
-				{
-					resultado = resultado - e2;
-				}
+			OP_MENOS e2 = sumando[ejecutar]
+			{
+				double val1 = Double.parseDouble(resultado._valor);
+				double val2 = Double.parseDouble(e2._valor);
+				if(ejecutar && resultado.tipo.equals(e2.tipo) && resultado.tipo.equals("numero"))
+					resultado._valor = String.valueOf(val1-val2);
+				else if(ejecutar)
+					throw new RecognitionException();
+			}
 		)
 	)*
-	{if(debug)System.out.println("ExpresionNum=>" + resultado);}
-	
+		
+	 	{if(debug)System.out.println("Expresion=>" + resultado._valor);}
 	;
 	exception
  		catch [RecognitionException re] {
- 			if(debug)System.out.println("Error en expresionNum");
+ 			if(debug&&ejecutar)System.out.println("Error en expresion");
+ 			if(ejecutar)
 			mostrarExcepcion(re);
-		 }
+		 }		
+
 
 
 sumando
+	[boolean ejecutar]
     //Valor que devuelve
-	returns [double resultado = (double)0.0;]
+	returns [Expresion resultado = new Expresion();]
 	//Variables locales
-	{double e1=-1, e2=-1;}
-	: (e1=factor_pot{resultado = e1;})
+	{Expresion e1, e2;}
+	: (e1=factor[ejecutar]{resultado = e1;})
 	(
 		//Producto
 		(
-			OP_PRODUCTO e2 = factor_pot
+			OP_PRODUCTO e2 = factor[ejecutar]
 			{
-				resultado = resultado * e2;	
+				double val1 = Double.parseDouble(resultado._valor);
+				double val2 = Double.parseDouble(e2._valor);
+				if(ejecutar && resultado.tipo.equals(e2.tipo)&& resultado.tipo.equals("numero"))
+					resultado._valor = String.valueOf(val1*val2);
+				else if(ejecutar)
+					throw new RecognitionException();			
 			}
 		)
 		|
 		(//División
-			OP_DIVISION e2 = factor_pot
+			OP_DIVISION e2 = factor[ejecutar]
 				{
-					resultado = resultado / e2;
+					double val1 = Double.parseDouble(resultado._valor);
+					double val2 = Double.parseDouble(e2._valor);
+					if(ejecutar && resultado.tipo.equals(e2.tipo) && resultado.tipo.equals("numero")) 
+						resultado._valor = String.valueOf(val1/val2);
+					else if(ejecutar)
+						throw new RecognitionException();	
 				}
 		)
 		|
 		(//Módulo
-			MOD e2 = factor_pot
+			MOD e2 = factor[ejecutar]
 				{
-					resultado = (int)resultado % (int)e2;
+					double val1 = Double.parseDouble(resultado._valor);
+					double val2 = Double.parseDouble(e2._valor);
+					if(ejecutar && resultado.tipo.equals(e2.tipo) && resultado.tipo.equals("numero"))
+						resultado._valor = String.valueOf((int)val1%(int)val2);
+					else if(ejecutar)
+						throw new RecognitionException();	
 				}
 		)
 	)*
-	{if(debug)System.out.println("Sumando=>" + resultado);}
+	{if(debug)System.out.println("Sumando=>" + resultado._valor);}
 	;
 	exception
  		catch [RecognitionException re] {
- 			if(debug)System.out.println("Error en sumando");
+ 			if(debug&&ejecutar)System.out.println("Error en sumando");
+ 			if(ejecutar)
 			mostrarExcepcion(re);
 		 }
 		
-//Expresión alfanumérica
-expresionAlfaNum
-	//Valor que devuelve
-	returns [String resultado = "";]
-	//Variables locales
-	{String e1, e2;}
-	: e1=factorAlfaNum{resultado = e1;}
-		//Suma
+factor
+	[boolean ejecutar]
+	returns [Expresion resultado = new Expresion();]
+		{Expresion e1, e2;}
+	:(e1=termino[ejecutar]{resultado = e1;})
+	(
 		(
-			OP_MAS e2 = factorAlfaNum
+			OP_POTENCIA e2 = termino[ejecutar]
 			{
-				resultado = resultado + e2;	
+				double val1 = Double.parseDouble(resultado._valor);
+				double val2 = Double.parseDouble(e2._valor);
+				if(ejecutar && resultado.tipo.equals(e2.tipo) && resultado.tipo.equals("numero"))
+					resultado._valor = String.valueOf(Math.pow(val1, val2));
+				else if(ejecutar)
+					throw new RecognitionException();			
 			}
-		)*
-	{if(debug)System.out.println("ExpresionAlfa=>" + resultado);}
+		)
+		|
+		(
+			OP_CONCATENACION e2 = termino[ejecutar]
+				{
+					if(ejecutar && resultado.tipo.equals(e2.tipo)&& resultado.tipo.equals("cadena"))
+						resultado._valor = resultado._valor + e2._valor;
+					else if(ejecutar)
+						throw new RecognitionException();	
+				}
+		)
+	)*
+	{if(debug)System.out.println("Factor=>" + resultado._valor);}
 	;
 	exception
  		catch [RecognitionException re] {
- 			if(debug)System.out.println("Error en expresion Alfa_num");
+ 			if(debug&&ejecutar)System.out.println("Error en factor");
+ 			if(ejecutar)
 			mostrarExcepcion(re);
 		 }
-				
-factorAlfaNum
-	//Valor que devuelve
-	returns [String resultado = "";]
-	//Variables locales
-	{String e;}
-	:
-	((
-		l:LIT_CADENA
-		{
-			resultado = l.getText();	
-		}
-	)|(
-		i:IDEN_CADENA
-		{
-			// Busca el identificador en la tabla de símbolos
-			int indice = tablaSimbolos.existeSimbolo(i.getText());
-			// Si encuentra el identificador, devuelve su valor
-			if (indice >= 0)
-			{
-				// Se recupera el valor almacenado como cadena
-				String valorCadena = tablaSimbolos.getSimbolo(indice).getValor();
-
-				// La cadena se convierte a número real
-				resultado = valorCadena;
-			}
-			else
-				System.err.println("Error: el identificador " + i.getText() + " está indefinido");
-		})
-	)
-		{if(debug)System.out.println("FactorAlfa=>" + resultado);}
 	
-		;
-	exception
- 		catch [RecognitionException re] {
- 			if(debug)System.out.println("Error en factorAlfaNum");
-			mostrarExcepcion(re);
-		 }
-				
-factor 
+termino
+	[boolean ejecutar]
 	//Valor que devuelve:
-	returns [double resultado = (double)0.0;]
-		{double e;}
+	returns [Expresion resultado = new Expresion();]
+		{Expresion e;}
 	: 
 	(
 		(n:LIT_NUMERO
 		{
-			{resultado = new Double(n.getText()).doubleValue();}
+			{
+				resultado._valor = n.getText();
+				resultado.tipo = "numero";	
+			}
+		
 		}
-      )| (
-      	i:IDEN_NUMERO
+      )|(
+		l:LIT_CADENA
+		{
+			resultado._valor = l.getText();
+			resultado.tipo = "cadena";
+		}
+      )|(
+      	i:IDENT
       	{
-      					// Busca el identificador en la tabla de símbolos
+      		// Busca el identificador en la tabla de símbolos
 			int indice = tablaSimbolos.existeSimbolo(i.getText());
 
 			// Si encuentra el identificador, devuelve su valor
 			if (indice >= 0)
 			{
 				// Se recupera el valor almacenado como cadena
-				String valorCadena = tablaSimbolos.getSimbolo(indice).getValor();
-
-				// La cadena se convierte a número real
-				resultado = Double.parseDouble(valorCadena);
+				resultado._valor = tablaSimbolos.getSimbolo(indice).getValor();
+				resultado.tipo = tablaSimbolos.getSimbolo(indice).getTipo();
+			}
+			else if(ejecutar)
+			{
+				System.err.println("Error: el identificador " + i.getText() + " está indefinido");
+				throw new RecognitionException();
 			}
 			else
-				System.err.println("Error: el identificador " + i.getText() + " está indefinido");
-      	}
-      )|( PARENT_IZ e=expresionNum PARENT_DE
-      	  {
-	      	resultado = e;	      	
-	      } 
-	   )|( OP_MENOS e=factor
-	   	{
-	   		resultado = -e;
-	   	}
-	   ) 
-	   )
-	   	{if(debug)System.out.println("factor=>" + resultado);}
-	;
-	exception
- 		catch [RecognitionException re] {
- 			if(debug)System.out.println("Error en factor");
-			mostrarExcepcion(re);
-		 }
-
-factor_pot
-	returns [double resultado = (double)0.0;]
-	{double e1, e2;}
-	:
-	(e1=factor{resultado = e1;})
-	(
-			OP_POTENCIA e2 = factor
 			{
-				resultado = Math.pow(resultado, e2);	
+				resultado.tipo = "numero";
+				resultado._valor = "0";
 			}
-	)*
-	{if(debug)System.out.println("Factor_pot=>" + resultado);}
+      	}
+      )|( PARENT_IZ e=expresion[ejecutar] PARENT_DE
+      	  {
+	      		resultado = e;	      	
+	      } 
+	   )|( OP_MENOS e=termino[ejecutar]
+	   	{
+	   		if(e.tipo.equals("numero"))
+	   		{
+	   			resultado._valor = String.valueOf(-Double.parseDouble(e._valor));
+	   			resultado.tipo = "numero";
+	   		}
+	   		else if(ejecutar)
+	   			throw new RecognitionException();
+	   		else
+	   		{
+	   			resultado._valor = "0";
+	   			resultado.tipo = "numero";
+	   		}
+	   	}	
+	   )
+	   )
+	   	{if(debug)System.out.println("termino=>" + resultado._valor);}
 	;
 	exception
  		catch [RecognitionException re] {
- 			if(debug)System.out.println("Error en Factor_pot");
-			mostrarExcepcion(re);
+ 			if(debug&&ejecutar)System.out.println("Error en termino");
+ 			if(ejecutar)
+				mostrarExcepcion(re);
 		 }
 
 
 leer 
 	[boolean ejecutar]
 	//Variables locales
-	{String id;}
-	: LEER PARENT_IZ id=identificador PARENT_DE PUNTO_COMA
+	: LEER PARENT_IZ id:IDENT PARENT_DE PUNTO_COMA
 	{
 		if(ejecutar)
 		{
 			Scanner entrada = new Scanner(System.in);
 			int valor = entrada.nextInt();
 			//TODO Controlar fallo
-			insertarIdentificador(id, "numero", String.valueOf(valor));
+			insertarIdentificador(id.getText(), "numero", String.valueOf(valor));
 		}
 	}
 		;
 	exception
  		catch [RecognitionException re] {
- 			if(debug)System.out.println("Error en leer");
+ 			if(debug&&ejecutar)System.out.println("Error en leer");
+ 			if(ejecutar)
 			mostrarExcepcion(re);
 		 }
 
@@ -392,19 +366,19 @@ leer
 leerCadena 
 	[boolean ejecutar]
 	//Variables locales
-	{String id;}
-	: LEER_CADENA PARENT_IZ id=identificador PARENT_DE PUNTO_COMA
+	: LEER_CADENA PARENT_IZ id:IDENT PARENT_DE PUNTO_COMA
 	{
 		if(ejecutar)
 		{
 			Scanner entrada = new Scanner(System.in);
 			String valorCadena = entrada.next();
-			insertarIdentificador(id, "cadena", valorCadena);
+			insertarIdentificador(id.getText(), "cadena", valorCadena);
 		}
 	}
 		;
 	exception
  		catch [RecognitionException re] {
+ 			if(ejecutar)
 			mostrarExcepcion(re);
 		 }
 		
@@ -414,37 +388,41 @@ lectura
 		;
 	exception
  		catch [RecognitionException re] {
+ 			if(ejecutar)
 			mostrarExcepcion(re);
 		 }
 		
 escribir 
 		[boolean ejecutar]
 		//Variables locales
-		{double e;}
-		: ESCRIBIR PARENT_IZ e=expresionNum PARENT_DE PUNTO_COMA
+		{Expresion e;}
+		: ESCRIBIR PARENT_IZ e=expresion[ejecutar] PARENT_DE PUNTO_COMA
 		{
 			if(ejecutar)
-				System.out.println(String.valueOf(e));
+				System.out.println(e._valor);
 		}
 		;
 	exception
  		catch [RecognitionException re] {
+ 			if(ejecutar)
 			mostrarExcepcion(re);
 		 }
-		
+
+//TODO Revisar que sea de tipo cadena
 escribirCadena 
 		[boolean ejecutar]
 		//Variables locales
-		{String s;}
-		: ESCRIBIR_CADENA PARENT_IZ s=expresionAlfaNum PARENT_DE PUNTO_COMA
+		{Expresion s;}
+		: ESCRIBIR_CADENA PARENT_IZ s=expresion[ejecutar] PARENT_DE PUNTO_COMA
 		{
 			if(ejecutar)
-				System.out.println(s);
+				System.out.println(s._valor);
 		}
 		;
 	exception
  		catch [RecognitionException re] {
-			mostrarExcepcion(re);
+ 			if(ejecutar)
+				mostrarExcepcion(re);
 		 }
 			
 escritura 
@@ -453,6 +431,7 @@ escritura
 		;
 	exception
  		catch [RecognitionException re] {
+ 			if(ejecutar)
 			mostrarExcepcion(re);
 		 }
 
@@ -471,149 +450,157 @@ instruccion
 		;
 	exception
  		catch [RecognitionException re] {
+ 			if(ejecutar)
 			mostrarExcepcion(re);
 		 }
 		
 
 
-condicionNum
+termino_cond
+	[boolean ejecutar]
 	//Valor devuelto
 	returns [boolean resultado = false;]
 	//Variables locales
-	{double e1=1, e2=1;}
+	{Expresion e1, e2;
+	boolean b;}
 	:
-	e1=expresionNum
-	((
-		OP_IGUAL e2=expresionNum
-		{
-			resultado = e1==e2;
-		}
+	(
+	e1=expresion[ejecutar]
+		((
+			OP_IGUAL e2=expresion[ejecutar]
+			{
+				if(ejecutar)
+					if(e2.tipo.equals("cadena"))
+						resultado = e2._valor.equals(e1._valor);
+					else
+					{
+						double val1 = Double.parseDouble(e1._valor);
+						double val2 = Double.parseDouble(e2._valor);
+						resultado = (val1==val2);
+					}
+			}
+		)|(
+			OP_DISTINTO e2=expresion[ejecutar]
+			{
+				if(ejecutar)
+					if(e2.tipo.equals("cadena"))
+						resultado = !e2._valor.equals(e1._valor);
+					else
+					{
+						double val1 = Double.parseDouble(e1._valor);
+						double val2 = Double.parseDouble(e2._valor);
+						resultado = (val1!=val2);
+					}
+			}
+		)|(
+			OP_MAYOR e2=expresion[ejecutar]
+			{
+				if(ejecutar)
+					if(e2.tipo.equals("cadena"))
+						throw new RecognitionException();
+					else
+					{
+						double val1 = Double.parseDouble(e1._valor);
+						double val2 = Double.parseDouble(e2._valor);
+						resultado = (val1>val2);
+					}
+			}
+		)|(
+			OP_MENOR e2=expresion[ejecutar]
+			{
+				if(ejecutar)
+					if(e2.tipo.equals("cadena"))
+						throw new RecognitionException();
+					else
+					{
+						double val1 = Double.parseDouble(e1._valor);
+						double val2 = Double.parseDouble(e2._valor);
+						resultado = (val1<val2);
+					}
+			}
+		)|(
+			OP_MAYOR_IGUAL e2=expresion[ejecutar]
+			{
+				if(ejecutar)
+					if(e2.tipo.equals("cadena"))
+						throw new RecognitionException();
+					else
+					{
+						double val1 = Double.parseDouble(e1._valor);
+						double val2 = Double.parseDouble(e2._valor);
+						resultado = (val1>=val2);
+					}
+			}
+		)|(
+			OP_MENOR_IGUAL e2=expresion[ejecutar]
+			{
+						if(ejecutar)
+					if(e2.tipo.equals("cadena"))
+						throw new RecognitionException();
+					else
+					{
+						double val1 = Double.parseDouble(e1._valor);
+						double val2 = Double.parseDouble(e2._valor);
+						resultado = (val1<=val2);
+					}
+			}	
+		)
+		)
 	)|(
-		OP_DISTINTO e2=expresionNum
-		{
-			resultado = e1!=e2;
-		}
-	)|(
-		OP_MAYOR e2=expresionNum
-		{
-			resultado = e1>e2;
-		}
-	)|(
-		OP_MENOR e2=expresionNum
-		{
-			resultado = e1<e2;
-		}
-	)|(
-		OP_MAYOR_IGUAL e2=expresionNum
-		{
-			resultado = e1>=e2;
-		}
-	)|(
-		OP_MENOR_IGUAL e2=expresionNum
-		{
-			resultado = e1<=e2;
-		}	
+			CORCH_IZ b=condicion[ejecutar] CORCH_DE
+			{
+				resultado = b;
+			}
 	)
-	)
-	{if(debug)System.out.println("CondiciónNum=>" + resultado);}
+	{if(debug)System.out.println("Termino_cond=>" + resultado);}
 	;
 	exception
  		catch [RecognitionException re] {
 
- 			if(debug)System.out.println("Error en condicionNum");
-			mostrarExcepcion(re);
-		 }
-
-condicionAlfaNum
-	//Valor devuelto
-	returns [boolean resultado = false;]
-	//Variables locales
-	{String s1, s2;}
-	:
-	s1=expresionAlfaNum
-	((
-		OP_IGUAL s2=expresionAlfaNum
-		{
-			resultado = s1.equals(s2);
-		}
-	)|(
-		OP_DISTINTO s2=expresionAlfaNum
-		{
-			resultado = !s1.equals(s2);
-		}
-	)
-	)
-	{if(debug)System.out.println("CondiciónAlfa=>" + resultado);}
-	;
-	exception
- 		catch [RecognitionException re] {
- 			if(debug)System.out.println("Error en condicionAlfaNum");
+ 			if(debug&&ejecutar)System.out.println("Error en termino_cond");
+ 			if(ejecutar)
 			mostrarExcepcion(re);
 		 }
 		
 		
 factor_cond
+	[boolean ejecutar]
 	//Valor devuelto
 	returns [boolean resultado = false;]
 	//Variables locales
 	{boolean a, b;}
-	:(
-		(
-			(
-				(b=condicionAlfaNum)
-				|(b=condicionNum)
-			)
-			{
-				resultado = b;
-			}
-		)
-		|
-		(
-			CORCH_IZ b=condicion CORCH_DE
-			{
-				resultado = b;
-			}
-		)
-	)
-	{if(debug)System.out.println("FactorCondicion=>" +  resultado);}
-	;
-	exception
- 		catch [RecognitionException re] {
- 			 if(debug)System.out.println("Error en factor_cond");
-			mostrarExcepcion(re);
-		 }
-
-factor_cond2
-	returns [boolean resultado=false;]
-	{boolean b;}
 	:
 	(
-		OP_NO b=factor_cond
+		OP_NO b=termino_cond[ejecutar]
 		{
 			resultado = !b;
 		}
 	)
 	|
 	(
-		b = factor_cond
+		b = termino_cond[ejecutar]
 		{
 			resultado = b;
 		}
 	)
+	{if(debug)System.out.println("FactorCondicion=>" +  resultado);}
 	;
 	exception
  		catch [RecognitionException re] {
- 			 if(debug)System.out.println("Error en factor_cond2");
+ 			 if(debug&&ejecutar)System.out.println("Error en factor_cond");
+ 			 if(ejecutar)
 			mostrarExcepcion(re);
 		 }
+
 		
 		
 sumando_cond
+	[boolean ejecutar]
 	returns [boolean resultado = false;]
 	{boolean a, b;}
-	:(a=factor_cond2{resultado = a;})
+	:(a=factor_cond[ejecutar]{resultado = a;})
 	(
-		OP_Y b = factor_cond2
+		OP_Y b = factor_cond[ejecutar]
 		{
 			resultado = resultado && b;	
 		}
@@ -622,18 +609,20 @@ sumando_cond
 	;
 	exception
  		catch [RecognitionException re] {
- 			if(debug)System.out.println("Error en sumando_cond");
+ 			if(debug&&ejecutar)System.out.println("Error en sumando_cond");
+ 			if(ejecutar)
 			mostrarExcepcion(re);
 		 }
 	
 	
 condicion
+	[boolean ejecutar]
 	returns [boolean resultado = false;]
 	{boolean a,b;}
 	:(
-		(a=sumando_cond{resultado = a;})
+		(a=sumando_cond[ejecutar]{resultado = a;})
 		(
-			OP_O b=sumando_cond
+			OP_O b=sumando_cond[ejecutar]
 			{
 				resultado = resultado || b;
 			}	
@@ -643,7 +632,8 @@ condicion
 	;
 	exception
  		catch [RecognitionException re] {
-			if(debug)System.out.println("Error en condicion");
+			if(debug&&ejecutar)System.out.println("Error en condicion");
+			if(ejecutar)
 			mostrarExcepcion(re);
 		 }
 
@@ -651,18 +641,19 @@ sentencia_si
 	[boolean ejecutar]
 	// Variable local
 	 {boolean valor;}
-	 : 	SI PARENT_IZ valor=condicion PARENT_DE
+	 : 	SI PARENT_IZ valor=condicion[ejecutar] PARENT_DE
 	   	ENTONCES 
 		(instruccion[ejecutar&&valor])+
 		(
 			SI_NO
-			(instruccion[!(ejecutar&&valor)])+
+			(instruccion[ejecutar&&(!valor)])+
 		)?
 		FIN_SI PUNTO_COMA
 			{if(debug)System.out.println("Sentencia if=>" + valor);}
 	;
 	exception
  		catch [RecognitionException re] {
+ 			if(ejecutar)
 			mostrarExcepcion(re);
 		 }
 		
@@ -674,7 +665,7 @@ bucle_mientras
 		:
 		 // Se establece una marca para indicar el punto de inicio del bucle
 		{marca = mark();}
-		 MIENTRAS PARENT_IZ valor=condicion PARENT_DE 
+		 MIENTRAS PARENT_IZ valor=condicion[ejecutar] PARENT_DE 
 		 HACER 
 		 (instruccion[valor&&ejecutar])+
 		 FIN_MIENTRAS PUNTO_COMA
@@ -688,6 +679,7 @@ bucle_mientras
 		;
 	exception
  		catch [RecognitionException re] {
+ 			if(ejecutar)
 			mostrarExcepcion(re);
 		 }
 		
@@ -701,9 +693,9 @@ bucle_repetir
 		{marca = mark();}
 		 REPETIR
 		 (instruccion[valor&&ejecutar])+ 
-		HASTA valor=condicion PUNTO_COMA
+		HASTA PARENT_IZ valor=condicion[ejecutar] PARENT_DE PUNTO_COMA
 			{
-				if(valor&&ejecutar)
+				if((!valor)&&ejecutar)
 				{
 					rewind(marca); 
 					this.bucle_repetir(true);
@@ -712,13 +704,15 @@ bucle_repetir
 		;
 	exception
  		catch [RecognitionException re] {
+ 			if(ejecutar)
 			mostrarExcepcion(re);
 		 }
 		
 		
 cuerpo_bucle_para
 	[String id, boolean ejecutar]
-	{double h, p, n=0;
+	{Expresion h, p;
+	double n=0;
 	boolean valor;
 	int marca=-1;}
 	:
@@ -731,10 +725,12 @@ cuerpo_bucle_para
 			n = Double.parseDouble(valorCadena);
 		}
 	}
-	HASTA h = expresionNum
-	PASO p = expresionNum
+	HASTA h = expresion[ejecutar]
+	PASO p = expresion[ejecutar]
 	{
-		if((p<0 && n>h)|(p>0 && n<h))
+		double valh = Double.parseDouble(h._valor);
+		double valp = Double.parseDouble(p._valor);
+		if((valp<0 && n>valh)|(valp>0 && n<valh))
 			valor = true;
 		else
 			valor = false;
@@ -745,7 +741,7 @@ cuerpo_bucle_para
 	{
 		if(valor&&ejecutar)
 		{
-			insertarIdentificador(id, "numero", String.valueOf(n+p));
+			insertarIdentificador(id, "numero", String.valueOf(n+valp));
 			rewind(marca); 
 			this.cuerpo_bucle_para(id, true);
 		}
@@ -753,6 +749,7 @@ cuerpo_bucle_para
 	;
 	exception
  		catch [RecognitionException re] {
+ 			if(ejecutar)
 			mostrarExcepcion(re);
 		 }
 		
@@ -761,18 +758,17 @@ bucle_para
 		[boolean ejecutar]
 		// Variables locales
 		{boolean valor;
-		String id;
-		double d;
+		Expresion d;
 		double h;
 		double p;}
 		:
-		PARA id=identificador
-		DESDE d=expresionNum
+		PARA id:IDENT
+		DESDE d=expresion[ejecutar]
 		{
 			if(ejecutar)
-				insertarIdentificador(id, "numero", String.valueOf(d));
+				insertarIdentificador(id.getText(), "numero", d._valor);
 		}
-		cuerpo_bucle_para[id, ejecutar]
+		cuerpo_bucle_para[id.getText(), ejecutar]
 	;
 	exception
  		catch [RecognitionException re] {
@@ -790,17 +786,20 @@ borrar
 	;
 	exception
  		catch [RecognitionException re] {
+ 			if(ejecutar)
 			mostrarExcepcion(re);
 		 }
 		
 		
 lugar
 	[boolean ejecutar]
-	{double x, y;}
-	: LUGAR PARENT_IZ x=expresionNum COMA y=expresionNum PARENT_DE PUNTO_COMA
+	{Expresion x, y;}
+	: LUGAR PARENT_IZ x=expresion[ejecutar] COMA y=expresion[ejecutar] PARENT_DE PUNTO_COMA
 	{
+		double valx = Double.parseDouble(x._valor);
+		double valy = Double.parseDouble(y._valor);
 		if(ejecutar)
-			System.out.printf("\033[%d;%dH",(int)x,(int)y);
+			System.out.printf("\033[%d;%dH",(int)valx,(int)valy);
 	}
 	;
 	exception
