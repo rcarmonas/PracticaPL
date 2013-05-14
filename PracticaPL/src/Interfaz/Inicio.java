@@ -112,8 +112,19 @@ public class Inicio {
 			}
 		});
 
-		jpBotones.setBounds(50*X+100, 20, 100, 150);
+		jpBotones.setBounds(50*X+100, 150, 100, 150);
 		ventana.add(jpBotones);
+		
+		JPanel jpEstado=new JPanel();
+		JLabel lblEstado=new JLabel("Estado");
+		jpEstado.add(lblEstado);
+		JLabel lblVidas=new JLabel("Vidas: "+jugador.getVidas());
+		jpEstado.add(lblVidas);
+		JLabel lblFlechas=new JLabel("Flechas: "+jugador.getFlechas());
+		jpEstado.add(lblFlechas);
+		jpEstado.setBounds(50*X+100, 20, 100, 150);
+		ventana.add(jpEstado);
+		
 	}
 
 	boolean mover(int iMovX, int iMovY){

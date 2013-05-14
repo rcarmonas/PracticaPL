@@ -2,6 +2,15 @@ package Interfaz;
 
 public class Jugador {
 	int vidas;
+	int flechas;
+	public int getFlechas() {
+		return flechas;
+	}
+
+	public void setFlechas(int flechas) {
+		this.flechas = flechas;
+	}
+
 	int x, y;
 
 	Jugador(int i,int j){
