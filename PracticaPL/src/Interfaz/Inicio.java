@@ -9,6 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 /*
  * Nomenclatura imagenes:
@@ -130,10 +131,11 @@ public class Inicio {
 		JLabel lblConsola=new JLabel("Consola");
 		lblConsola.setBounds(50*X+50, 300, 200, 50);
 		ventana.add(lblConsola);
-		
+
 		JTextArea jtConsola=new JTextArea();
-		jtConsola.setBounds(50*X+50, 350, 210, 170);
-		ventana.add(jtConsola);
+		JScrollPane jsScroll= new JScrollPane(jtConsola);
+		jsScroll.setBounds(50*X+50, 350, 210, 170);
+		ventana.add(jsScroll);
 		
 		KeyListener listener = new MiKeyListener(this);
 		jtConsola.addKeyListener(listener);
