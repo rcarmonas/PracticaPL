@@ -10,7 +10,7 @@ public class Test
 {
 	public static void main(String args[]) 
 	{
-		boolean debug = true;
+		boolean debug = false;
 		try 
 		{
 			/*
@@ -46,11 +46,10 @@ public class Test
 		
 			// Analizador sintáctico
 			Anasint anasint = new Anasint(analex);
-			anasint.setTablaSimbolos(analex.getTablaSimbolos());
+			anasint.setTablaSimbolos(new TablaSimbolos());
 			// Se invoca a la función asociada al símbolo inicial
 			anasint.setDebug(debug);
 			anasint.prog();	
-
 			// Se muestran los identificadores reconocidos
 			if(debug)
 			{

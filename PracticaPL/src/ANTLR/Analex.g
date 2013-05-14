@@ -12,6 +12,7 @@ class Analex extends Lexer;
 
 
 options{
+	charVocabulary = '\3'..'\377';
 	importVocab = Anasint;
 
 	// Se indica que los literales se comprueben localmente
@@ -62,50 +63,7 @@ tokens
 	
 }
 // FIN DE LA DECLARACION DE TOKENS PREDEFINIDOS
-{		
-	private TablaSimbolos tablaSimbolos = new TablaSimbolos();
-	
-	public TablaSimbolos getTablaSimbolos()
-	{
-		return tablaSimbolos;
-	}
-	
-	private void insertarIdentificador(String nombre, String tipo, String valorCadena)
-		{
-			
-			// Busca el identificador en la tabla de símbolos
-			int indice = tablaSimbolos.existeSimbolo(nombre);
 
-			// Si encuentra el identificador, le modifica su valor
-			if (indice >= 0)
-			{
-				tablaSimbolos.getSimbolo(indice).setValor(valorCadena);
-			}
-			// Si no lo encuentra, lo inserta en la tabla de símbolos
-			else
-			{
-				// Se crea la variable
-				Variable v = new Variable (nombre,"float",valorCadena);
-
-				// Se inserta la variable en la tabla de símbolos
-				tablaSimbolos.insertarSimbolo(v);
-			}
-		}
-		
-	private String getTipo(String nombre)
-		{
-			
-			int indice = tablaSimbolos.existeSimbolo(nombre);
-			if(indice<0)
-				return null;
-			else
-			{
-				Variable aux = tablaSimbolos.getSimbolo(indice);
-			
-				return aux.getTipo();
-			}
-		}
-}
 
 // ZONA DE REGLAS
 
@@ -152,18 +110,6 @@ IDENT
 	// Se indica que se compruebe si un identificador es una palabra reservada
 	options {testLiterals=true;} 
 	: LETRA(LETRA|DIGITO|('_'(LETRA|DIGITO)))*
-	{
-		String aux = $getText;
-		String tipo = getTipo(aux);
-		//System.out.println("Identificador: " + tipo + " " + aux);
-		if(tipo != null)
-		{
-			if(tipo.equals("cadena"))
-				$setType(IDEN_CADENA);
-			else if(tipo.equals("numero"))
-				$setType(IDEN_NUMERO);
-		}
-	}
 	;
 SI : "si"
 	;
@@ -182,6 +128,9 @@ OP_Y : "__y"
 	;
 
 OP_NO : "__no"
+	;
+
+OP_CONCATENACION : "||"
 	;
 
 //Número:
