@@ -216,13 +216,22 @@ public class Inicio {
 			ipAux = matrizIP[jJugador.getX()][jJugador.getY()];
 			if(ipAux.bVector[2])
 			{
-				jJugador.setFlechas(jJugador.getFlechas()+1);
+				jJugador.setFlechas(jJugador.getFlechas() + 1);
 				this.lblFlechas.setText("Flechas: " + jJugador.getFlechas());
 			}
 			if(ipAux.bVector[3])
 			{
-				jJugador.setVidas(jJugador.getVidas()+1);
+				jJugador.setVidas(jJugador.getVidas() + 1);
 				this.lblVidas.setText("Vidas: " + jJugador.getVidas());
+			}
+			if(ipAux.bVector[5])
+			{
+				if(jJugador.getVidas() != 0){
+					jJugador.setVidas(jJugador.getVidas() - 1);
+					this.lblVidas.setText("Vidas: " + jJugador.getVidas());
+				}
+				else
+					this.lblVidas.setText("Vidas: Muerto");
 			}
 			
 
