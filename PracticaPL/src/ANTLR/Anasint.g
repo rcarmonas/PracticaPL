@@ -408,7 +408,6 @@ escribir
 			mostrarExcepcion(re);
 		 }
 
-//TODO Revisar que sea de tipo cadena
 escribirCadena 
 		[boolean ejecutar]
 		//Variables locales
