@@ -4,28 +4,36 @@ import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+
 /*
  * Nomenclatura imagenes:
- * 	0 - Jugador
- * 	1 - Jugador-Viento
- * 	2 - Jugador-Olor
- * 	3 - Jugador-Viento-Olor
- * 	4 - Vacio
- * 	5 - Viento
- * 	6 - Olor
- * 	7 - Viento-Olor
- * 	8 - Desconocido
+ * 	0 - olor
+ *  1 - viento
+ *  2 - flecha - Especial
+ *  3 - ambrosia - Especial
+ *  4 - tesoro - Especial
+ *  5 - pozo
+ *  6 - wumpus
+ *  7 - jugador
+ *  8 - desconocido
  */
 
 public class Inicio {
+	static int olor = 0;
+	static int viento = 1;
+	static int flecha = 2;
+	static int jugador = 3;
+	static int ambrosia = 4;
+	static int tesoro = 5;
+	static int desconocido = 6;
+
 	public JFrame ventana;
-	Jugador jugador;
+	Jugador jJugador;
 	ImagePanel matrizIP[][];
 	int rejillaX, rejillaY;
 
@@ -49,17 +57,64 @@ public class Inicio {
 		this.rejillaX = X;
 		this.rejillaY = Y;
 
-		jugador = new Jugador(0,0);
+		jJugador = new Jugador(0,0);
 		
 		matrizIP = new ImagePanel[X][Y];
 		
 		//inicializacion del tablero
 		for(i=0; i<X; i++)
 			for(j=0; j<Y; j++)
-				matrizIP[i][j] = new ImagePanel(8,4);
+				matrizIP[i][j] = new ImagePanel();
+		
 
-		matrizIP[0][0] = new ImagePanel(0,4);
-		matrizIP[0][1] = new ImagePanel(8,5);
+		matrizIP[0][0] = new ImagePanel(new boolean[]{false, false, false, false, false, false, false, true, false});
+
+		//TODO borrar desde aquí
+		matrizIP[0][1] = new ImagePanel(new boolean[]{false, false, false, false, false, false, false, false, true});
+		matrizIP[0][2] = new ImagePanel(new boolean[]{false, false, false, false, false, false, false, false, true});
+		matrizIP[0][3] = new ImagePanel(new boolean[]{false, false, false, false, false, false, false, false, true});
+		matrizIP[0][4] = new ImagePanel(new boolean[]{false, false, false, false, false, false, false, false, true});
+
+		matrizIP[1][1] = new ImagePanel(new boolean[]{true, false, false, false, false, false, false, false, true});
+		matrizIP[1][2] = new ImagePanel(new boolean[]{true, true, false, false, false, false, false, false, true});
+		matrizIP[1][3] = new ImagePanel(new boolean[]{true, false, false, false, false, false, false, false, true});
+		matrizIP[1][4] = new ImagePanel(new boolean[]{false, true, false, false, false, false, false, false, true});
+
+		matrizIP[2][1] = new ImagePanel(new boolean[]{false, true, false, false, false, false, false, false, true});
+		matrizIP[2][2] = new ImagePanel(new boolean[]{false, true, false, false, false, false, false, false, true});
+		matrizIP[2][3] = new ImagePanel(new boolean[]{false, true, false, false, false, false, false, false, true});
+		matrizIP[2][4] = new ImagePanel(new boolean[]{false, true, false, false, false, false, false, false, true});
+
+		matrizIP[3][1] = new ImagePanel(new boolean[]{true, true, false, false, false, false, false, false, true});
+		matrizIP[3][2] = new ImagePanel(new boolean[]{true, true, false, false, false, false, false, false, true});
+		matrizIP[3][3] = new ImagePanel(new boolean[]{true, true, false, false, false, false, false, false, true});
+		matrizIP[3][4] = new ImagePanel(new boolean[]{true, true, false, false, false, false, false, false, true});
+
+		matrizIP[4][1] = new ImagePanel(new boolean[]{false, false, true, false, false, false, false, false, true});
+		matrizIP[4][2] = new ImagePanel(new boolean[]{false, false, true, false, false, false, false, false, true});
+		matrizIP[4][3] = new ImagePanel(new boolean[]{false, false, true, false, false, false, false, false, true});
+		matrizIP[4][4] = new ImagePanel(new boolean[]{false, false, true, false, false, false, false, false, true});
+
+		matrizIP[5][1] = new ImagePanel(new boolean[]{false, false, false, true, false, false, false, false, true});
+		matrizIP[5][2] = new ImagePanel(new boolean[]{false, false, false, true, false, false, false, false, true});
+		matrizIP[5][3] = new ImagePanel(new boolean[]{false, false, false, true, false, false, false, false, true});
+		matrizIP[5][4] = new ImagePanel(new boolean[]{false, false, false, true, false, false, false, false, true});
+
+		matrizIP[6][1] = new ImagePanel(new boolean[]{false, false, false, false, true, false, false, false, true});
+		matrizIP[6][2] = new ImagePanel(new boolean[]{false, false, false, false, true, false, false, false, true});
+		matrizIP[6][3] = new ImagePanel(new boolean[]{false, false, false, false, true, false, false, false, true});
+		matrizIP[6][4] = new ImagePanel(new boolean[]{false, false, false, false, true, false, false, false, true});
+
+		matrizIP[7][1] = new ImagePanel(new boolean[]{false, false, false, false, false, true, false, false, true});
+		matrizIP[7][2] = new ImagePanel(new boolean[]{false, false, false, false, false, true, false, false, true});
+		matrizIP[7][3] = new ImagePanel(new boolean[]{false, false, false, false, false, true, false, false, true});
+		matrizIP[7][4] = new ImagePanel(new boolean[]{false, false, false, false, false, true, false, false, true});
+
+		matrizIP[8][1] = new ImagePanel(new boolean[]{false, false, false, false, false, false, true, false, true});
+		matrizIP[8][2] = new ImagePanel(new boolean[]{false, false, false, false, false, false, true, false, true});
+		matrizIP[8][3] = new ImagePanel(new boolean[]{false, false, false, false, false, false, true, false, true});
+		matrizIP[8][4] = new ImagePanel(new boolean[]{false, false, false, false, false, false, true, false, true});
+		//TODO borrar hasta aquí
 		
 		//creacion de la ventana
 		ventana = new JFrame();
@@ -117,13 +172,16 @@ public class Inicio {
 		jpBotones.setBounds(50*X+100, 150, 100, 150);
 		ventana.add(jpBotones);
 		
-		JPanel jpEstado=new JPanel();
-		JLabel lblEstado=new JLabel("Estado");
+		JPanel jpEstado = new JPanel();
+		JLabel lblEstado = new JLabel("Estado");
 		jpEstado.add(lblEstado);
-		JLabel lblVidas=new JLabel("Vidas: "+jugador.getVidas());
+
+		JLabel lblVidas = new JLabel("Vidas: " + jJugador.getVidas());
 		jpEstado.add(lblVidas);
-		JLabel lblFlechas=new JLabel("Flechas: "+jugador.getFlechas());
+
+		JLabel lblFlechas = new JLabel("Flechas: " + jJugador.getFlechas());
 		jpEstado.add(lblFlechas);
+
 		jpEstado.setBounds(50*X+100, 20, 100, 150);
 		ventana.add(jpEstado);
 		
@@ -141,19 +199,20 @@ public class Inicio {
 
 	boolean mover(int iMovX, int iMovY){
 
-		ImagePanel ipAux = matrizIP[jugador.getX()][jugador.getY()];
+		ImagePanel ipAux = matrizIP[jJugador.getX()][jJugador.getY()];
 
-		if(jugador.getX() + iMovX >= 0 && jugador.getX() + iMovX < rejillaX && jugador.getY() + iMovY >= 0 && jugador.getY() + iMovY < rejillaY){
-			//Quitar al jugador de la casilla donde estaba
-			ipAux.cambiarImagen(ipAux.getiValorReal());
-			
-			jugador.setX(jugador.getX() + iMovX);
-			jugador.setY(jugador.getY() + iMovY);
+		if(jJugador.getX() + iMovX >= 0 && jJugador.getX() + iMovX < rejillaX && jJugador.getY() + iMovY >= 0 && jJugador.getY() + iMovY < rejillaY){
+			//Quita al jugador de la casilla donde estaba
+			ipAux.cambiarImagen(false);
 
-			ipAux = matrizIP[jugador.getX()][jugador.getY()];
-			
-			//Poner al jugador en la nueva casilla
-			ipAux.cambiarImagen(ipAux.getiValorReal() - 4);
+			//Mover
+			jJugador.setX(jJugador.getX() + iMovX);
+			jJugador.setY(jJugador.getY() + iMovY);
+
+			ipAux = matrizIP[jJugador.getX()][jJugador.getY()];
+
+			//Pone al jugador en la nueva casilla
+			ipAux.cambiarImagen(true);
 		}
 		else
 			return false;
