@@ -583,12 +583,37 @@ factor_cond
 			mostrarExcepcion(re);
 		 }
 
+factor_cond2
+	returns [boolean resultado=false;]
+	{boolean b;}
+	:
+	(
+		OP_NO b=factor_cond
+		{
+			resultado = !b;
+		}
+	)
+	|
+	(
+		b = factor_cond
+		{
+			resultado = b;
+		}
+	)
+	;
+	exception
+ 		catch [RecognitionException re] {
+ 			 if(debug)System.out.println("Error en factor_cond2");
+			mostrarExcepcion(re);
+		 }
+		
+		
 sumando_cond
 	returns [boolean resultado = false;]
 	{boolean a, b;}
-	:(a=factor_cond{resultado = a;})
+	:(a=factor_cond2{resultado = a;})
 	(
-		OP_Y b = factor_cond
+		OP_Y b = factor_cond2
 		{
 			resultado = resultado && b;	
 		}
@@ -613,13 +638,6 @@ condicion
 				resultado = resultado || b;
 			}	
 		)*
-	)
-	|
-	(
-		OP_NO b=condicion
-		{
-			resultado = !b;
-		}
 	)
 	{if(debug)System.out.println("Condición=>" + resultado);}
 	;
