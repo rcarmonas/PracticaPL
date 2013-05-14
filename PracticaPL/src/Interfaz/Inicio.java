@@ -37,6 +37,8 @@ public class Inicio {
 	Jugador jJugador;
 	ImagePanel matrizIP[][];
 	int rejillaX, rejillaY;
+	JLabel lblVidas;
+	JLabel lblFlechas;
 
 	public static void main(String args[]) {
 		Runnable rAux = new Runnable() {
@@ -177,10 +179,10 @@ public class Inicio {
 		JLabel lblEstado = new JLabel("Estado");
 		jpEstado.add(lblEstado);
 
-		JLabel lblVidas = new JLabel("Vidas: " + jJugador.getVidas());
+		lblVidas = new JLabel("Vidas: " + jJugador.getVidas());
 		jpEstado.add(lblVidas);
 
-		JLabel lblFlechas = new JLabel("Flechas: " + jJugador.getFlechas());
+		lblFlechas = new JLabel("Flechas: " + jJugador.getFlechas());
 		jpEstado.add(lblFlechas);
 
 		jpEstado.setBounds(50*X+100, 20, 100, 150);
@@ -210,8 +212,19 @@ public class Inicio {
 			//Mover
 			jJugador.setX(jJugador.getX() + iMovX);
 			jJugador.setY(jJugador.getY() + iMovY);
-
+			
 			ipAux = matrizIP[jJugador.getX()][jJugador.getY()];
+			if(ipAux.bVector[2])
+			{
+				jJugador.setFlechas(jJugador.getFlechas()+1);
+				this.lblFlechas.setText("Flechas: " + jJugador.getFlechas());
+			}
+			if(ipAux.bVector[3])
+			{
+				jJugador.setVidas(jJugador.getVidas()+1);
+				this.lblVidas.setText("Vidas: " + jJugador.getVidas());
+			}
+			
 
 			//Pone al jugador en la nueva casilla
 			ipAux.cambiarImagen(true);

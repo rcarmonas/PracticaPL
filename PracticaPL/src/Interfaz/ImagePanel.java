@@ -22,7 +22,7 @@ import javax.swing.JPanel;
 public class ImagePanel extends JPanel{
 
 	String imagen[] = {"olor", "viento", "flecha", "ambrosia", "tesoro", "pozo", "wumpus", "jugador", "desconocido"};
-	boolean bVector[] = {false, false, false, false, false, false, false, false, true};
+	public boolean bVector[] = {false, false, false, false, false, false, false, false, true};
 
 	public ImagePanel(boolean vector[]) {
 		bVector = vector;
