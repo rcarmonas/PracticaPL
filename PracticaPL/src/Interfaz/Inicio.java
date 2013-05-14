@@ -24,7 +24,6 @@ import javax.swing.JPanel;
 public class Inicio {
 	public JFrame ventana;
 	Jugador jugador;
-	//int matriz[][];
 	ImagePanel matrizIP[][];
 	int rejillaX, rejillaY;
 
@@ -56,8 +55,9 @@ public class Inicio {
 		for(i=0; i<X; i++)
 			for(j=0; j<Y; j++)
 				matrizIP[i][j] = new ImagePanel(8,4);
+
 		matrizIP[0][0] = new ImagePanel(0,4);
-		matrizIP[0][1]=new ImagePanel(8,5);
+		matrizIP[0][1] = new ImagePanel(8,5);
 		
 		//creacion de la ventana
 		ventana = new JFrame();
@@ -88,7 +88,6 @@ public class Inicio {
 
 		JButton JBAbajo = new JButton("Abajo");
 		jpBotones.add(JBAbajo);
-		
 
 		JBAbajo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -119,17 +118,19 @@ public class Inicio {
 
 	boolean mover(int iMovX, int iMovY){
 
-		ImagePanel aux=matrizIP[jugador.getX()][jugador.getY()];
+		ImagePanel ipAux = matrizIP[jugador.getX()][jugador.getY()];
+
 		if(jugador.getX() + iMovX >= 0 && jugador.getX() + iMovX < rejillaX && jugador.getY() + iMovY >= 0 && jugador.getY() + iMovY < rejillaY){
-			//quito al jugador de la casilla donde estaba
-			aux.cambiarImagen(aux.getiValor());
+			//Quitar al jugador de la casilla donde estaba
+			ipAux.cambiarImagen(ipAux.getiValorReal());
 			
-			jugador.setX(jugador.getX()+iMovX);
-			jugador.setY(jugador.getY()+iMovY);
-			aux=matrizIP[jugador.getX()][jugador.getY()];
+			jugador.setX(jugador.getX() + iMovX);
+			jugador.setY(jugador.getY() + iMovY);
+
+			ipAux = matrizIP[jugador.getX()][jugador.getY()];
 			
-			//pongo al jugador en la nueva casilla
-			aux.cambiarImagen(aux.getiValor()-4);
+			//Poner al jugador en la nueva casilla
+			ipAux.cambiarImagen(ipAux.getiValorReal() - 4);
 		}
 		else
 			return false;

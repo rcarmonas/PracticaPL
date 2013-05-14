@@ -23,14 +23,14 @@ import javax.swing.JPanel;
 
 public class ImagePanel extends JPanel{
 
-    private BufferedImage image;
+    private BufferedImage biActualImage;
     String imagen[] = {"jugador", "jugador-viento", "jugador-olor", "jugador-viento-olor", "vacio", "viento", "olor", "viento-olor", "desconocido"};
-    int iValor = 8;
+    int iValorReal = 8;
 
     public ImagePanel(int index,int valor) {
        try {                
-          image = ImageIO.read(new File("img/" + imagen[index] + ".png"));
-          iValor = valor;
+          biActualImage = ImageIO.read(new File("img/" + imagen[index] + ".png"));
+          iValorReal = valor;
        } catch (IOException ex) {
             ex.printStackTrace();
        }
@@ -39,22 +39,21 @@ public class ImagePanel extends JPanel{
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(image, 0, 0, null); // see javadoc for more info on the parameters            
+        g.drawImage(biActualImage, 0, 0, null); // see javadoc for more info on the parameters            
     }
 
-	public int getiValor() {
-		return iValor;
+	public int getiValorReal() {
+		return iValorReal;
 	}
 
-	public void setiValor(int iValor) {
-		this.iValor = iValor;
+	public void setiValorReal(int iValor) {
+		this.iValorReal = iValor;
 	}
 	public void cambiarImagen(int index)
 	{
 		try {
-			image = ImageIO.read(new File("img/" + imagen[index] + ".png"));
+			biActualImage = ImageIO.read(new File("img/" + imagen[index] + ".png"));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		this.paintComponent(getGraphics());
