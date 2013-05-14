@@ -39,7 +39,6 @@ tokens
 	ESCRIBIR = "escribir";
 	ESCRIBIR_CADENA = "escribir_cadena";
     ENTONCES = "entonces";
-    SI_NO = "si_no";
     FIN_SI = "fin_si";
 	MIENTRAS = "mientras";
 	HACER = "hacer";
@@ -167,7 +166,9 @@ IDENT
 	}
 	;
 SI : "si"
-{System.out.println("Reconocido 'si'");}
+	;
+
+SI_NO : "si_no"
 	;
 
 //Operadores lógicos y de módulo:

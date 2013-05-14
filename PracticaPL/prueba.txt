@@ -1,7 +1,1 @@
-para a
-	desde 1
-	hasta 10
-	paso 1
-	hacer
-		escribir(a);
-fin_para
+escribir(3**2+3);

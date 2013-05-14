@@ -101,6 +101,7 @@ options
 
 //Asignación tanto numérica como alfanumérica
 asignacion
+	[boolean ejecutar]
 	//Variable local
 	{Expresion e;
 	String id;}
@@ -109,7 +110,8 @@ asignacion
 		e=expresion
 		{	
 			String nombre = id;
-			insertarIdentificador(nombre, e.tipo, e._valor);
+			if(ejecutar)
+				insertarIdentificador(nombre, e.tipo, e._valor);
 			if(debug)
 	 			System.out.println("Asignación =>" + nombre + "=" + e._valor);
 		}	
@@ -207,25 +209,25 @@ sumando
 	returns [double resultado = (double)0.0;]
 	//Variables locales
 	{double e1=-1, e2=-1;}
-	: (e1=factor{resultado = e1;})
+	: (e1=factor_pot{resultado = e1;})
 	(
 		//Producto
 		(
-			OP_PRODUCTO e2 = factor
+			OP_PRODUCTO e2 = factor_pot
 			{
 				resultado = resultado * e2;	
 			}
 		)
 		|
 		(//División
-			OP_DIVISION e2 = factor
+			OP_DIVISION e2 = factor_pot
 				{
 					resultado = resultado / e2;
 				}
 		)
 		|
 		(//Módulo
-			MOD e2 = factor
+			MOD e2 = factor_pot
 				{
 					resultado = (int)resultado % (int)e2;
 				}
@@ -345,16 +347,39 @@ factor
 			mostrarExcepcion(re);
 		 }
 
-		
+factor_pot
+	returns [double resultado = (double)0.0;]
+	{double e1, e2;}
+	:
+	(e1=factor{resultado = e1;})
+	(
+			OP_POTENCIA e2 = factor
+			{
+				resultado = Math.pow(resultado, e2);	
+			}
+	)*
+	{if(debug)System.out.println("Factor_pot=>" + resultado);}
+	;
+	exception
+ 		catch [RecognitionException re] {
+ 			if(debug)System.out.println("Error en Factor_pot");
+			mostrarExcepcion(re);
+		 }
+
+
 leer 
+	[boolean ejecutar]
 	//Variables locales
 	{String id;}
 	: LEER PARENT_IZ id=identificador PARENT_DE PUNTO_COMA
 	{
-		Scanner entrada = new Scanner(System.in);
-		int valor = entrada.nextInt();
-		//TODO Controlar fallo
-		insertarIdentificador(id, "numero", String.valueOf(valor));
+		if(ejecutar)
+		{
+			Scanner entrada = new Scanner(System.in);
+			int valor = entrada.nextInt();
+			//TODO Controlar fallo
+			insertarIdentificador(id, "numero", String.valueOf(valor));
+		}
 	}
 		;
 	exception
@@ -365,13 +390,17 @@ leer
 
 
 leerCadena 
+	[boolean ejecutar]
 	//Variables locales
 	{String id;}
 	: LEER_CADENA PARENT_IZ id=identificador PARENT_DE PUNTO_COMA
 	{
-		Scanner entrada = new Scanner(System.in);
-		String valorCadena = entrada.next();
-		insertarIdentificador(id, "cadena", valorCadena);
+		if(ejecutar)
+		{
+			Scanner entrada = new Scanner(System.in);
+			String valorCadena = entrada.next();
+			insertarIdentificador(id, "cadena", valorCadena);
+		}
 	}
 		;
 	exception
@@ -379,7 +408,9 @@ leerCadena
 			mostrarExcepcion(re);
 		 }
 		
-lectura : leer | leerCadena
+lectura
+	[boolean ejecutar]
+	: leer[ejecutar] | leerCadena[ejecutar]
 		;
 	exception
  		catch [RecognitionException re] {
@@ -387,11 +418,13 @@ lectura : leer | leerCadena
 		 }
 		
 escribir 
+		[boolean ejecutar]
 		//Variables locales
 		{double e;}
 		: ESCRIBIR PARENT_IZ e=expresionNum PARENT_DE PUNTO_COMA
 		{
-			System.out.println(String.valueOf(e));
+			if(ejecutar)
+				System.out.println(String.valueOf(e));
 		}
 		;
 	exception
@@ -400,11 +433,13 @@ escribir
 		 }
 		
 escribirCadena 
+		[boolean ejecutar]
 		//Variables locales
 		{String s;}
 		: ESCRIBIR_CADENA PARENT_IZ s=expresionAlfaNum PARENT_DE PUNTO_COMA
 		{
-			System.out.println(s);
+			if(ejecutar)
+				System.out.println(s);
 		}
 		;
 	exception
@@ -412,23 +447,27 @@ escribirCadena
 			mostrarExcepcion(re);
 		 }
 			
-escritura : escribir | escribirCadena
+escritura 
+	[boolean ejecutar]
+	: escribir[ejecutar] | escribirCadena[ejecutar]
 		;
 	exception
  		catch [RecognitionException re] {
 			mostrarExcepcion(re);
 		 }
 
-instruccion : 
-	escritura 
-	| lectura 
-	| asignacion 
-	| sentencia_si
-	| bucle_mientras 
-	| bucle_repetir 
-	| bucle_para
-	| borrar
-	| lugar
+instruccion 
+	[boolean ejecutar]
+	: 
+	escritura[ejecutar] 
+	| lectura[ejecutar] 
+	| asignacion[ejecutar] 
+	| sentencia_si[ejecutar]
+	| bucle_mientras[ejecutar] 
+	| bucle_repetir[ejecutar] 
+	| bucle_para[ejecutar]
+	| borrar[ejecutar]
+	| lugar[ejecutar]
 		;
 	exception
  		catch [RecognitionException re] {
@@ -591,27 +630,16 @@ condicion
 		 }
 
 sentencia_si
+	[boolean ejecutar]
 	// Variable local
 	 {boolean valor;}
-	 : SI PARENT_IZ valor=condicion PARENT_DE
-	   ENTONCES 
+	 : 	SI PARENT_IZ valor=condicion PARENT_DE
+	   	ENTONCES 
+		(instruccion[ejecutar&&valor])+
 		(
-		 // Si la condición es verdadera, se ejecuta el consecuente
-		 {(valor)==true}? (instruccion)+
-		 // Si hay parte alternativa, se omite
-			(
-			  SI_NO
-				 (options {greedy=false;}:.)+
-			)?
-		|
-		 // Si la condición es false, se omite el consecuente
-  		  {(valor)==false}? (options {greedy=false;}:.)+
-		 // Si hay parte alternativa, se ejecuta
-			(
-			 SI_NO
-				(instruccion)+
-			)?
-		)
+			SI_NO
+			(instruccion[!(ejecutar&&valor)])+
+		)?
 		FIN_SI PUNTO_COMA
 			{if(debug)System.out.println("Sentencia if=>" + valor);}
 	;
@@ -622,28 +650,23 @@ sentencia_si
 		
 		
 bucle_mientras
+		[boolean ejecutar]
 		// Variables locales
 		{boolean valor; int marca=-1;}
 		:
 		 // Se establece una marca para indicar el punto de inicio del bucle
 		{marca = mark();}
 		 MIENTRAS PARENT_IZ valor=condicion PARENT_DE 
-		      HACER 
-
-			( // Comienzo de las alternativas
-
-			  // Si la condición es falsa, se omite el cuerpo del bucle
-			 {valor == false}? (options {greedy=false;}:.)*  FIN_MIENTRAS PUNTO_COMA
-
-			  // Si la condición es verdadera, se ejecutan las instrucciones del bucle
-			| {valor == true}? (instruccion)+  FIN_MIENTRAS PUNTO_COMA
-				// Se indica que se repita la ejecución del bucle_mientras
-				{
+		 HACER 
+		 (instruccion[valor&&ejecutar])+
+		 FIN_MIENTRAS PUNTO_COMA
+		 {
+		 	if(ejecutar&&valor)
+		 	{
 				rewind(marca); 
-				this.bucle_mientras();
-				}
-			) // Fin de las alternativas
-		
+				this.bucle_mientras(true);
+		 	}
+		}
 		;
 	exception
  		catch [RecognitionException re] {
@@ -652,24 +675,22 @@ bucle_mientras
 		
 		
 bucle_repetir
+		[boolean ejecutar]
 		// Variables locales
 		{boolean valor=true; int marca=-1;}
 		:
 		 // Se establece una marca para indicar el punto de inicio del bucle
 		{marca = mark();}
 		 REPETIR
-			( // Comienzo de las alternativas
-				 (instruccion)+  HASTA valor=condicion PUNTO_COMA
-				// Se indica que se repita la ejecución del bucle_mientras
+		 (instruccion[valor&&ejecutar])+ 
+		HASTA valor=condicion PUNTO_COMA
+			{
+				if(valor&&ejecutar)
 				{
-					if(valor)
-					{
-						rewind(marca); 
-						this.bucle_repetir();
-					}
+					rewind(marca); 
+					this.bucle_repetir(true);
 				}
-			) // Fin de las alternativas
-		
+			}
 		;
 	exception
  		catch [RecognitionException re] {
@@ -678,16 +699,19 @@ bucle_repetir
 		
 		
 cuerpo_bucle_para
-	[String id]
-	{double h, p, n;
+	[String id, boolean ejecutar]
+	{double h, p, n=0;
 	boolean valor;
 	int marca=-1;}
 	:
 	{
 		marca = mark();
-		int indice = tablaSimbolos.existeSimbolo(id);
-		String valorCadena = tablaSimbolos.getSimbolo(indice).getValor();
-		n = Double.parseDouble(valorCadena);
+		if(ejecutar)
+		{
+			int indice = tablaSimbolos.existeSimbolo(id);
+			String valorCadena = tablaSimbolos.getSimbolo(indice).getValor();
+			n = Double.parseDouble(valorCadena);
+		}
 	}
 	HASTA h = expresionNum
 	PASO p = expresionNum
@@ -696,20 +720,18 @@ cuerpo_bucle_para
 			valor = true;
 		else
 			valor = false;
-		
 	}
 	HACER
-	( // Comienzo de las alternativas
-			  // Si la condición es falsa, se omite el cuerpo del bucle
-			 {valor == false}? (options {greedy=false;}:.)*  FIN_PARA PUNTO_COMA
-			  // Si la condición es verdadera, se ejecutan las instrucciones del bucle
-			| {valor == true}? (instruccion)+  FIN_PARA PUNTO_COMA
-				{
-				insertarIdentificador(id, "numero", String.valueOf(n+p));
-				rewind(marca); 
-				this.cuerpo_bucle_para(id);
-				}
-	) 
+	(instruccion[valor&&ejecutar])+
+	FIN_PARA PUNTO_COMA
+	{
+		if(valor&&ejecutar)
+		{
+			insertarIdentificador(id, "numero", String.valueOf(n+p));
+			rewind(marca); 
+			this.cuerpo_bucle_para(id, true);
+		}
+	}
 	;
 	exception
  		catch [RecognitionException re] {
@@ -718,6 +740,7 @@ cuerpo_bucle_para
 		
 		
 bucle_para
+		[boolean ejecutar]
 		// Variables locales
 		{boolean valor;
 		String id;
@@ -728,9 +751,10 @@ bucle_para
 		PARA id=identificador
 		DESDE d=expresionNum
 		{
-			insertarIdentificador(id, "numero", String.valueOf(d));
+			if(ejecutar)
+				insertarIdentificador(id, "numero", String.valueOf(d));
 		}
-		cuerpo_bucle_para[id]
+		cuerpo_bucle_para[id, ejecutar]
 	;
 	exception
  		catch [RecognitionException re] {
@@ -738,9 +762,12 @@ bucle_para
 		 }
 		
 		
-borrar: BORRAR PUNTO_COMA
+borrar
+	[boolean ejecutar]
+	: BORRAR PUNTO_COMA
 	{
-		System.out.printf("\33[2J");
+		if(ejecutar)
+			System.out.printf("\33[2J");
 	}
 	;
 	exception
@@ -750,10 +777,12 @@ borrar: BORRAR PUNTO_COMA
 		
 		
 lugar
+	[boolean ejecutar]
 	{double x, y;}
 	: LUGAR PARENT_IZ x=expresionNum COMA y=expresionNum PARENT_DE PUNTO_COMA
 	{
-		System.out.printf("\033[%d;%dH",(int)x,(int)y);
+		if(ejecutar)
+			System.out.printf("\033[%d;%dH",(int)x,(int)y);
 	}
 	;
 	exception
@@ -761,7 +790,7 @@ lugar
 			mostrarExcepcion(re);
 		 }
 
-prog: (instruccion)+
+prog: (instruccion[true])+
 	;
 	exception
  		catch [RecognitionException re] {
