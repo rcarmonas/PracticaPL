@@ -3,11 +3,13 @@ package Interfaz;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 /*
  * Nomenclatura imagenes:
  * 	0 - Jugador
@@ -125,6 +127,16 @@ public class Inicio {
 		jpEstado.setBounds(50*X+100, 20, 100, 150);
 		ventana.add(jpEstado);
 		
+		JLabel lblConsola=new JLabel("Consola");
+		lblConsola.setBounds(50*X+50, 300, 200, 50);
+		ventana.add(lblConsola);
+		
+		JTextArea jtConsola=new JTextArea();
+		jtConsola.setBounds(50*X+50, 350, 210, 170);
+		ventana.add(jtConsola);
+		
+		KeyListener listener = new MiKeyListener(this);
+		jtConsola.addKeyListener(listener);
 	}
 
 	boolean mover(int iMovX, int iMovY){
