@@ -489,27 +489,6 @@ escritura
 		 }
 
 
-//-------------------------------------------------------------------------------------------
-//Instruccion
-instruccion 
-	[boolean ejecutar]
-	: 
-	escritura[ejecutar] 
-	| lectura[ejecutar] 
-	| asignacion[ejecutar] 
-	| sentencia_si[ejecutar]
-	| bucle_mientras[ejecutar] 
-	| bucle_repetir[ejecutar] 
-	| bucle_para[ejecutar]
-	| borrar[ejecutar]
-	| lugar[ejecutar]
-		;
-	exception
- 		catch [RecognitionException re] {
- 			if(ejecutar)
-			mostrarExcepcion(re);
-		 }
-		
 
 //-------------------------------------------------------------------------------------------
 //Condición y los elementos de los que se compone
@@ -871,7 +850,47 @@ lugar
 			mostrarExcepcion(re);
 		 }
 
+
+
 //-------------------------------------------------------------------------------------------
+//Sentencias del mundo de wumpus =D
+colocarPozo
+	[boolean ejecutar]
+	{Expresion e1, e2;}
+	:
+	SET_POZO PARENT_IZ e1=expresion[ejecutar] COMA e2=expresion[ejecutar] PARENT_DE PUNTO_COMA
+	{
+		if(e1.tipo.equals("cadena") || e2.tipo.equals("cadena"))
+		{
+			System.err.println("Se esperaba expresion numérica , no alfanumérica");
+			throw new RecognitionException();
+		}
+		else if(ejecutar)
+		{
+			int valX = (int)Double.parseDouble(e1._valor);
+			int valY = (int)Double.parseDouble(e2._valor);
+			interfaz.setHole(valX, valY);
+		}
+	}
+	;
+	exception
+ 		catch [RecognitionException re] {
+			mostrarExcepcion(re);
+		 }
+
+sentenciaWumpus
+	[boolean ejecutar]
+	:
+		colocarPozo[ejecutar]
+	;
+	exception
+ 		catch [RecognitionException re] {
+			mostrarExcepcion(re);
+		 }
+//-------------------------------------------------------------------------------------------
+//Sentencias de configuración del mundo de wumpus
+
+
 sentenciasConf
 	{
 		Expresion x, y, xP, yP, vidas, flechas;
@@ -890,20 +909,47 @@ sentenciasConf
 			|| yP.tipo.equals("cadena")
 			|| vidas.tipo.equals("cadena")
 			|| flechas.tipo.equals("cadena"))
+		{
+			System.err.println("Se esperaba expresion numérica , no alfanumérica");
 			throw new RecognitionException();
+		}
 		int valy = (int)Double.parseDouble(y._valor);
 		int valx = (int)Double.parseDouble(x._valor);
 		int valxP = (int)Double.parseDouble(xP._valor);
 		int valyP = (int)Double.parseDouble(yP._valor);
 		int valVidas = (int)Double.parseDouble(vidas._valor);
 		int valFlechas = (int)Double.parseDouble(flechas._valor); 
-		Inicio interfaz=new Inicio(valy, valx, valxP, valyP, valVidas, valFlechas);
+		interfaz=new Inicio(valy, valx, valxP, valyP, valVidas, valFlechas);
 	}
 	;
 	exception
  		catch [RecognitionException re] {
 			mostrarExcepcion(re);
 		 }
+
+
+//-------------------------------------------------------------------------------------------
+//Instruccion
+instruccion 
+	[boolean ejecutar]
+	: 
+	escritura[ejecutar] 
+	| lectura[ejecutar] 
+	| asignacion[ejecutar] 
+	| sentencia_si[ejecutar]
+	| bucle_mientras[ejecutar] 
+	| bucle_repetir[ejecutar] 
+	| bucle_para[ejecutar]
+	| borrar[ejecutar]
+	| lugar[ejecutar]
+	| sentenciaWumpus[ejecutar]
+		;
+	exception
+ 		catch [RecognitionException re] {
+ 			if(ejecutar)
+			mostrarExcepcion(re);
+		 }
+		
 
 //-------------------------------------------------------------------------------------------
 //Programa general

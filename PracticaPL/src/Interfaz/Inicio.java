@@ -199,7 +199,7 @@ public class Inicio {
 		return true;
 	}
 
-	void setHole(int x, int y){
+	public void setHole(int x, int y){
 		matrizIP[x+1][y].changeParameter(1, true);
 		matrizIP[x-1][y].changeParameter(1, true);
 		matrizIP[x][y+1].changeParameter(1, true);
@@ -208,7 +208,7 @@ public class Inicio {
 		matrizIP[x][y].changeParameter(5, true);
 	}
 
-	void setWumpus(int x, int y){
+	public void setWumpus(int x, int y){
 		matrizIP[x+1][y].changeParameter(0, true);
 		matrizIP[x-1][y].changeParameter(0, true);
 		matrizIP[x][y+1].changeParameter(0, true);
@@ -217,7 +217,7 @@ public class Inicio {
 		matrizIP[x][y].changeParameter(6, true);
 	}
 
-	void eraseWumpus(int x, int y){
+	public void eraseWumpus(int x, int y){
 		matrizIP[x+1][y].changeParameter(0, false);
 		matrizIP[x-1][y].changeParameter(0, false);
 		matrizIP[x][y+1].changeParameter(0, false);
@@ -226,15 +226,15 @@ public class Inicio {
 		matrizIP[x][y].changeParameter(6, false);
 	}
 
-	void setArrow(int x, int y){
+	public void setArrow(int x, int y){
 		matrizIP[x][y].changeParameter(2, true);
 	}
 
-	void setTreasure(int x, int y){
+	public void setTreasure(int x, int y){
 		matrizIP[x][y].changeParameter(4, true);
 	}
 
-	void setAmbrosia(int x, int y){
+	public void setAmbrosia(int x, int y){
 		matrizIP[x][y].changeParameter(3, true);
 	}
 
