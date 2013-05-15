@@ -878,10 +878,35 @@ colocarPozo
 			mostrarExcepcion(re);
 		 }
 
+colocarWumpus
+	[boolean ejecutar]
+	{Expresion e1, e2;}
+	:
+	SET_WUMPUS PARENT_IZ e1=expresion[ejecutar] COMA e2=expresion[ejecutar] PARENT_DE PUNTO_COMA
+	{
+		if(e1.tipo.equals("cadena") || e2.tipo.equals("cadena"))
+		{
+			System.err.println("Se esperaba expresion numérica , no alfanumérica");
+			throw new RecognitionException();
+		}
+		else if(ejecutar)
+		{
+			int valX = (int)Double.parseDouble(e1._valor);
+			int valY = (int)Double.parseDouble(e2._valor);
+			interfaz.setWumpus(valX, valY);
+		}
+	}
+	;
+	exception
+ 		catch [RecognitionException re] {
+			mostrarExcepcion(re);
+		 }
+
 sentenciaWumpus
 	[boolean ejecutar]
 	:
 		colocarPozo[ejecutar]
+		|colocarWumpus[ejecutar]
 	;
 	exception
  		catch [RecognitionException re] {

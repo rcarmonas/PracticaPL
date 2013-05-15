@@ -6,5 +6,5 @@
  	@vidas 1
  	@flechas 1
 #ejecutar
- 	colocar_pozo(1, 1);
+ 	colocar_wumpus(1, 1);
 #fin
