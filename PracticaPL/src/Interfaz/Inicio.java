@@ -158,15 +158,86 @@ public class Inicio {
 
 	boolean mover(int iMovX, int iMovY){
 
+		return setPlayer(iMovX + jJugador.getX(), iMovY + jJugador.getY());
+		
+	}
+
+	public void setHole(int x, int y){
+		if(x>0 && x<rejillaX && y>0 && y<rejillaY)
+		{
+			if(x<rejillaX-1)
+				matrizIP[x+1][y].changeParameter(1, true);
+			if(x>0)
+				matrizIP[x-1][y].changeParameter(1, true);
+			if(y<rejillaY-1)
+				matrizIP[x][y+1].changeParameter(1, true);
+			if(y>0)
+				matrizIP[x][y-1].changeParameter(1, true);
+	
+			matrizIP[x][y].changeParameter(5, true);
+		}
+	}
+
+	public void setWumpus(int x, int y){
+		
+		if(x>0 && x<rejillaX && y>0 && y<rejillaY)
+		{
+			if(x<rejillaX-1)
+				matrizIP[x+1][y].changeParameter(0, true);
+			if(x>0)
+				matrizIP[x-1][y].changeParameter(0, true);
+			if(y<rejillaY-1)
+				matrizIP[x][y+1].changeParameter(0, true);
+			if(y>0)
+				matrizIP[x][y-1].changeParameter(0, true);
+	
+			matrizIP[x][y].changeParameter(6, true);
+		}
+	}
+
+	public void eraseWumpus(int x, int y){
+		
+		if(x>0 && x<rejillaX && y>0 && y<rejillaY)
+		{
+			if(x<rejillaX-1)
+				matrizIP[x+1][y].changeParameter(0, false);
+			if(x>0)
+				matrizIP[x-1][y].changeParameter(0, false);
+			if(y<rejillaY-1)
+				matrizIP[x][y+1].changeParameter(0, false);
+			if(y>0)
+				matrizIP[x][y-1].changeParameter(0, false);
+	
+			matrizIP[x][y].changeParameter(6, false);
+		}
+	}
+
+	public void setArrow(int x, int y){
+		if(x>0 && x<rejillaX && y>0 && y<rejillaY)
+			matrizIP[x][y].changeParameter(2, true);
+	}
+
+	public void setTreasure(int x, int y){
+		if(x>0 && x<rejillaX && y>0 && y<rejillaY)
+			matrizIP[x][y].changeParameter(4, true);
+	}
+
+	public void setAmbrosia(int x, int y){
+		if(x>0 && x<rejillaX && y>0 && y<rejillaY)
+			matrizIP[x][y].changeParameter(3, true);
+	}
+	
+	public boolean setPlayer(int x, int y){
+		
 		ImagePanel ipAux = matrizIP[jJugador.getX()][jJugador.getY()];
 
-		if(jJugador.getX() + iMovX >= 0 && jJugador.getX() + iMovX < rejillaX && jJugador.getY() + iMovY >= 0 && jJugador.getY() + iMovY < rejillaY){
+		if(x >= 0 && x < rejillaX && y >= 0 && y < rejillaY){
 			//Quita al jugador de la casilla donde estaba
 			ipAux.cambiarImagen(false);
 
 			//Mover
-			jJugador.setX(jJugador.getX() + iMovX);
-			jJugador.setY(jJugador.getY() + iMovY);
+			jJugador.setX(x);
+			jJugador.setY(y);
 			
 			ipAux = matrizIP[jJugador.getX()][jJugador.getY()];
 			if(ipAux.bVector[2])
@@ -197,54 +268,6 @@ public class Inicio {
 			return false;
 
 		return true;
-	}
-
-	public void setHole(int x, int y){
-		matrizIP[x+1][y].changeParameter(1, true);
-		matrizIP[x-1][y].changeParameter(1, true);
-		matrizIP[x][y+1].changeParameter(1, true);
-		matrizIP[x][y-1].changeParameter(1, true);
-
-		matrizIP[x][y].changeParameter(5, true);
-	}
-
-	public void setWumpus(int x, int y){
-		matrizIP[x+1][y].changeParameter(0, true);
-		matrizIP[x-1][y].changeParameter(0, true);
-		matrizIP[x][y+1].changeParameter(0, true);
-		matrizIP[x][y-1].changeParameter(0, true);
-
-		matrizIP[x][y].changeParameter(6, true);
-	}
-
-	public void eraseWumpus(int x, int y){
-		matrizIP[x+1][y].changeParameter(0, false);
-		matrizIP[x-1][y].changeParameter(0, false);
-		matrizIP[x][y+1].changeParameter(0, false);
-		matrizIP[x][y-1].changeParameter(0, false);
-
-		matrizIP[x][y].changeParameter(6, false);
-	}
-
-	public void setArrow(int x, int y){
-		matrizIP[x][y].changeParameter(2, true);
-	}
-
-	public void setTreasure(int x, int y){
-		matrizIP[x][y].changeParameter(4, true);
-	}
-
-	public void setAmbrosia(int x, int y){
-		matrizIP[x][y].changeParameter(3, true);
-	}
-	
-	public void setPlayer(int x, int y){
-		//TODO Cubero, revisa este código para cambiar la posición del jugador.
-		matrizIP[jJugador.getX()][jJugador.getY()].changeParameter(7, false);
-		this.jJugador.setX(x);
-		this.jJugador.setY(y);
-		matrizIP[x][y].changeParameter(7, true);
-		matrizIP[x][y].changeParameter(8, false);
 	}
 
 	void datosEjemplo(){
@@ -294,10 +317,10 @@ public class Inicio {
 		matrizIP[8][4] = new ImagePanel(new boolean[]{false, false, false, false, false, false, true, false, true});
 */
 
-		this.setHole(3, 3);
+		/*this.setHole(3, 3);
 		this.setWumpus(6, 6);
 		setArrow(0, 1);
 		setTreasure(0, 2);
-		setAmbrosia(0, 3);
+		setAmbrosia(0, 3);*/
 	}
 }

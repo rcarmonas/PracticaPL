@@ -19,6 +19,7 @@ import javax.swing.JPanel;
  *  8 - desconocido
  */
 
+@SuppressWarnings("serial")
 public class ImagePanel extends JPanel{
 
 	String imagen[] = {"olor", "viento", "flecha", "ambrosia", "tesoro", "pozo", "wumpus", "jugador", "desconocido"};
