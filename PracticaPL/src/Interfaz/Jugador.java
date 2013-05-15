@@ -3,20 +3,21 @@ package Interfaz;
 public class Jugador {
 	int vidas;
 	int flechas;
+	int x, y;
+
+	Jugador(int i, int j, int vidas, int flechas){
+		this.x = i;
+		this.y = j;
+		this.vidas = vidas;
+		this.flechas = flechas;
+	}
+
 	public int getFlechas() {
 		return flechas;
 	}
 
 	public void setFlechas(int flechas) {
 		this.flechas = flechas;
-	}
-
-	int x, y;
-
-	Jugador(int i,int j){
-		this.x = i;
-		this.y = j;
-		vidas = 3;
 	}
 
 	public int getVidas() {

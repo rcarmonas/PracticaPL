@@ -28,8 +28,7 @@ public class ImagePanel extends JPanel{
 		bVector = vector;
 	}
 
-	public ImagePanel() {
-	}
+	public ImagePanel() {}
 
 	void actualizaCasilla(int index, boolean value){
 		this.bVector[index] = value;
@@ -64,5 +63,9 @@ public class ImagePanel extends JPanel{
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}    
+	}
+
+	void changeParameter(int pos, boolean value){
+		bVector[pos] = value;
 	}
 }
