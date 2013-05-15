@@ -1138,6 +1138,30 @@ terminoWumpus
 			resultado.tipo = "numero";
 			resultado._valor = String.valueOf(i);
 		}
+	)|(
+		CONF_vidas
+		{
+			resultado.tipo = "numero";
+			resultado._valor = String.valueOf(interfaz.jJugador.getVidas());
+		}
+	)|(
+		CONF_flechas
+		{
+			resultado.tipo = "numero";
+			resultado._valor = String.valueOf(interfaz.jJugador.getFlechas());
+		}
+	)|(
+		CONF_XPlayer
+		{
+			resultado.tipo = "numero";
+			resultado._valor = String.valueOf(interfaz.jJugador.getX());
+		}
+	)|(
+		CONF_YPlayer
+		{
+			resultado.tipo = "numero";
+			resultado._valor = String.valueOf(interfaz.jJugador.getY());
+		}
 	)
 	;
 	exception
