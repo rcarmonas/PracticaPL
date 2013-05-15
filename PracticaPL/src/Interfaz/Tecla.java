@@ -1,4 +1,7 @@
 package Interfaz;
+
+import java.awt.event.KeyListener;
+
 /**
  * Tecla para manejar las pulsaciones de las flechas de dirección
  * @author Rafael Carmona Sánchez
@@ -14,14 +17,20 @@ public class Tecla {
 	static int IZQUIERDA = 37;
 
 	int teclaPulsada;
+	Inicio interfaz;
+	KeyListener listener;
 	
+	Tecla(Inicio j){
+		interfaz=j;
+	}
 	/**
 	 * Se bloquea a la espera de una pulsación
 	 * @return Devuelve la primera tecla pulsada
 	 */
 	int get()
 	{
-		//TODO avisar a MiKeyListener de que escuche
+		listener = new MiKeyListener(this);
+		interfaz.jtConsola.addKeyListener(listener);
 		try {
 			wait();
 		} catch (InterruptedException e) {
@@ -37,6 +46,7 @@ public class Tecla {
 	void pulsacion(int tecla)
 	{
 		this.teclaPulsada = tecla;
+		interfaz.jtConsola.removeKeyListener(listener);
 		this.notify();
 	}
 
