@@ -1126,7 +1126,34 @@ moverJugador
  			if(ejecutar)
 				mostrarExcepcion(re);
 		 }
+		
+aleatorio
+	[boolean ejecutar]
+	returns [int resultado=0;]
+	{int i;
+	Expresion e;}
+	:
+	 ALEATORIO PARENT_IZ e=expresion[ejecutar] PARENT_DE
+	{
+		if(e.tipo.equals("cadena") && ejecutar)
+		{
+			System.err.println("Se esperaba expresion numérica , no alfanumérica");
+			throw new RecognitionException();
+		}
+		else if(ejecutar)
+		{
+			int valR = (int)(Double.parseDouble(e._valor));
+			resultado = (int) (Math.random()*valR);
+		}
+	}
+	; 
+	exception
+ 		catch [RecognitionException re] {
+ 			if(ejecutar)
+				mostrarExcepcion(re);
+		 }
 	
+		
 terminoWumpus
 	[boolean ejecutar]
 	returns [Expresion resultado = new Expresion();]
@@ -1161,6 +1188,12 @@ terminoWumpus
 		{
 			resultado.tipo = "numero";
 			resultado._valor = String.valueOf(interfaz.jJugador.getY());
+		}
+	)|(
+		i=aleatorio[ejecutar]
+		{
+			resultado.tipo = "numero";
+			resultado._valor = String.valueOf(i);
 		}
 	)
 	;

@@ -64,7 +64,8 @@ tokens
 	DEL_WUMPUS = "borrar_wumpus";
 	PAUSA = "pausa";
 	MOVER_JUGADOR = "mover_jugador";
-
+	ALEATORIO = "aleatorio";
+	
 	// Literales lógicos
 	LIT_CIERTO = "true" ;
 	LIT_FALSO = "false" ;
