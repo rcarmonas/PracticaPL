@@ -56,7 +56,7 @@ tokens
 	//Wumpus:
 	SET_POZO = "colocar_pozo";
 	SET_WUMPUS = "colocar_wumpus";
-	SET_AMBROSIA ="colocar_ambrosa";
+	SET_AMBROSIA ="colocar_ambrosia";
 	SET_FLECHA = "colocar_flecha";
 	SET_TESORO = "colocar_tesoro";
 	SET_JUGADOR = "colocar_jugador";

@@ -854,6 +854,30 @@ lugar
 
 //-------------------------------------------------------------------------------------------
 //Sentencias del mundo de wumpus =D
+
+colocarAmbrosia
+	[boolean ejecutar]
+	{Expresion e1, e2;}
+	:
+	SET_AMBROSIA PARENT_IZ e1=expresion[ejecutar] COMA e2=expresion[ejecutar] PARENT_DE PUNTO_COMA
+	{
+		if(e1.tipo.equals("cadena") || e2.tipo.equals("cadena"))
+		{
+			System.err.println("Se esperaba expresion numérica , no alfanumérica");
+			throw new RecognitionException();
+		}
+		else if(ejecutar)
+		{
+			int valX = (int)Double.parseDouble(e1._valor);
+			int valY = (int)Double.parseDouble(e2._valor);
+			interfaz.setAmbrosia(valX, valY);
+		}
+	}
+	;
+	exception
+ 		catch [RecognitionException re] {
+			mostrarExcepcion(re);
+		 }
 colocarPozo
 	[boolean ejecutar]
 	{Expresion e1, e2;}
@@ -907,6 +931,7 @@ sentenciaWumpus
 	:
 		colocarPozo[ejecutar]
 		|colocarWumpus[ejecutar]
+		|colocarAmbrosia[ejecutar]
 	;
 	exception
  		catch [RecognitionException re] {
