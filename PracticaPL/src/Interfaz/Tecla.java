@@ -11,10 +11,10 @@ import java.awt.event.KeyListener;
  */
 public class Tecla {
 
-	static int ARRIBA = 38;
-	static int ABAJO = 40;
-	static int DERECHA = 39;
-	static int IZQUIERDA = 37;
+	public static int ARRIBA = 38;
+	public static int ABAJO = 40;
+	public static int DERECHA = 39;
+	public static int IZQUIERDA = 37;
 
 	int teclaPulsada;
 	Inicio interfaz;

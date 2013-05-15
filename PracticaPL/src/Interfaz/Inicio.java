@@ -156,7 +156,7 @@ public class Inicio {
 		ventana.setVisible(true);
 	}
 
-	boolean mover(int iMovX, int iMovY){
+	public boolean mover(int iMovX, int iMovY){
 
 		return setPlayer(iMovX + jJugador.getX(), iMovY + jJugador.getY());
 		

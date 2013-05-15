@@ -383,6 +383,15 @@ termino
 	   			resultado.tipo = "numero";
 	   		}
 	   	}	
+	   )|( e=terminoWumpus[ejecutar]
+	   {
+	   		if(e.tipo.equals("numero"))
+	   		 	resultado = e;
+	   		else if(!ejecutar)
+	   		{
+				System.err.println("Se esperaba expresion numérica , no alfanumérica");
+	   		}
+	   }
 	   )
 	   )
 	   	{if(debug)System.out.println("termino=>" + resultado._valor);}
@@ -862,7 +871,7 @@ colocarAmbrosia
 	:
 	SET_AMBROSIA PARENT_IZ e1=expresion[ejecutar] COMA e2=expresion[ejecutar] PARENT_DE PUNTO_COMA
 	{
-		if(e1.tipo.equals("cadena") || e2.tipo.equals("cadena"))
+		if((e1.tipo.equals("cadena") || e2.tipo.equals("cadena"))&& ejecutar)
 		{
 			System.err.println("Se esperaba expresion numérica , no alfanumérica");
 			throw new RecognitionException();
@@ -886,7 +895,7 @@ colocarFlecha
 	:
 	SET_FLECHA PARENT_IZ e1=expresion[ejecutar] COMA e2=expresion[ejecutar] PARENT_DE PUNTO_COMA
 	{
-		if(e1.tipo.equals("cadena") || e2.tipo.equals("cadena"))
+		if((e1.tipo.equals("cadena") || e2.tipo.equals("cadena"))&& ejecutar)
 		{
 			System.err.println("Se esperaba expresion numérica , no alfanumérica");
 			throw new RecognitionException();
@@ -910,7 +919,7 @@ colocarPozo
 	:
 	SET_POZO PARENT_IZ e1=expresion[ejecutar] COMA e2=expresion[ejecutar] PARENT_DE PUNTO_COMA
 	{
-		if(e1.tipo.equals("cadena") || e2.tipo.equals("cadena"))
+		if((e1.tipo.equals("cadena") || e2.tipo.equals("cadena"))&& ejecutar)
 		{
 			System.err.println("Se esperaba expresion numérica , no alfanumérica");
 			throw new RecognitionException();
@@ -934,7 +943,7 @@ colocarWumpus
 	:
 	SET_WUMPUS PARENT_IZ e1=expresion[ejecutar] COMA e2=expresion[ejecutar] PARENT_DE PUNTO_COMA
 	{
-		if(e1.tipo.equals("cadena") || e2.tipo.equals("cadena"))
+		if((e1.tipo.equals("cadena") || e2.tipo.equals("cadena"))&& ejecutar)
 		{
 			System.err.println("Se esperaba expresion numérica , no alfanumérica");
 			throw new RecognitionException();
@@ -958,7 +967,7 @@ colocarTesoro
 	:
 	SET_TESORO PARENT_IZ e1=expresion[ejecutar] COMA e2=expresion[ejecutar] PARENT_DE PUNTO_COMA
 	{
-		if(e1.tipo.equals("cadena") || e2.tipo.equals("cadena"))
+		if((e1.tipo.equals("cadena") || e2.tipo.equals("cadena"))&& ejecutar)
 		{
 			System.err.println("Se esperaba expresion numérica , no alfanumérica");
 			throw new RecognitionException();
@@ -982,7 +991,7 @@ colocarJugador
 	:
 	SET_JUGADOR PARENT_IZ e1=expresion[ejecutar] COMA e2=expresion[ejecutar] PARENT_DE PUNTO_COMA
 	{
-		if(e1.tipo.equals("cadena") || e2.tipo.equals("cadena"))
+		if((e1.tipo.equals("cadena") || e2.tipo.equals("cadena"))&& ejecutar)
 		{
 			System.err.println("Se esperaba expresion numérica , no alfanumérica");
 			throw new RecognitionException();
@@ -1006,7 +1015,7 @@ eliminarWumpus
 	:
 	DEL_WUMPUS PARENT_IZ e1=expresion[ejecutar] COMA e2=expresion[ejecutar] PARENT_DE PUNTO_COMA
 	{
-		if(e1.tipo.equals("cadena") || e2.tipo.equals("cadena"))
+		if((e1.tipo.equals("cadena") || e2.tipo.equals("cadena"))&& ejecutar)
 		{
 			System.err.println("Se esperaba expresion numérica , no alfanumérica");
 			throw new RecognitionException();
@@ -1030,7 +1039,7 @@ pausa
 	:
 	 PAUSA PARENT_IZ e=expresion[ejecutar] PARENT_DE PUNTO_COMA
 	{
-		if(e.tipo.equals("cadena"))
+		if(e.tipo.equals("cadena") && ejecutar)
 		{
 			System.err.println("Se esperaba expresion numérica , no alfanumérica");
 			throw new RecognitionException();
@@ -1049,10 +1058,94 @@ pausa
 	;
 	exception
  		catch [RecognitionException re] {
-			mostrarExcepcion(re);
+  			if(ejecutar)
+				mostrarExcepcion(re);
 		 }
 
+direccion
+	[boolean ejecutar]
+	returns [int resultado=0;]
+	:
+	(
+		DERECHA
+		{resultado = Tecla.DERECHA;}
+	)|(
+		IZQUIERDA
+		{resultado = Tecla.IZQUIERDA;}
+	)|(
+		ARRIBA
+		{resultado = Tecla.ARRIBA;}
+	)|(
+		ABAJO
+		{resultado = Tecla.ABAJO;}
+	)
+	;
+	exception
+ 		catch [RecognitionException re] {
+ 			if(ejecutar)
+				mostrarExcepcion(re);
+		 }
 		
+moverJugador
+	[boolean ejecutar]
+	{Expresion e;}
+	:
+	  MOVER_JUGADOR PARENT_IZ e=expresion[ejecutar] PARENT_DE PUNTO_COMA
+	{
+		if(e.tipo.equals("cadena") && ejecutar)
+		{
+			System.err.println("Se esperaba expresion numérica , no alfanumérica");
+			throw new RecognitionException();
+		}
+		else if(ejecutar)
+		{
+			int valD = (int)(Double.parseDouble(e._valor));
+			int auxX=0, auxY=0;
+			
+			if(valD == Tecla.DERECHA)
+				auxX = 1;
+			else if(valD == Tecla.IZQUIERDA)
+				auxX = -1;
+			else if(valD == Tecla.ARRIBA)
+				auxY = -1;
+			else if(valD == Tecla.ABAJO)
+				auxY = 1;
+			else
+			{
+				System.err.println("Se esperaba una dirección");	
+				throw new RecognitionException();
+			}
+			
+			interfaz.mover(auxX, auxY);
+			
+		}
+	}
+	; 
+	exception
+ 		catch [RecognitionException re] {
+ 			if(ejecutar)
+				mostrarExcepcion(re);
+		 }
+	
+terminoWumpus
+	[boolean ejecutar]
+	returns [Expresion resultado = new Expresion();]
+	{int i;}
+	:
+	(
+		i=direccion[ejecutar]
+		{
+			resultado.tipo = "numero";
+			resultado._valor = String.valueOf(i);
+		}
+	)
+	;
+	exception
+ 		catch [RecognitionException re] {
+ 			if(ejecutar)
+				mostrarExcepcion(re);
+		 }
+
 sentenciaWumpus
 	[boolean ejecutar]
 	:
@@ -1127,6 +1220,7 @@ instruccion
 	| borrar[ejecutar]
 	| lugar[ejecutar]
 	| sentenciaWumpus[ejecutar]
+	| moverJugador[ejecutar]
 		;
 	exception
  		catch [RecognitionException re] {

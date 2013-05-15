@@ -52,6 +52,7 @@ tokens
 	FIN_PARA = "fin_para";
 	BORRAR = "borrar";
 	LUGAR = "lugar";
+	
 
 	//Wumpus:
 	SET_POZO = "colocar_pozo";
@@ -62,6 +63,7 @@ tokens
 	SET_JUGADOR = "colocar_jugador";
 	DEL_WUMPUS = "borrar_wumpus";
 	PAUSA = "pausa";
+	MOVER_JUGADOR = "mover_jugador";
 
 	// Literales lógicos
 	LIT_CIERTO = "true" ;
@@ -243,6 +245,15 @@ CONF_flechas: "@flechas"
 	;
 
 CONF_vidas: "@vidas"
+	;
+	
+DERECHA: "__derecha"
+	;
+IZQUIERDA: "__izquierda"
+	;
+ARRIBA: "__arriba"
+	;
+ABAJO: "__abajo"
 	;
 
 CORCH_DE : "]"
