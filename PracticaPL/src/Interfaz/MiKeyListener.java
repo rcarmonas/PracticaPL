@@ -7,7 +7,7 @@ public class MiKeyListener implements KeyListener {
 
 	Inicio interfaz;
 	MiKeyListener(Inicio i){
-		interfaz=i;
+		interfaz = i;
 	}
 		@Override
 		public void keyTyped(KeyEvent e) {
@@ -19,16 +19,19 @@ public class MiKeyListener implements KeyListener {
 			{
 				case 38://arriba
 					interfaz.mover(0, -1);
-				break;
+					break;
+
 				case 40://abajo
 					interfaz.mover(0, 1);
-				break;
+					break;
+
 				case 37://izquierda
 					interfaz.mover(-1, 0);
-				break;
+					break;
+
 				case 39://derecha
 					interfaz.mover(1, 0);
-				break;
+					break;
 			}
 		}
 

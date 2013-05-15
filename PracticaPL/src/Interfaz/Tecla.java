@@ -12,8 +12,7 @@ public class Tecla {
 	static int ABAJO = 40;
 	static int DERECHA = 39;
 	static int IZQUIERDA = 37;
-	
-	
+
 	int teclaPulsada;
 	
 	/**
@@ -22,7 +21,6 @@ public class Tecla {
 	 */
 	int get()
 	{
-		
 		//TODO avisar a MiKeyListener de que escuche
 		try {
 			wait();
