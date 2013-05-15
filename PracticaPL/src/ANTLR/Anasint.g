@@ -110,9 +110,9 @@ asignacion
 	//Variable local
 	{Expresion e;}
 	:
-	id:IDENT OP_ASIG
+	id:IDENT 
 	(
-		e=expresion[ejecutar]
+	(OP_ASIG e=expresion[ejecutar]
 		{	
 			String nombre = id.getText();
 			if(ejecutar)
@@ -120,6 +120,56 @@ asignacion
 			if(debug)
 	 			System.out.println("Asignación =>" + nombre + "=" + e._valor);
 		}	
+	)
+	|
+	(
+		OP_INCREMENTO
+			{
+			    // Busca el identificador en la tabla de símbolos
+				int indice = tablaSimbolos.existeSimbolo(id.getText());
+				String tipo;
+				double valor;
+				// Si encuentra el identificador, devuelve su valor
+				if (indice >= 0)
+					tipo = tablaSimbolos.getSimbolo(indice).getTipo();
+				else
+					throw new RecognitionException();
+					
+				if (!tipo.equals("numero"))
+					throw new RecognitionException();
+				else
+					valor = Double.parseDouble(tablaSimbolos.getSimbolo(indice).getValor());
+					
+				valor = valor+1;
+				
+				insertarIdentificador(id.getText(), tipo, String.valueOf(valor));
+				
+			}
+		)
+		|
+		(
+		OP_DECREMENTO
+			{
+			    // Busca el identificador en la tabla de símbolos
+				int indice = tablaSimbolos.existeSimbolo(id.getText());
+				String tipo;
+				double valor;
+				// Si encuentra el identificador, devuelve su valor
+				if (indice >= 0)
+					tipo = tablaSimbolos.getSimbolo(indice).getTipo();
+				else
+					throw new RecognitionException();
+					
+				if (!tipo.equals("numero"))
+					throw new RecognitionException();
+				else
+					valor = Double.parseDouble(tablaSimbolos.getSimbolo(indice).getValor());
+					
+				valor = valor-1;
+				
+				insertarIdentificador(id.getText(), tipo, String.valueOf(valor));
+			}
+		)
 	)
 	PUNTO_COMA
 	;
@@ -130,7 +180,8 @@ asignacion
 			mostrarExcepcion(re);
 		 }
 
-//Expresión, tanto numérica como alfanumérica	
+//-------------------------------------------------------------------------------------------
+//Expresión, y elementos de los que se compone
 expresion
 	[boolean ejecutar]
 	returns [Expresion resultado = new Expresion();]
@@ -171,7 +222,6 @@ expresion
  			if(ejecutar)
 			mostrarExcepcion(re);
 		 }		
-
 
 
 sumando
@@ -340,7 +390,8 @@ termino
 				mostrarExcepcion(re);
 		 }
 
-
+//-------------------------------------------------------------------------------------------
+//Funciones de lectura/escritura
 leer 
 	[boolean ejecutar]
 	//Variables locales
@@ -434,6 +485,9 @@ escritura
 			mostrarExcepcion(re);
 		 }
 
+
+//-------------------------------------------------------------------------------------------
+//Instruccion
 instruccion 
 	[boolean ejecutar]
 	: 
@@ -454,7 +508,8 @@ instruccion
 		 }
 		
 
-
+//-------------------------------------------------------------------------------------------
+//Condición y los elementos de los que se compone
 termino_cond
 	[boolean ejecutar]
 	//Valor devuelto
@@ -561,7 +616,7 @@ termino_cond
 			mostrarExcepcion(re);
 		 }
 		
-		
+
 factor_cond
 	[boolean ejecutar]
 	//Valor devuelto
@@ -636,6 +691,9 @@ condicion
 			mostrarExcepcion(re);
 		 }
 
+
+//-------------------------------------------------------------------------------------------
+//Sentencia condicional
 sentencia_si
 	[boolean ejecutar]
 	// Variable local
@@ -656,7 +714,8 @@ sentencia_si
 			mostrarExcepcion(re);
 		 }
 		
-		
+//-------------------------------------------------------------------------------------------
+//Bucle mientras
 bucle_mientras
 		[boolean ejecutar]
 		// Variables locales
@@ -682,7 +741,8 @@ bucle_mientras
 			mostrarExcepcion(re);
 		 }
 		
-		
+//-------------------------------------------------------------------------------------------
+// Bucle repetir
 bucle_repetir
 		[boolean ejecutar]
 		// Variables locales
@@ -707,7 +767,8 @@ bucle_repetir
 			mostrarExcepcion(re);
 		 }
 		
-		
+//-------------------------------------------------------------------------------------------
+// Bucle para y partes de las que se compone
 cuerpo_bucle_para
 	[String id, boolean ejecutar]
 	{Expresion h, p;
@@ -774,7 +835,8 @@ bucle_para
 			mostrarExcepcion(re);
 		 }
 		
-		
+//-------------------------------------------------------------------------------------------
+//Control de la consola
 borrar
 	[boolean ejecutar]
 	: BORRAR PUNTO_COMA
@@ -806,7 +868,9 @@ lugar
 			mostrarExcepcion(re);
 		 }
 
-prog: (instruccion[true])+
+//-------------------------------------------------------------------------------------------
+//Programa general
+prog: instruccion[true] (instruccion[true])+
 	;
 	exception
  		catch [RecognitionException re] {

@@ -2,6 +2,8 @@ package ANTLR;
 // Test.java (clase principal)
 
 import java.io.*;
+
+import Interfaz.Inicio;
 import antlr.*;
 
 
@@ -12,32 +14,7 @@ public class Test
 	{
 		boolean debug = false;
 		try 
-		{
-			/*
-			FileInputStream fichero = new FileInputStream(args[0]);
-			Analex lexer = new Analex(fichero);
-
-			System.out.println("Fichero: " + args[0]);
-
-			Token tok = lexer.nextToken();
-
-			while(tok.getType() != Token.EOF_TYPE)
-			{ 
-				System.out.println(
-						    "\n Lexema: " + tok.getText()  
-						  + "\n Tipo de token:" + tok.getType() 
-						  + "\n Línea: " + tok.getLine()   
-						  + "   Columna: " + tok.getColumn()  
-						  );
-
-				System.out.println(tok);
-
-				tok = lexer.nextToken();
-			}
-			*/
-			
-			
-			
+		{			
 			// Se abre el fichero pasado como argumento de entrada
 			FileInputStream fichero =new FileInputStream(args[0]);
 
@@ -56,6 +33,10 @@ public class Test
 				System.out.println("\n\nContenido de la Tabla de Símbolos");
 				anasint.getTablaSimbolos().escribirSimbolos();
 			}
+			
+			//TODO crear la interfaz
+			Inicio interfaz=new Inicio(10,10);
+			
 		}
 
 
