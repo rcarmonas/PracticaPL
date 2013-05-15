@@ -130,7 +130,8 @@ asignacion
 			mostrarExcepcion(re);
 		 }
 
-//Expresión, tanto numérica como alfanumérica	
+//-------------------------------------------------------------------------------------------
+//Expresión, y elementos de los que se compone
 expresion
 	[boolean ejecutar]
 	returns [Expresion resultado = new Expresion();]
@@ -171,7 +172,6 @@ expresion
  			if(ejecutar)
 			mostrarExcepcion(re);
 		 }		
-
 
 
 sumando
@@ -340,7 +340,8 @@ termino
 				mostrarExcepcion(re);
 		 }
 
-
+//-------------------------------------------------------------------------------------------
+//Funciones de lectura/escritura
 leer 
 	[boolean ejecutar]
 	//Variables locales
@@ -434,6 +435,9 @@ escritura
 			mostrarExcepcion(re);
 		 }
 
+
+//-------------------------------------------------------------------------------------------
+//Instruccion
 instruccion 
 	[boolean ejecutar]
 	: 
@@ -454,7 +458,8 @@ instruccion
 		 }
 		
 
-
+//-------------------------------------------------------------------------------------------
+//Condición y los elementos de los que se compone
 termino_cond
 	[boolean ejecutar]
 	//Valor devuelto
@@ -561,7 +566,7 @@ termino_cond
 			mostrarExcepcion(re);
 		 }
 		
-		
+
 factor_cond
 	[boolean ejecutar]
 	//Valor devuelto
@@ -636,6 +641,9 @@ condicion
 			mostrarExcepcion(re);
 		 }
 
+
+//-------------------------------------------------------------------------------------------
+//Sentencia condicional
 sentencia_si
 	[boolean ejecutar]
 	// Variable local
@@ -656,7 +664,8 @@ sentencia_si
 			mostrarExcepcion(re);
 		 }
 		
-		
+//-------------------------------------------------------------------------------------------
+//Bucle mientras
 bucle_mientras
 		[boolean ejecutar]
 		// Variables locales
@@ -682,7 +691,8 @@ bucle_mientras
 			mostrarExcepcion(re);
 		 }
 		
-		
+//-------------------------------------------------------------------------------------------
+// Bucle repetir
 bucle_repetir
 		[boolean ejecutar]
 		// Variables locales
@@ -707,7 +717,8 @@ bucle_repetir
 			mostrarExcepcion(re);
 		 }
 		
-		
+//-------------------------------------------------------------------------------------------
+// Bucle para y partes de las que se compone
 cuerpo_bucle_para
 	[String id, boolean ejecutar]
 	{Expresion h, p;
@@ -774,7 +785,8 @@ bucle_para
 			mostrarExcepcion(re);
 		 }
 		
-		
+//-------------------------------------------------------------------------------------------
+//Control de la consola
 borrar
 	[boolean ejecutar]
 	: BORRAR PUNTO_COMA
@@ -806,6 +818,8 @@ lugar
 			mostrarExcepcion(re);
 		 }
 
+//-------------------------------------------------------------------------------------------
+//Programa general
 prog: (instruccion[true])+
 	;
 	exception
