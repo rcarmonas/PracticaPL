@@ -2,8 +2,6 @@ package ANTLR;
 // Test.java (clase principal)
 
 import java.io.*;
-
-import Interfaz.Inicio;
 import antlr.*;
 
 

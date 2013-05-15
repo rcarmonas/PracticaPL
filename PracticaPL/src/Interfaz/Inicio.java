@@ -237,6 +237,15 @@ public class Inicio {
 	public void setAmbrosia(int x, int y){
 		matrizIP[x][y].changeParameter(3, true);
 	}
+	
+	public void setPlayer(int x, int y){
+		//TODO Cubero, revisa este código para cambiar la posición del jugador.
+		matrizIP[jJugador.getX()][jJugador.getY()].changeParameter(7, false);
+		this.jJugador.setX(x);
+		this.jJugador.setY(y);
+		matrizIP[x][y].changeParameter(7, true);
+		matrizIP[x][y].changeParameter(8, false);
+	}
 
 	void datosEjemplo(){
 /*		matrizIP[0][1] = new ImagePanel(new boolean[]{false, false, false, false, false, false, false, false, true});
