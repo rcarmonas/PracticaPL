@@ -61,7 +61,7 @@ tokens
 	SET_TESORO = "colocar_tesoro";
 	SET_JUGADOR = "colocar_jugador";
 	DEL_WUMPUS = "borrar_wumpus";
-	
+	PAUSA = "pausa";
 
 	// Literales lógicos
 	LIT_CIERTO = "true" ;

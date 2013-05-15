@@ -12,6 +12,7 @@ header{
 	package ANTLR;
 	import java.util.Scanner;
 	import Interfaz.*;
+	import java.lang.*;
 
 	}
 class Anasint extends Parser;
@@ -1023,6 +1024,35 @@ eliminarWumpus
 			mostrarExcepcion(re);
 		 }
 
+pausa
+	[boolean ejecutar]
+	{Expresion e;}
+	:
+	 PAUSA PARENT_IZ e=expresion[ejecutar] PARENT_DE PUNTO_COMA
+	{
+		if(e.tipo.equals("cadena"))
+		{
+			System.err.println("Se esperaba expresion numérica , no alfanumérica");
+			throw new RecognitionException();
+		}
+		else if(ejecutar)
+		{
+			int valT = (int)(Double.parseDouble(e._valor)*1000);
+			try{
+			  Thread.currentThread().sleep(valT);
+			}
+			catch(Exception ie){
+				System.err.println("Error al intentar pausar");
+			}
+		}
+	}
+	;
+	exception
+ 		catch [RecognitionException re] {
+			mostrarExcepcion(re);
+		 }
+
+		
 sentenciaWumpus
 	[boolean ejecutar]
 	:
@@ -1033,11 +1063,14 @@ sentenciaWumpus
 		|colocarTesoro[ejecutar]
 		|colocarJugador[ejecutar]
 		|eliminarWumpus[ejecutar]
+		|pausa[ejecutar]
 	;
 	exception
  		catch [RecognitionException re] {
 			mostrarExcepcion(re);
 		 }
+
+
 //-------------------------------------------------------------------------------------------
 //Sentencias de configuración del mundo de wumpus
 

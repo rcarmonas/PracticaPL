@@ -7,5 +7,6 @@
  	@flechas 1
 #ejecutar
  	colocar_wumpus(1, 1);
+ 	pausa(3);
  	borrar_wumpus(1,1);
 #fin
