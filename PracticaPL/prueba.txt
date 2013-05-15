@@ -1,5 +1,10 @@
-a = 0;
-repetir
-	a++;
-	escribir(a);
-hasta (a>10);
+#config
+ 	@x 12
+ 	@y 12
+ 	@xjugador 0
+ 	@yjugador 0
+ 	@vidas 1
+ 	@flechas 1
+#ejecutar
+ a = 0;
+#fin

@@ -33,10 +33,7 @@ public class Test
 				System.out.println("\n\nContenido de la Tabla de Símbolos");
 				anasint.getTablaSimbolos().escribirSimbolos();
 			}
-			
-			//TODO crear la interfaz
-			Inicio interfaz=new Inicio(10,10);
-			
+						
 		}
 
 

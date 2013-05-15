@@ -11,6 +11,7 @@
 header{
 	package ANTLR;
 	import java.util.Scanner;
+	import Interfaz.*;
 
 	}
 class Anasint extends Parser;
@@ -27,6 +28,8 @@ options
 {		
 	//Variable que activa o desactiva la muestra de información de debug
 	boolean debug = false;
+	
+	Inicio interfaz;
 	
 	//Función para activar o desactivar la información adicional
 	public void setDebug(boolean debug)
@@ -869,8 +872,47 @@ lugar
 		 }
 
 //-------------------------------------------------------------------------------------------
+sentenciasConf
+	{
+		Expresion x, y, xP, yP, vidas, flechas;
+	}
+	:
+	CONF_X x=expresion[true]
+	CONF_Y y=expresion[true]
+	CONF_XPlayer xP=expresion[true]
+	CONF_YPlayer yP=expresion[true]
+	CONF_vidas vidas=expresion[true]
+	CONF_flechas flechas=expresion[true]
+	{
+		if(x.tipo.equals("cadena")
+			|| y.tipo.equals("cadena")
+			|| xP.tipo.equals("cadena")
+			|| yP.tipo.equals("cadena")
+			|| vidas.tipo.equals("cadena")
+			|| flechas.tipo.equals("cadena"))
+			throw new RecognitionException();
+		int valy = (int)Double.parseDouble(y._valor);
+		int valx = (int)Double.parseDouble(x._valor);
+		int valxP = (int)Double.parseDouble(xP._valor);
+		int valyP = (int)Double.parseDouble(yP._valor);
+		int valVidas = (int)Double.parseDouble(vidas._valor);
+		int valFlechas = (int)Double.parseDouble(flechas._valor); 
+		Inicio interfaz=new Inicio(valy, valx, valxP, valyP, valVidas, valFlechas);
+	}
+	;
+	exception
+ 		catch [RecognitionException re] {
+			mostrarExcepcion(re);
+		 }
+
+//-------------------------------------------------------------------------------------------
 //Programa general
-prog: instruccion[true] (instruccion[true])+
+prog: 
+	CONFIGURACION
+		sentenciasConf
+	EJECUCION
+		(instruccion[true])+
+	FIN
 	;
 	exception
  		catch [RecognitionException re] {

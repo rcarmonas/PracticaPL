@@ -208,6 +208,33 @@ PARENT_DE : ")"
 CORCH_IZ : "["
 		;
 
+CONFIGURACION : "#config"
+	;
+
+EJECUCION : "#ejecutar"
+	;
+
+FIN: "#fin"
+	;
+
+CONF_X : "@x"
+	;
+
+CONF_Y : "@y"
+	;
+
+CONF_XPlayer: "@xjugador"
+	;
+
+CONF_YPlayer: "@yjugador"
+	;
+
+CONF_flechas: "@flechas"
+	;
+
+CONF_vidas: "@vidas"
+	;
+
 CORCH_DE : "]"
 		;
 
@@ -227,6 +254,7 @@ COMENTARIO:
 	  | COMENTARIO2 
           )		{ $setType(Token.SKIP); }
 	  ;
+
 
 
 // FIN DE LA ZONA DE REGLAS LEXICAS
