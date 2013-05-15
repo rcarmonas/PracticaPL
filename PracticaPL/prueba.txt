@@ -1,5 +1,5 @@
 a = 0;
 repetir
-	a = a+1;
+	a++;
 	escribir(a);
 hasta (a>10);

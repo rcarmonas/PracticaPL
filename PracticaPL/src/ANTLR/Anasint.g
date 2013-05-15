@@ -110,9 +110,9 @@ asignacion
 	//Variable local
 	{Expresion e;}
 	:
-	id:IDENT OP_ASIG
+	id:IDENT 
 	(
-		e=expresion[ejecutar]
+	(OP_ASIG e=expresion[ejecutar]
 		{	
 			String nombre = id.getText();
 			if(ejecutar)
@@ -120,6 +120,56 @@ asignacion
 			if(debug)
 	 			System.out.println("Asignación =>" + nombre + "=" + e._valor);
 		}	
+	)
+	|
+	(
+		OP_INCREMENTO
+			{
+			    // Busca el identificador en la tabla de símbolos
+				int indice = tablaSimbolos.existeSimbolo(id.getText());
+				String tipo;
+				double valor;
+				// Si encuentra el identificador, devuelve su valor
+				if (indice >= 0)
+					tipo = tablaSimbolos.getSimbolo(indice).getTipo();
+				else
+					throw new RecognitionException();
+					
+				if (!tipo.equals("numero"))
+					throw new RecognitionException();
+				else
+					valor = Double.parseDouble(tablaSimbolos.getSimbolo(indice).getValor());
+					
+				valor = valor+1;
+				
+				insertarIdentificador(id.getText(), tipo, String.valueOf(valor));
+				
+			}
+		)
+		|
+		(
+		OP_DECREMENTO
+			{
+			    // Busca el identificador en la tabla de símbolos
+				int indice = tablaSimbolos.existeSimbolo(id.getText());
+				String tipo;
+				double valor;
+				// Si encuentra el identificador, devuelve su valor
+				if (indice >= 0)
+					tipo = tablaSimbolos.getSimbolo(indice).getTipo();
+				else
+					throw new RecognitionException();
+					
+				if (!tipo.equals("numero"))
+					throw new RecognitionException();
+				else
+					valor = Double.parseDouble(tablaSimbolos.getSimbolo(indice).getValor());
+					
+				valor = valor-1;
+				
+				insertarIdentificador(id.getText(), tipo, String.valueOf(valor));
+			}
+		)
 	)
 	PUNTO_COMA
 	;
@@ -820,7 +870,7 @@ lugar
 
 //-------------------------------------------------------------------------------------------
 //Programa general
-prog: (instruccion[true])+
+prog: instruccion[true] (instruccion[true])+
 	;
 	exception
  		catch [RecognitionException re] {
