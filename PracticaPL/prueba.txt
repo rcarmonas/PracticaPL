@@ -6,5 +6,6 @@
  	@vidas 1
  	@flechas 1
 #ejecutar
- 	colocar_jugador(1, 1);
+ 	colocar_wumpus(1, 1);
+ 	borrar_wumpus(1,1);
 #fin
