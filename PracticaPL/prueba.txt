@@ -6,5 +6,7 @@
  	@vidas 1
  	@flechas 1
 #ejecutar
- 	escribir(aleatorio(10));
+para i desde 0 hasta 100 paso 1 hacer
+ 	leer_tecla;
+fin_para;
 #fin

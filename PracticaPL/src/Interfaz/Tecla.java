@@ -20,17 +20,17 @@ public class Tecla {
 	Inicio interfaz;
 	KeyListener listener;
 	
-	Tecla(Inicio j){
+	public Tecla(Inicio j){
 		interfaz=j;
 	}
 	/**
 	 * Se bloquea a la espera de una pulsación
 	 * @return Devuelve la primera tecla pulsada
 	 */
-	int get()
+	synchronized public int get()
 	{
 		listener = new MiKeyListener(this);
-		interfaz.jtConsola.addKeyListener(listener);
+		interfaz.jtEntrada.addKeyListener(listener);
 		try {
 			wait();
 		} catch (InterruptedException e) {
@@ -43,10 +43,10 @@ public class Tecla {
 	 * Establece una pulsación
 	 * @param tecla Tecla pulsada
 	 */
-	void pulsacion(int tecla)
+	synchronized public void pulsacion(int tecla)
 	{
 		this.teclaPulsada = tecla;
-		interfaz.jtConsola.removeKeyListener(listener);
+		interfaz.jtEntrada.removeKeyListener(listener);
 		this.notify();
 	}
 

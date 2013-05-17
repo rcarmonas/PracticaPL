@@ -65,6 +65,7 @@ tokens
 	PAUSA = "pausa";
 	MOVER_JUGADOR = "mover_jugador";
 	ALEATORIO = "aleatorio";
+	LEER_TECLA="leer_tecla";
 	
 	// Literales lógicos
 	LIT_CIERTO = "true" ;

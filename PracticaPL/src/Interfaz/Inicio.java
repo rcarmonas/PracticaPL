@@ -10,6 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 /*
  * Nomenclatura imagenes:
@@ -39,7 +40,7 @@ public class Inicio {
 	int rejillaX, rejillaY;
 	JLabel lblVidas;
 	JLabel lblFlechas;
-	JTextArea jtConsola;
+	JTextField jtEntrada;
 
 	public static void main(String args[]) {
 		Runnable rAux = new Runnable() {
@@ -148,10 +149,15 @@ public class Inicio {
 		lblConsola.setBounds(50*sizeX+50, 300, 200, 50);
 		ventana.add(lblConsola);
 
-		jtConsola=new JTextArea();
+		JTextArea jtConsola=new JTextArea();
+		jtConsola.setEditable(false);
 		JScrollPane jsScroll= new JScrollPane(jtConsola);
-		jsScroll.setBounds(50*sizeX+50, 350, 210, 170);
+		jsScroll.setBounds(50*sizeX+50, 350, 210, 140);
 		ventana.add(jsScroll);
+
+		jtEntrada=new JTextField();
+		jtEntrada.setBounds(50*sizeX+50, 500, 210, 20);
+		ventana.add(jtEntrada);
 		
 		ventana.setVisible(true);
 	}
