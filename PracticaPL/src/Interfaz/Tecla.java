@@ -32,6 +32,7 @@ public class Tecla {
 	{
 		listener = new MiKeyListener(this,true);
 		interfaz.jtEntrada.addKeyListener(listener);
+		interfaz.jtEntrada.requestFocusInWindow();
 		try {
 			wait();
 		} catch (InterruptedException e) {
@@ -43,6 +44,7 @@ public class Tecla {
 	{
 		listener = new MiKeyListener(this,false);
 		interfaz.jtEntrada.addKeyListener(listener);
+		interfaz.jtEntrada.requestFocusInWindow();
 		try {
 			wait();
 		} catch (InterruptedException e) {
