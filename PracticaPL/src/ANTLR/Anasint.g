@@ -32,7 +32,6 @@ options
 	
 	Inicio interfaz;
 	Tecla tecla;
-	Tecla entrada;
 	
 	//Función para activar o desactivar la información adicional
 	public void setDebug(boolean debug)
@@ -414,7 +413,8 @@ leer
 	{
 		if(ejecutar)
 		{
-			int valor = Integer.parseInt(entrada.getTexto());
+			tecla=new Tecla(interfaz);
+			int valor = Integer.parseInt(tecla.getTexto());
 			//TODO Controlar fallo
 			insertarIdentificador(id.getText(), "numero", String.valueOf(valor));
 			//borro la entrada
@@ -439,7 +439,8 @@ leerCadena
 	{
 		if(ejecutar)
 		{
-			String valorCadena = entrada.getTexto();
+			tecla=new Tecla(interfaz);
+			String valorCadena = tecla.getTexto();
 			insertarIdentificador(id.getText(), "cadena", valorCadena);
 			//borro la entrada
 			interfaz.jtEntrada.setText("");
@@ -1288,7 +1289,6 @@ sentenciasConf
 		int valVidas = (int)Double.parseDouble(vidas._valor);
 		int valFlechas = (int)Double.parseDouble(flechas._valor);
 		interfaz=new Inicio(valy, valx, valxP, valyP, valVidas, valFlechas);
-		entrada=new Tecla(interfaz);
 	}
 	;
 	exception

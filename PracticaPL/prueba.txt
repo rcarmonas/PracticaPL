@@ -6,10 +6,12 @@
  	@vidas 1
  	@flechas 1
 #ejecutar
+colocar_wumpus(2,2);
 para i desde 0 hasta 100 paso 1 hacer
-	escribir_cadena('Introduce a: ');
- 	leer_cadena(a);
  	escribir_cadena('Pulse una direccion');
  	leer_tecla;
+ 	escribir_cadena('Te quedan ');
+ 	escribir(99-i);
+ 	escribir_cadena('movimientos');
 fin_para;
 #fin
