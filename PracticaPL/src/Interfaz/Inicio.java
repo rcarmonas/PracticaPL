@@ -11,6 +11,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 /*
  * Nomenclatura imagenes:
@@ -40,7 +42,8 @@ public class Inicio {
 	int rejillaX, rejillaY;
 	JLabel lblVidas;
 	JLabel lblFlechas;
-	JTextField jtEntrada;
+	public JTextField jtEntrada;
+	public JTextArea jtConsola;
 
 	public static void main(String args[]) {
 		Runnable rAux = new Runnable() {
@@ -149,12 +152,27 @@ public class Inicio {
 		lblConsola.setBounds(50*sizeX+50, 300, 200, 50);
 		ventana.add(lblConsola);
 
-		JTextArea jtConsola=new JTextArea();
+		jtConsola=new JTextArea();
 		jtConsola.setEditable(false);
+		jtConsola.getDocument().addDocumentListener(new DocumentListener() {
+				@Override
+				public void changedUpdate(DocumentEvent arg0) {
+				}
+				@Override
+				public void insertUpdate(DocumentEvent arg0) {
+					try{
+						jtConsola.setCaretPosition(jtConsola.getLineStartOffset(jtConsola.getLineCount()-1));
+					}catch(Exception ex){}
+					
+				}
+				@Override
+				public void removeUpdate(DocumentEvent arg0) {					
+				}
+		});
 		JScrollPane jsScroll= new JScrollPane(jtConsola);
 		jsScroll.setBounds(50*sizeX+50, 350, 210, 140);
 		ventana.add(jsScroll);
-
+		
 		jtEntrada=new JTextField();
 		jtEntrada.setBounds(50*sizeX+50, 500, 210, 20);
 		ventana.add(jtEntrada);

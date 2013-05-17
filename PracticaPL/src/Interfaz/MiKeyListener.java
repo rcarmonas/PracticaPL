@@ -5,10 +5,12 @@ import java.awt.event.KeyListener;
 
 public class MiKeyListener implements KeyListener {
 
-	Inicio interfaz;
 	Tecla tecla;
-	MiKeyListener(Tecla t){
+	boolean direccion;
+	
+	MiKeyListener(Tecla t,boolean d){
 		tecla=t;
+		direccion=d;
 	}
 		@Override
 		public void keyTyped(KeyEvent e) {
@@ -16,8 +18,16 @@ public class MiKeyListener implements KeyListener {
 
 		@Override
 		public void keyPressed(KeyEvent e) {
-			tecla.pulsacion(e.getKeyCode());
-
+			if(direccion){//si es el keylistener de leer teclas de dirección
+				tecla.pulsacion(e.getKeyCode());
+			}
+			else//si es el keylistener de la entrada de texto
+			{
+				if(e.getKeyCode()==10)//si es el intro
+				{
+					tecla.pulsacion(tecla.interfaz.jtEntrada.getText());
+				}
+			}
 		}
 
 		@Override

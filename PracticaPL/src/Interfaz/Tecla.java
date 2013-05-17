@@ -17,6 +17,7 @@ public class Tecla {
 	public static int IZQUIERDA = 37;
 
 	int teclaPulsada;
+	String texto;
 	Inicio interfaz;
 	KeyListener listener;
 	
@@ -27,9 +28,9 @@ public class Tecla {
 	 * Se bloquea a la espera de una pulsación
 	 * @return Devuelve la primera tecla pulsada
 	 */
-	synchronized public int get()
+	synchronized public int getTecla()
 	{
-		listener = new MiKeyListener(this);
+		listener = new MiKeyListener(this,true);
 		interfaz.jtEntrada.addKeyListener(listener);
 		try {
 			wait();
@@ -37,6 +38,17 @@ public class Tecla {
 			e.printStackTrace();
 		}
 		return this.teclaPulsada;
+	}
+	synchronized public String getTexto()
+	{
+		listener = new MiKeyListener(this,false);
+		interfaz.jtEntrada.addKeyListener(listener);
+		try {
+			wait();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		return texto;
 	}
 	
 	/**
@@ -46,6 +58,12 @@ public class Tecla {
 	synchronized public void pulsacion(int tecla)
 	{
 		this.teclaPulsada = tecla;
+		interfaz.jtEntrada.removeKeyListener(listener);
+		this.notify();
+	}
+	synchronized public void pulsacion(String tecla)
+	{
+		this.texto = tecla;
 		interfaz.jtEntrada.removeKeyListener(listener);
 		this.notify();
 	}

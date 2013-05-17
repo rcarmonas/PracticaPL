@@ -32,6 +32,7 @@ options
 	
 	Inicio interfaz;
 	Tecla tecla;
+	Tecla entrada;
 	
 	//Función para activar o desactivar la información adicional
 	public void setDebug(boolean debug)
@@ -413,10 +414,13 @@ leer
 	{
 		if(ejecutar)
 		{
-			Scanner entrada = new Scanner(System.in);
-			int valor = entrada.nextInt();
+			int valor = Integer.parseInt(entrada.getTexto());
 			//TODO Controlar fallo
 			insertarIdentificador(id.getText(), "numero", String.valueOf(valor));
+			//borro la entrada
+			interfaz.jtEntrada.setText("");
+			//pongo la entrada en la consola
+			interfaz.jtConsola.setText(interfaz.jtConsola.getText()+valor);
 		}
 	}
 		;
@@ -435,9 +439,12 @@ leerCadena
 	{
 		if(ejecutar)
 		{
-			Scanner entrada = new Scanner(System.in);
-			String valorCadena = entrada.next();
+			String valorCadena = entrada.getTexto();
 			insertarIdentificador(id.getText(), "cadena", valorCadena);
+			//borro la entrada
+			interfaz.jtEntrada.setText("");
+			//pongo la entrada en la consola
+			interfaz.jtConsola.setText(interfaz.jtConsola.getText()+valorCadena);
 		}
 	}
 		;
@@ -464,7 +471,7 @@ escribir
 		: ESCRIBIR PARENT_IZ e=expresion[ejecutar] PARENT_DE PUNTO_COMA
 		{
 			if(ejecutar)
-				System.out.println(e._valor);
+				interfaz.jtConsola.setText(interfaz.jtConsola.getText()+"\n"+e._valor);
 		}
 		;
 	exception
@@ -480,7 +487,7 @@ escribirCadena
 		: ESCRIBIR_CADENA PARENT_IZ s=expresion[ejecutar] PARENT_DE PUNTO_COMA
 		{
 			if(ejecutar)
-				System.out.println(s._valor);
+				interfaz.jtConsola.setText(interfaz.jtConsola.getText()+"\n"+s._valor);
 		}
 		;
 	exception
@@ -1135,7 +1142,7 @@ leerTecla
 	{
 		int auxX=0, auxY=0;
 		tecla=new Tecla(interfaz);
-		int valD = tecla.get();
+		int valD = tecla.getTecla();
 		if(valD == Tecla.DERECHA)
 			auxX = 1;
 		else if(valD == Tecla.IZQUIERDA)
@@ -1281,6 +1288,7 @@ sentenciasConf
 		int valVidas = (int)Double.parseDouble(vidas._valor);
 		int valFlechas = (int)Double.parseDouble(flechas._valor);
 		interfaz=new Inicio(valy, valx, valxP, valyP, valVidas, valFlechas);
+		entrada=new Tecla(interfaz);
 	}
 	;
 	exception

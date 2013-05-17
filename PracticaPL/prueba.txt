@@ -7,6 +7,9 @@
  	@flechas 1
 #ejecutar
 para i desde 0 hasta 100 paso 1 hacer
+	escribir_cadena('Introduce a: ');
+ 	leer_cadena(a);
+ 	escribir_cadena('Pulse una direccion');
  	leer_tecla;
 fin_para;
 #fin
