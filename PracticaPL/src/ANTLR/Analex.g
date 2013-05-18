@@ -68,6 +68,17 @@ tokens
 	LEER_TECLA="leer_tecla";
 	INFO_CASILLA="info_casilla";
 	
+	//Comprobación de casillas:
+	HAY_WUMPUS = "hay wumpus";
+	HAY_TESORO = "hay_tesoro";
+	HAY_JUGADOR = "hay_jugador";
+	HAY_FLECHA = "hay_flecha";
+	HAY_AMBROSIA = "hay_ambrosia";
+	HAY_POZO = "hay pozo";
+	HAY_VIENTO = "hay_viento";
+	HAY_OLOR = "hay_olor";
+	OCULTO = "oculto";
+	
 	// Literales lógicos
 	LIT_CIERTO = "true" ;
 	LIT_FALSO = "false" ;
