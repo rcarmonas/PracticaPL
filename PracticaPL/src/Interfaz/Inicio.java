@@ -309,7 +309,6 @@ public class Inicio {
 			if(matrizIP[x][y].bVector[i])
 				aux+=Math.pow(2, i);
 		return aux;
-		
 	}
 
 	void datosEjemplo(){

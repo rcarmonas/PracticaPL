@@ -1073,7 +1073,7 @@ pausa
 				mostrarExcepcion(re);
 		 }
 
-direccion
+pulsacion
 	[boolean ejecutar]
 	returns [int resultado=0;]
 	:
@@ -1089,6 +1089,12 @@ direccion
 	)|(
 		ABAJO
 		{resultado = Tecla.ABAJO;}
+	)|(
+		ESPACIO
+		{resultado = Tecla.ESPACIO;}
+	)|(
+		ESCAPE
+		{resultado = Tecla.ESCAPE;}
 	)
 	;
 	exception
@@ -1185,7 +1191,50 @@ aleatorio
  			if(ejecutar)
 				mostrarExcepcion(re);
 		 }
-	
+
+
+infoCasilla	
+	[boolean ejecutar]
+	returns [Expresion resultado= new Expresion();]
+	{
+	boolean aux=false;
+	Expresion e1=new Expresion(), e2=new Expresion();
+	}
+	:
+	INFO_CASILLA (PARENT_IZ e1=expresion[ejecutar] COMA e2=expresion[ejecutar] PARENT_DE{aux = true;})?
+	{
+		if(ejecutar)
+		{
+			if(aux)
+			{
+				if(e1.tipo.equals("cadena") || e2.tipo.equals("cadena"))
+				{
+					System.err.println("Se esperaba expresion numérica , no alfanumérica");
+					throw new RecognitionException();
+				}
+				else
+				{
+					int valX = (int)Double.parseDouble(e1._valor);
+					int valY = (int)Double.parseDouble(e2._valor);
+					resultado.tipo = "numero";
+					resultado._valor = String.valueOf(interfaz.getInfoCasilla(valX, valY));
+				}
+			}
+			else
+			{	
+					int valX = interfaz.jJugador.getX();
+					int valY = interfaz.jJugador.getY();
+					resultado.tipo = "numero";
+					resultado._valor = String.valueOf(interfaz.getInfoCasilla(valX, valY));
+			}
+		}			
+	}
+	;
+	exception
+ 		catch [RecognitionException re] {
+ 			if(ejecutar)
+				mostrarExcepcion(re);
+		 }
 		
 terminoWumpus
 	[boolean ejecutar]
@@ -1194,7 +1243,7 @@ terminoWumpus
 	Expresion e;}
 	:
 	(
-		i=direccion[ejecutar]
+		i=pulsacion[ejecutar]
 		{
 			resultado.tipo = "numero";
 			resultado._valor = String.valueOf(i);
@@ -1231,6 +1280,11 @@ terminoWumpus
 		}
 	)|(
 		e=leerTecla[ejecutar]
+		{
+			resultado = e;
+		}	
+	)|(
+		e=infoCasilla[ejecutar]
 		{
 			resultado = e;
 		}	

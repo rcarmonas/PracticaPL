@@ -15,6 +15,9 @@ public class Tecla {
 	public static int ABAJO = 40;
 	public static int DERECHA = 39;
 	public static int IZQUIERDA = 37;
+	public static int ESPACIO = 32;
+	public static int ESCAPE = 27;
+
 
 	int teclaPulsada;
 	String texto;

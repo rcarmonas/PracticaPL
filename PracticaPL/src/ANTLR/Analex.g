@@ -66,6 +66,7 @@ tokens
 	MOVER_JUGADOR = "mover_jugador";
 	ALEATORIO = "aleatorio";
 	LEER_TECLA="leer_tecla";
+	INFO_CASILLA="info_casilla";
 	
 	// Literales lógicos
 	LIT_CIERTO = "true" ;
@@ -249,13 +250,17 @@ CONF_flechas: "@flechas"
 CONF_vidas: "@vidas"
 	;
 	
-DERECHA: "__derecha"
+DERECHA: ":derecha"
 	;
-IZQUIERDA: "__izquierda"
+IZQUIERDA: ":izquierda"
 	;
-ARRIBA: "__arriba"
+ARRIBA: ":arriba"
 	;
-ABAJO: "__abajo"
+ABAJO: ":abajo"
+	;
+ESPACIO: ":espacio" //32
+	;
+ESCAPE: ":scape" //27
 	;
 
 CORCH_DE : "]"
