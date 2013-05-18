@@ -222,13 +222,13 @@ PARENT_DE : ")"
 CORCH_IZ : "["
 		;
 
-CONFIGURACION : "#config"
+CONFIGURACION : "<config>"
 	;
 
-EJECUCION : "#ejecutar"
+EJECUCION : "<ejecutar>"
 	;
 
-FIN: "#fin"
+FIN: "<fin>"
 	;
 
 CONF_X : "@x"

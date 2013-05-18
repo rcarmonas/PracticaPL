@@ -13,6 +13,8 @@ header{
 	import java.util.Scanner;
 	import Interfaz.*;
 	import java.lang.*;
+	import java.util.Random;
+	
 
 	}
 class Anasint extends Parser;
@@ -1137,30 +1139,25 @@ moverJugador
 		 }
 leerTecla
 	[boolean ejecutar]
-	{Expresion e;}
+	returns [Expresion resultado = new Expresion()]
 	:
 	 LEER_TECLA PUNTO_COMA
 	{
-		int auxX=0, auxY=0;
-		tecla=new Tecla(interfaz);
-		int valD = tecla.getTecla();
-		if(valD == Tecla.DERECHA)
-			auxX = 1;
-		else if(valD == Tecla.IZQUIERDA)
-			auxX = -1;
-		else if(valD == Tecla.ARRIBA)
-			auxY = -1;
-		else if(valD == Tecla.ABAJO)
-			auxY = 1;
-		else
+		if(ejecutar)
 		{
-			System.err.println("Se esperaba una dirección");	
-			throw new RecognitionException();
+			tecla = new Tecla(interfaz);
+			int pulsacion = tecla.getTecla();
+			resultado.tipo="numero";
+			resultado._valor = String.valueOf(pulsacion);
 		}
-		
-		interfaz.mover(auxX, auxY);
 	}
 	;
+	exception
+ 		catch [RecognitionException re] {
+ 			if(ejecutar)
+				mostrarExcepcion(re);
+		 }
+	
 aleatorio
 	[boolean ejecutar]
 	returns [int resultado=0;]
@@ -1177,7 +1174,9 @@ aleatorio
 		else if(ejecutar)
 		{
 			int valR = (int)(Double.parseDouble(e._valor));
-			resultado = (int) (Math.random()*valR);
+			Random r=new Random();
+			r.setSeed(System.currentTimeMillis());
+			resultado = r.nextInt(valR);
 		}
 	}
 	; 
@@ -1191,7 +1190,8 @@ aleatorio
 terminoWumpus
 	[boolean ejecutar]
 	returns [Expresion resultado = new Expresion();]
-	{int i;}
+	{int i;
+	Expresion e;}
 	:
 	(
 		i=direccion[ejecutar]
@@ -1229,6 +1229,11 @@ terminoWumpus
 			resultado.tipo = "numero";
 			resultado._valor = String.valueOf(i);
 		}
+	)|(
+		e=leerTecla[ejecutar]
+		{
+			resultado = e;
+		}	
 	)
 	;
 	exception
@@ -1248,7 +1253,6 @@ sentenciaWumpus
 		|colocarJugador[ejecutar]
 		|eliminarWumpus[ejecutar]
 		|pausa[ejecutar]
-		|leerTecla[ejecutar]
 	;
 	exception
  		catch [RecognitionException re] {

@@ -9,7 +9,7 @@
 colocar_wumpus(2,2);
 para i desde 0 hasta 100 paso 1 hacer
  	escribir_cadena('Pulse una direccion');
- 	leer_tecla;
+ 	mover_jugador(leer_tecla);
  	escribir_cadena('Te quedan ');
  	escribir(99-i);
  	escribir_cadena('movimientos');
