@@ -7,7 +7,10 @@
  	@flechas 1
 <ejecutar>
 colocar_wumpus(2,2);
-escribir(info_casilla(2,2));
+si(oculto(info_casilla(2,2))) entonces
+	escribir('hay wumpus');
+fin_si;
+
 para i desde 0 hasta 100 paso 1 hacer
  	escribir_cadena('Pulse una direccion');
  	tecla = leer_tecla;

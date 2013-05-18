@@ -28,15 +28,15 @@ import javax.swing.event.DocumentListener;
  */
 
 public class Inicio {
-	static int olor = 0;
-	static int viento = 1;
-	static int flecha = 2;
-	static int ambrosia = 3;
-	static int tesoro = 4;
-	static int pozo = 5;
-	static int wumpus = 6;
-	static int jugador = 7;
-	static int desconocido = 8;
+	public static int olor = 0;
+	public static int viento = 1;
+	public static int flecha = 2;
+	public static int ambrosia = 3;
+	public static int tesoro = 4;
+	public static int pozo = 5;
+	public static int wumpus = 6;
+	public static int jugador = 7;
+	public static int desconocido = 8;
 
 	public JFrame ventana;
 	public Jugador jJugador;

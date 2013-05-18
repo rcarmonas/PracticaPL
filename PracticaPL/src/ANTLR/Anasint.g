@@ -608,6 +608,12 @@ termino_cond
 			{
 				resultado = b;
 			}
+	)|(
+			b=condicionWumpus[ejecutar]
+			{
+				resultado = b;
+			}
+	
 	)
 	{if(debug)System.out.println("Termino_cond=>" + resultado);}
 	;
@@ -1235,7 +1241,53 @@ infoCasilla
  			if(ejecutar)
 				mostrarExcepcion(re);
 		 }
-		
+	
+comprobacion
+	[boolean ejecutar]
+	returns [int resultado=0]
+	:
+		(HAY_WUMPUS{resultado = Inicio.wumpus;})| 
+		(HAY_TESORO{resultado = Inicio.tesoro;})|
+		(HAY_JUGADOR{resultado = Inicio.jugador;})|
+		(HAY_FLECHA{resultado = Inicio.flecha;})|
+		(HAY_AMBROSIA{resultado = Inicio.ambrosia;})|
+		(HAY_POZO{resultado = Inicio.pozo;})|
+		(HAY_VIENTO{resultado = Inicio.viento;})|
+		(HAY_OLOR{resultado = Inicio.olor;})|
+		(OCULTO{resultado = Inicio.desconocido;})
+	;
+	exception
+ 		catch [RecognitionException re] {
+ 			if(ejecutar)
+				mostrarExcepcion(re);
+		 }
+
+condicionWumpus
+	[boolean ejecutar]
+	returns [boolean resultado = false]
+	{int tipo;
+	Expresion e;}
+	:tipo=comprobacion[ejecutar] PARENT_IZ e=expresion[ejecutar] PARENT_DE
+	{
+		if(ejecutar && e.tipo.equals("cadena"))
+		{
+			System.err.println("Se esperaba dato numérico, no cadena");	
+			throw new RecognitionException();
+		}
+		else if(ejecutar)
+		{
+			int val = (int)Double.parseDouble(e._valor);
+			int aux = (int)(val/Math.pow(2,tipo));
+			resultado = ((aux%2)==1);
+		}
+	}
+	;
+	exception
+ 		catch [RecognitionException re] {
+ 			if(ejecutar)
+				mostrarExcepcion(re);
+		 }
+	
 terminoWumpus
 	[boolean ejecutar]
 	returns [Expresion resultado = new Expresion();]

@@ -69,7 +69,7 @@ tokens
 	INFO_CASILLA="info_casilla";
 	
 	//Comprobación de casillas:
-	HAY_WUMPUS = "hay wumpus";
+	HAY_WUMPUS = "hay_wumpus";
 	HAY_TESORO = "hay_tesoro";
 	HAY_JUGADOR = "hay_jugador";
 	HAY_FLECHA = "hay_flecha";
