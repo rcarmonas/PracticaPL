@@ -101,15 +101,19 @@ public class Inicio {
 		jpBotones.add(lblControles);
 		JButton JBArriba = new JButton("Arriba");
 		jpBotones.add(JBArriba);
+		JBArriba.setFocusable(false);
 		
 		JButton JBIzquierda = new JButton("<");
 		jpBotones.add(JBIzquierda);
+		JBIzquierda.setFocusable(false);
 		
 		JButton JBDerecha = new JButton(">");
 		jpBotones.add(JBDerecha);
+		JBDerecha.setFocusable(false);
 
 		JButton JBAbajo = new JButton("Abajo");
 		jpBotones.add(JBAbajo);
+		JBAbajo.setFocusable(false);
 
 		JBAbajo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -156,6 +160,7 @@ public class Inicio {
 
 		jtConsola=new JTextArea();
 		jtConsola.setEditable(false);
+		jtConsola.setFocusable(false);
 		jtConsola.getDocument().addDocumentListener(new DocumentListener() {
 				@Override
 				public void changedUpdate(DocumentEvent arg0) {
@@ -176,6 +181,8 @@ public class Inicio {
 		ventana.add(jsScroll);
 		
 		jtEntrada=new JTextField();
+		jtEntrada.setEditable(false);
+		jtEntrada.setFocusable(false);
 		jtEntrada.setBounds(50*sizeX+50, 500, 210, 20);
 		ventana.add(jtEntrada);
 		

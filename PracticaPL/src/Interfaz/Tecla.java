@@ -34,8 +34,8 @@ public class Tecla {
 	synchronized public int getTecla()
 	{
 		listener = new MiKeyListener(this,true);
-		interfaz.jtEntrada.addKeyListener(listener);
-		interfaz.jtEntrada.requestFocusInWindow();
+		interfaz.ventana.addKeyListener(listener);
+		interfaz.ventana.requestFocusInWindow();
 		try {
 			wait();
 		} catch (InterruptedException e) {
@@ -47,6 +47,8 @@ public class Tecla {
 	{
 		listener = new MiKeyListener(this,false);
 		interfaz.jtEntrada.addKeyListener(listener);
+		interfaz.jtEntrada.setEditable(true);
+		interfaz.jtEntrada.setFocusable(true);
 		interfaz.jtEntrada.requestFocusInWindow();
 		try {
 			wait();
@@ -63,13 +65,15 @@ public class Tecla {
 	synchronized public void pulsacion(int tecla)
 	{
 		this.teclaPulsada = tecla;
-		interfaz.jtEntrada.removeKeyListener(listener);
+		interfaz.ventana.removeKeyListener(listener);
 		this.notify();
 	}
 	synchronized public void pulsacion(String tecla)
 	{
 		this.texto = tecla;
 		interfaz.jtEntrada.removeKeyListener(listener);
+		interfaz.jtEntrada.setEditable(false);
+		interfaz.jtEntrada.setFocusable(false);
 		this.notify();
 	}
 
