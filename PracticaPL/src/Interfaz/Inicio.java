@@ -1,6 +1,5 @@
 package Interfaz;
 
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -13,19 +12,6 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-
-/*
- * Nomenclatura imagenes:
- * 	0 - olor
- *  1 - viento
- *  2 - flecha - Especial
- *  3 - ambrosia - Especial
- *  4 - tesoro - Especial
- *  5 - pozo
- *  6 - wumpus
- *  7 - jugador
- *  8 - desconocido
- */
 
 public class Inicio {
 	public static int olor = 0;
@@ -47,21 +33,6 @@ public class Inicio {
 	public JTextField jtEntrada;
 	public JTextArea jtConsola;
 
-	public static void main(String args[]) {
-		Runnable rAux = new Runnable() {
-			public void run() {
-				try {
-					Inicio window = new Inicio(10, 10, 0, 2, 3, 1);
-					window.ventana.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		};
-
-		EventQueue.invokeLater(rAux);
-	}
-
 	public Inicio(int sizeX, int sizeY, int playerX, int playerY, int lives, int arrows){
 		int i, j;
 		this.rejillaX = sizeX;
@@ -78,13 +49,14 @@ public class Inicio {
 
 		matrizIP[playerX][playerY].changeParameter(jugador, true);
 		matrizIP[playerX][playerY].changeParameter(desconocido, false);
-
-		datosEjemplo();
 		
 		//creacion de la ventana
 		ventana = new JFrame();
 		ventana.setTitle("Mundo Wumpus");
-		ventana.setBounds(100, 100, sizeX*50+300, sizeY*50+80);
+		if(sizeY*50+80<450)
+			ventana.setBounds(100, 100, sizeX*50+300, 450);
+		else
+			ventana.setBounds(100, 100, sizeX*50+300, sizeY*50+80);
 		ventana.setResizable(false);
 		ventana.setLayout(null);
 		ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -95,21 +67,44 @@ public class Inicio {
 				matrizIP[i][j].setBounds(i*50+30, j*50+30, 50, 50);
 			}
 
+		/**
+		 * Panel de estado
+		 */
+		JPanel jpEstado = new JPanel();
+		JLabel lblEstado = new JLabel("Estado");
+		jpEstado.add(lblEstado);
+
+		lblVidas = new JLabel("Vidas: " + jJugador.getVidas());
+		jpEstado.add(lblVidas);
+
+		lblFlechas = new JLabel("Flechas: " + jJugador.getFlechas());
+		jpEstado.add(lblFlechas);
+
+		jpEstado.setBounds(50*sizeX+100, getAlturaMenos(95), 100, 60);
+		ventana.add(jpEstado);
+		
+		/**
+		 * Panel de controles
+		 */
 		JPanel jpBotones = new JPanel();
 
 		JLabel lblControles=new JLabel("Controles");
 		jpBotones.add(lblControles);
 		JButton JBArriba = new JButton("Arriba");
 		jpBotones.add(JBArriba);
+		JBArriba.setFocusable(false);
 		
 		JButton JBIzquierda = new JButton("<");
 		jpBotones.add(JBIzquierda);
+		JBIzquierda.setFocusable(false);
 		
 		JButton JBDerecha = new JButton(">");
 		jpBotones.add(JBDerecha);
+		JBDerecha.setFocusable(false);
 
 		JButton JBAbajo = new JButton("Abajo");
 		jpBotones.add(JBAbajo);
+		JBAbajo.setFocusable(false);
 
 		JBAbajo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -134,28 +129,19 @@ public class Inicio {
 			}
 		});
 
-		jpBotones.setBounds(50*sizeX+100, 150, 100, 150);
+		jpBotones.setBounds(50*sizeX+100, getAlturaMenos(80), 100, 120);
 		ventana.add(jpBotones);
 		
-		JPanel jpEstado = new JPanel();
-		JLabel lblEstado = new JLabel("Estado");
-		jpEstado.add(lblEstado);
-
-		lblVidas = new JLabel("Vidas: " + jJugador.getVidas());
-		jpEstado.add(lblVidas);
-
-		lblFlechas = new JLabel("Flechas: " + jJugador.getFlechas());
-		jpEstado.add(lblFlechas);
-
-		jpEstado.setBounds(50*sizeX+100, 20, 100, 150);
-		ventana.add(jpEstado);
-		
+		/**
+		 * Consola
+		 */
 		JLabel lblConsola=new JLabel("Consola");
-		lblConsola.setBounds(50*sizeX+50, 300, 200, 50);
+		lblConsola.setBounds(50*sizeX+50, getAlturaMenos(45), 100, 20);
 		ventana.add(lblConsola);
 
 		jtConsola=new JTextArea();
 		jtConsola.setEditable(false);
+		jtConsola.setFocusable(false);
 		jtConsola.getDocument().addDocumentListener(new DocumentListener() {
 				@Override
 				public void changedUpdate(DocumentEvent arg0) {
@@ -172,16 +158,21 @@ public class Inicio {
 				}
 		});
 		JScrollPane jsScroll= new JScrollPane(jtConsola);
-		jsScroll.setBounds(50*sizeX+50, 350, 210, 140);
+		jsScroll.setBounds(50*sizeX+50, getAlturaMenos(45)+25, 210, getAlturaMenos(75));
 		ventana.add(jsScroll);
 		
 		jtEntrada=new JTextField();
-		jtEntrada.setBounds(50*sizeX+50, 500, 210, 20);
+		jtEntrada.setEditable(false);
+		jtEntrada.setFocusable(false);
+		jtEntrada.setBounds(50*sizeX+50, getAlturaMenos(45)+30+getAlturaMenos(75), 210, 20);
 		ventana.add(jtEntrada);
 		
 		ventana.setVisible(true);
 	}
-
+	public int getAlturaMenos(int porcentaje)
+	{
+		return(ventana.getHeight()-porcentaje*ventana.getHeight()/100);
+	}
 	public boolean mover(int iMovX, int iMovY){
 
 		return setPlayer(iMovX + jJugador.getX(), iMovY + jJugador.getY());
@@ -286,7 +277,6 @@ public class Inicio {
 					this.lblVidas.setText("Vidas: Muerto");
 			}
 			
-
 			//Pone al jugador en la nueva casilla
 			ipAux.cambiarImagen(true);
 		}
@@ -309,59 +299,5 @@ public class Inicio {
 			if(matrizIP[x][y].bVector[i])
 				aux+=Math.pow(2, i);
 		return aux;
-	}
-
-	void datosEjemplo(){
-/*		matrizIP[0][1] = new ImagePanel(new boolean[]{false, false, false, false, false, false, false, false, true});
-		matrizIP[0][2] = new ImagePanel(new boolean[]{false, false, false, false, false, false, false, false, true});
-		matrizIP[0][3] = new ImagePanel(new boolean[]{false, false, false, false, false, false, false, false, true});
-		matrizIP[0][4] = new ImagePanel(new boolean[]{false, false, false, false, false, false, false, false, true});
-
-		matrizIP[1][1] = new ImagePanel(new boolean[]{true, false, false, false, false, false, false, false, true});
-		matrizIP[1][2] = new ImagePanel(new boolean[]{true, true, false, false, false, false, false, false, true});
-		matrizIP[1][3] = new ImagePanel(new boolean[]{true, false, false, false, false, false, false, false, true});
-		matrizIP[1][4] = new ImagePanel(new boolean[]{false, true, false, false, false, false, false, false, true});
-
-		matrizIP[2][1] = new ImagePanel(new boolean[]{false, true, false, false, false, false, false, false, true});
-		matrizIP[2][2] = new ImagePanel(new boolean[]{false, true, false, false, false, false, false, false, true});
-		matrizIP[2][3] = new ImagePanel(new boolean[]{false, true, false, false, false, false, false, false, true});
-		matrizIP[2][4] = new ImagePanel(new boolean[]{false, true, false, false, false, false, false, false, true});
-
-		matrizIP[3][1] = new ImagePanel(new boolean[]{true, true, false, false, false, false, false, false, true});
-		matrizIP[3][2] = new ImagePanel(new boolean[]{true, true, false, false, false, false, false, false, true});
-		matrizIP[3][3] = new ImagePanel(new boolean[]{true, true, false, false, false, false, false, false, true});
-		matrizIP[3][4] = new ImagePanel(new boolean[]{true, true, false, false, false, false, false, false, true});
-
-		matrizIP[4][1] = new ImagePanel(new boolean[]{false, false, true, false, false, false, false, false, true});
-		matrizIP[4][2] = new ImagePanel(new boolean[]{false, false, true, false, false, false, false, false, true});
-		matrizIP[4][3] = new ImagePanel(new boolean[]{false, false, true, false, false, false, false, false, true});
-		matrizIP[4][4] = new ImagePanel(new boolean[]{false, false, true, false, false, false, false, false, true});
-
-		matrizIP[5][1] = new ImagePanel(new boolean[]{false, false, false, true, false, false, false, false, true});
-		matrizIP[5][2] = new ImagePanel(new boolean[]{false, false, false, true, false, false, false, false, true});
-		matrizIP[5][3] = new ImagePanel(new boolean[]{false, false, false, true, false, false, false, false, true});
-		matrizIP[5][4] = new ImagePanel(new boolean[]{false, false, false, true, false, false, false, false, true});
-
-		matrizIP[6][1] = new ImagePanel(new boolean[]{false, false, false, false, true, false, false, false, true});
-		matrizIP[6][2] = new ImagePanel(new boolean[]{false, false, false, false, true, false, false, false, true});
-		matrizIP[6][3] = new ImagePanel(new boolean[]{false, false, false, false, true, false, false, false, true});
-		matrizIP[6][4] = new ImagePanel(new boolean[]{false, false, false, false, true, false, false, false, true});
-
-		matrizIP[7][1] = new ImagePanel(new boolean[]{false, false, false, false, false, true, false, false, true});
-		matrizIP[7][2] = new ImagePanel(new boolean[]{false, false, false, false, false, true, false, false, true});
-		matrizIP[7][3] = new ImagePanel(new boolean[]{false, false, false, false, false, true, false, false, true});
-		matrizIP[7][4] = new ImagePanel(new boolean[]{false, false, false, false, false, true, false, false, true});
-
-		matrizIP[8][1] = new ImagePanel(new boolean[]{false, false, false, false, false, false, true, false, true});
-		matrizIP[8][2] = new ImagePanel(new boolean[]{false, false, false, false, false, false, true, false, true});
-		matrizIP[8][3] = new ImagePanel(new boolean[]{false, false, false, false, false, false, true, false, true});
-		matrizIP[8][4] = new ImagePanel(new boolean[]{false, false, false, false, false, false, true, false, true});
-*/
-
-		/*this.setHole(3, 3);
-		this.setWumpus(6, 6);
-		setArrow(0, 1);
-		setTreasure(0, 2);
-		setAmbrosia(0, 3);*/
 	}
 }
