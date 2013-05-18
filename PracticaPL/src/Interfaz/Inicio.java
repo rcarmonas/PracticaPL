@@ -31,10 +31,12 @@ public class Inicio {
 	static int olor = 0;
 	static int viento = 1;
 	static int flecha = 2;
-	static int jugador = 3;
-	static int ambrosia = 4;
-	static int tesoro = 5;
-	static int desconocido = 6;
+	static int ambrosia = 3;
+	static int tesoro = 4;
+	static int pozo = 5;
+	static int wumpus = 6;
+	static int jugador = 7;
+	static int desconocido = 8;
 
 	public JFrame ventana;
 	public Jugador jJugador;
@@ -74,8 +76,8 @@ public class Inicio {
 			for(j=0; j<sizeY; j++)
 				matrizIP[i][j] = new ImagePanel();
 
-		matrizIP[playerX][playerY].changeParameter(7, true);
-		matrizIP[playerX][playerY].changeParameter(8, false);
+		matrizIP[playerX][playerY].changeParameter(jugador, true);
+		matrizIP[playerX][playerY].changeParameter(desconocido, false);
 
 		datosEjemplo();
 		
@@ -190,15 +192,15 @@ public class Inicio {
 		if(x>0 && x<rejillaX && y>0 && y<rejillaY)
 		{
 			if(x<rejillaX-1)
-				matrizIP[x+1][y].changeParameter(1, true);
+				matrizIP[x+1][y].changeParameter(viento, true);
 			if(x>0)
-				matrizIP[x-1][y].changeParameter(1, true);
+				matrizIP[x-1][y].changeParameter(viento, true);
 			if(y<rejillaY-1)
-				matrizIP[x][y+1].changeParameter(1, true);
+				matrizIP[x][y+1].changeParameter(viento, true);
 			if(y>0)
-				matrizIP[x][y-1].changeParameter(1, true);
+				matrizIP[x][y-1].changeParameter(viento, true);
 	
-			matrizIP[x][y].changeParameter(5, true);
+			matrizIP[x][y].changeParameter(pozo, true);
 		}
 	}
 
@@ -207,15 +209,15 @@ public class Inicio {
 		if(x>0 && x<rejillaX && y>0 && y<rejillaY)
 		{
 			if(x<rejillaX-1)
-				matrizIP[x+1][y].changeParameter(0, true);
+				matrizIP[x+1][y].changeParameter(olor, true);
 			if(x>0)
-				matrizIP[x-1][y].changeParameter(0, true);
+				matrizIP[x-1][y].changeParameter(olor, true);
 			if(y<rejillaY-1)
-				matrizIP[x][y+1].changeParameter(0, true);
+				matrizIP[x][y+1].changeParameter(olor, true);
 			if(y>0)
-				matrizIP[x][y-1].changeParameter(0, true);
+				matrizIP[x][y-1].changeParameter(olor, true);
 	
-			matrizIP[x][y].changeParameter(6, true);
+			matrizIP[x][y].changeParameter(wumpus, true);
 		}
 	}
 
@@ -224,31 +226,31 @@ public class Inicio {
 		if(x>0 && x<rejillaX && y>0 && y<rejillaY)
 		{
 			if(x<rejillaX-1)
-				matrizIP[x+1][y].changeParameter(0, false);
+				matrizIP[x+1][y].changeParameter(olor, false);
 			if(x>0)
-				matrizIP[x-1][y].changeParameter(0, false);
+				matrizIP[x-1][y].changeParameter(olor, false);
 			if(y<rejillaY-1)
-				matrizIP[x][y+1].changeParameter(0, false);
+				matrizIP[x][y+1].changeParameter(olor, false);
 			if(y>0)
-				matrizIP[x][y-1].changeParameter(0, false);
+				matrizIP[x][y-1].changeParameter(olor, false);
 	
-			matrizIP[x][y].changeParameter(6, false);
+			matrizIP[x][y].changeParameter(wumpus, false);
 		}
 	}
 
 	public void setArrow(int x, int y){
 		if(x>0 && x<rejillaX && y>0 && y<rejillaY)
-			matrizIP[x][y].changeParameter(2, true);
+			matrizIP[x][y].changeParameter(flecha, true);
 	}
 
 	public void setTreasure(int x, int y){
 		if(x>0 && x<rejillaX && y>0 && y<rejillaY)
-			matrizIP[x][y].changeParameter(4, true);
+			matrizIP[x][y].changeParameter(tesoro, true);
 	}
 
 	public void setAmbrosia(int x, int y){
 		if(x>0 && x<rejillaX && y>0 && y<rejillaY)
-			matrizIP[x][y].changeParameter(3, true);
+			matrizIP[x][y].changeParameter(ambrosia, true);
 	}
 	
 	public boolean setPlayer(int x, int y){
@@ -264,17 +266,17 @@ public class Inicio {
 			jJugador.setY(y);
 			
 			ipAux = matrizIP[jJugador.getX()][jJugador.getY()];
-			if(ipAux.bVector[2])
+			if(ipAux.bVector[flecha])
 			{
 				jJugador.setFlechas(jJugador.getFlechas() + 1);
 				this.lblFlechas.setText("Flechas: " + jJugador.getFlechas());
 			}
-			if(ipAux.bVector[3])
+			if(ipAux.bVector[ambrosia])
 			{
 				jJugador.setVidas(jJugador.getVidas() + 1);
 				this.lblVidas.setText("Vidas: " + jJugador.getVidas());
 			}
-			if(ipAux.bVector[5])
+			if(ipAux.bVector[tesoro])
 			{
 				if(jJugador.getVidas() != 0){
 					jJugador.setVidas(jJugador.getVidas() - 1);
@@ -292,6 +294,22 @@ public class Inicio {
 			return false;
 
 		return true;
+	}
+	
+	/**
+	 * Devuelve la información sobre una casilla codificada en un entero
+	 * @param x Coordenada X
+	 * @param y Coordenada Y
+	 * @return Información sobre la casilla
+	 */
+	public int getInfoCasilla(int x, int y)
+	{
+		int aux=0;
+		for(int i=0; i<9; i++)
+			if(matrizIP[x][y].bVector[i])
+				aux+=Math.pow(2, i);
+		return aux;
+		
 	}
 
 	void datosEjemplo(){

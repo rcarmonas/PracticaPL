@@ -37,15 +37,15 @@ public class ImagePanel extends JPanel{
 
 	public void cambiarImagen(boolean jugador){
 		//quitas desconocido si es necesario
-			this.bVector[8] = false;
+			this.bVector[Inicio.desconocido] = false;
 
 		//activas/desactivas jugador
-			this.bVector[7] = jugador;
+			this.bVector[Inicio.jugador] = jugador;
 
 		if(!jugador){
-			bVector[2] = false;
-			bVector[3] = false;
-			bVector[4] = false;
+			bVector[Inicio.flecha] = false;
+			bVector[Inicio.ambrosia] = false;
+			bVector[Inicio.tesoro] = false;
 		}
 
 		//repintar

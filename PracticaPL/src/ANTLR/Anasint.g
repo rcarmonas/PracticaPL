@@ -1141,7 +1141,7 @@ leerTecla
 	[boolean ejecutar]
 	returns [Expresion resultado = new Expresion()]
 	:
-	 LEER_TECLA PUNTO_COMA
+	 LEER_TECLA
 	{
 		if(ejecutar)
 		{

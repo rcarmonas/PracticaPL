@@ -1,11 +1,11 @@
-#config
+<config>
  	@x 10
  	@y 10
  	@xjugador 0
  	@yjugador 0
  	@vidas 1
  	@flechas 1
-#ejecutar
+<ejecutar>
 colocar_wumpus(2,2);
 para i desde 0 hasta 100 paso 1 hacer
  	escribir_cadena('Pulse una direccion');
@@ -14,4 +14,4 @@ para i desde 0 hasta 100 paso 1 hacer
  	escribir(99-i);
  	escribir_cadena('movimientos');
 fin_para;
-#fin
+<fin>
