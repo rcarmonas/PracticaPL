@@ -80,8 +80,8 @@ tokens
 	OCULTO = "oculto";
 	
 	// Literales lógicos
-	LIT_CIERTO = "true" ;
-	LIT_FALSO = "false" ;
+	LIT_CIERTO = "verdadero" ;
+	LIT_FALSO = "falso" ;
 
 	// Literales numericos
 	LIT_REAL ; 

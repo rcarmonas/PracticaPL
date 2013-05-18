@@ -7,7 +7,7 @@
  	@flechas 1
 <ejecutar>
 colocar_wumpus(2,2);
-si(oculto(info_casilla(2,2))) entonces
+si(verdadero) entonces
 	escribir('hay wumpus');
 fin_si;
 

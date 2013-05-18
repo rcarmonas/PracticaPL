@@ -614,7 +614,7 @@ termino_cond
 				resultado = b;
 			}
 	
-	)
+	)|(LIT_CIERTO{resultado=true;})|(LIT_FALSO{resultado=false;})
 	{if(debug)System.out.println("Termino_cond=>" + resultado);}
 	;
 	exception
