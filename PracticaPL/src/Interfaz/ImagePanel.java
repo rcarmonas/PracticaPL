@@ -37,6 +37,7 @@ public class ImagePanel extends JPanel{
 
 
 	/**
+	/**
 	 * Hace desaparecer o aparecer la imagen del jugador
 	 * @param jugador Indica si se desea que este o no el jugador
 	 */

@@ -70,7 +70,6 @@ public class Inicio {
 			for(j=0; j<sizeY; j++)
 				matrizIP[i][j] = new ImagePanel("");
 
-
 		
 		//creacion de la ventana
 		ventana = new JFrame();
