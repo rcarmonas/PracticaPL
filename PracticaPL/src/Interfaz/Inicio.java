@@ -28,6 +28,7 @@ public class Inicio {
 
 	public JFrame ventana;
 	public Jugador jJugador;
+	public Wumpus jWumpus=null;
 	ImagePanel matrizIP[][];
 	public int rejillaX, rejillaY;
 	JLabel lblVidas;
@@ -54,7 +55,6 @@ public class Inicio {
 		this.rejillaY = sizeY;
 
 		jJugador = new Jugador(playerX, playerY, lives, arrows);
-
 		matrizIP = new ImagePanel[sizeX][sizeY];
 
 		//inicializacion del tablero
@@ -214,6 +214,15 @@ public class Inicio {
 		
 		if(x>=0 && x<rejillaX && y>=0 && y<rejillaY)
 		{
+			if(jWumpus==null)
+				jWumpus= new Wumpus(x,y);
+			else
+			{
+				eraseWumpus(jWumpus.getX(),jWumpus.getY());
+				jWumpus.setX(x);
+				jWumpus.setY(y);
+			}
+			
 			if(x<rejillaX-1)
 				matrizIP[x+1][y].changeParameter(olor, true);
 			if(x>0)
@@ -224,6 +233,7 @@ public class Inicio {
 				matrizIP[x][y-1].changeParameter(olor, true);
 	
 			matrizIP[x][y].changeParameter(wumpus, true);
+
 		}
 	}
 

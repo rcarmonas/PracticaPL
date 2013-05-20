@@ -17,5 +17,8 @@ mientras (verdadero) hacer
  	si_no
  		mover_jugador(tecla);
  	fin_si;
+ 	x=aleatorio(@x);
+y=aleatorio(@y);
+ 	colocar_wumpus(x,y);
 fin_mientras;
 <fin>4
