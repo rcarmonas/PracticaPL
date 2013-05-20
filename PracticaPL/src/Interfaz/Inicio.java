@@ -27,7 +27,7 @@ public class Inicio {
 	public JFrame ventana;
 	public Jugador jJugador;
 	ImagePanel matrizIP[][];
-	int rejillaX, rejillaY;
+	public int rejillaX, rejillaY;
 	JLabel lblVidas;
 	JLabel lblFlechas;
 	public JTextField jtEntrada;

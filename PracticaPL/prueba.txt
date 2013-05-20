@@ -6,21 +6,14 @@
  	@vidas 1
  	@flechas 1
 <ejecutar>
-colocar_wumpus(2,2);
-si(verdadero) entonces
-	escribir('hay wumpus');
-fin_si;
-
-para i desde 0 hasta 100 paso 1 hacer
- 	escribir_cadena('Pulse una direccion');
+colocar_wumpus(aleatorio(@x),aleatorio(@y));
+mientras (verdadero) hacer
+ 	escribir('Pulse una direccion');
  	tecla = leer_tecla;
  	si(tecla==:scape) entonces
  		escribir('Se ha pulsado escape');
  	si_no
  		mover_jugador(tecla);
  	fin_si;
- 	escribir_cadena('Te quedan ');
- 	escribir(99-i);
- 	escribir_cadena('movimientos');
-fin_para;
-<fin>
+fin_mientras;
+<fin>4

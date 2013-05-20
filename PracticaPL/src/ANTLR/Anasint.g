@@ -474,7 +474,7 @@ escribir
 		: ESCRIBIR PARENT_IZ e=expresion[ejecutar] PARENT_DE PUNTO_COMA
 		{
 			if(ejecutar)
-				interfaz.jtConsola.setText(interfaz.jtConsola.getText()+"\n"+e._valor);
+				interfaz.jtConsola.setText(interfaz.jtConsola.getText()+e._valor+"\n");
 		}
 		;
 	exception
@@ -490,7 +490,7 @@ escribirCadena
 		: ESCRIBIR_CADENA PARENT_IZ s=expresion[ejecutar] PARENT_DE PUNTO_COMA
 		{
 			if(ejecutar)
-				interfaz.jtConsola.setText(interfaz.jtConsola.getText()+"\n"+s._valor);
+				interfaz.jtConsola.setText(interfaz.jtConsola.getText()+s._valor);
 		}
 		;
 	exception
@@ -1340,6 +1340,18 @@ terminoWumpus
 		{
 			resultado = e;
 		}	
+	)|(
+		CONF_X
+		{
+			resultado.tipo = "numero";
+			resultado._valor = String.valueOf(interfaz.rejillaX);
+		}
+	)|(
+		CONF_Y
+		{
+			resultado.tipo = "numero";
+			resultado._valor = String.valueOf(interfaz.rejillaY);
+		}
 	)
 	;
 	exception
