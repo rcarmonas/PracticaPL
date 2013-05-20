@@ -243,10 +243,10 @@ EJECUCION : "<ejecutar>"
 FIN: "<fin>"
 	;
 
-CONF_X : "@x"
+CONF_X : "@xtamano"
 	;
 
-CONF_Y : "@y"
+CONF_Y : "@ytamano"
 	;
 
 CONF_XPlayer: "@xjugador"

@@ -1,13 +1,13 @@
 <config>
- 	@x 10
- 	@y 10
+ 	@xtamano 10
+ 	@ytamano 10
  	@xjugador 0
  	@yjugador 0
  	@vidas 1
  	@flechas 1
 <ejecutar>
-x=aleatorio(@x);
-y=aleatorio(@y);
+x=aleatorio(@xtamano);
+y=aleatorio(@ytamano);
 colocar_wumpus(x,y);
 mientras (verdadero) hacer
  	escribir('Pulse una direccion');
