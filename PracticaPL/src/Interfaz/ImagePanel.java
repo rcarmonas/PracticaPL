@@ -22,14 +22,18 @@ import javax.swing.JPanel;
 @SuppressWarnings("serial")
 public class ImagePanel extends JPanel{
 
-	String imagen[] = {"olor", "viento", "flecha", "ambrosia", "tesoro", "pozo", "wumpus", "jugador", "desconocido"};
-	public boolean bVector[] = {false, false, false, false, false, false, false, false, true};
+	String imagen[] = {"olor", "viento", "flecha", "ambrosia", "tesoro", "pozo", "wumpus", "mina", "puerta", "jugador", "desconocido"};
+	public boolean bVector[] = {false, false, false, false, false, false, false, false, false, false, true};
+	String strMod = "";
 
 	public ImagePanel(boolean vector[]) {
 		bVector = vector;
 	}
 
-	public ImagePanel() {}
+	public ImagePanel(String aux) {
+		if(!aux.isEmpty())
+			strMod = aux + "/";
+	}
 
 	void actualizaCasilla(int index, boolean value){
 		this.bVector[index] = value;
@@ -57,9 +61,9 @@ public class ImagePanel extends JPanel{
 		super.paintComponent(g);
 		try {
 			g.drawImage(ImageIO.read(new File("img/fondo.png")), 0, 0, null);
-			for(int iAux=0; iAux<=8; iAux++){
+			for(int iAux=0; iAux<=9; iAux++){
 				if(bVector[iAux])
-					g.drawImage(ImageIO.read(new File("img/" + imagen[iAux] + ".png")), 0, 0, null);
+					g.drawImage(ImageIO.read(new File("img/" + strMod + imagen[iAux] + ".png")), 0, 0, null);
 			}
 		} catch (IOException ex) {
 			ex.printStackTrace();

@@ -21,8 +21,10 @@ public class Inicio {
 	public static int tesoro = 4;
 	public static int pozo = 5;
 	public static int wumpus = 6;
-	public static int jugador = 7;
-	public static int desconocido = 8;
+	public static int mina = 7;
+	public static int puerta = 8;
+	public static int jugador = 9;
+	public static int desconocido = 10;
 
 	public JFrame ventana;
 	public Jugador jJugador;
@@ -32,10 +34,20 @@ public class Inicio {
 	JLabel lblFlechas;
 	public JTextField jtEntrada;
 	public JTextArea jtConsola;
-public static void main(String[] args)
-{
-	Inicio i=new Inicio(10, 10, 1, 1, 1, 3);
-}
+
+	public static void main(String[] args)
+	{
+		Inicio i = new Inicio(10, 10, 1, 1, 1, 3);
+		i.setWumpus(1, 1);
+		i.setMina(1, 3);
+		i.setPuerta(1, 5);
+		i.setTreasure(3, 3);
+		i.setAmbrosia(2, 2);
+		i.setWumpus(5, 5);
+		i.eraseWumpus(5, 5);
+		i.setWumpus(6, 6);
+	}
+
 	public Inicio(int sizeX, int sizeY, int playerX, int playerY, int lives, int arrows){
 		int i, j;
 		this.rejillaX = sizeX;
@@ -48,7 +60,7 @@ public static void main(String[] args)
 		//inicializacion del tablero
 		for(i=0; i<sizeX; i++)
 			for(j=0; j<sizeY; j++)
-				matrizIP[i][j] = new ImagePanel();
+				matrizIP[i][j] = new ImagePanel("");
 
 		matrizIP[playerX][playerY].changeParameter(jugador, true);
 		matrizIP[playerX][playerY].changeParameter(desconocido, false);
@@ -245,6 +257,16 @@ public static void main(String[] args)
 	public void setAmbrosia(int x, int y){
 		if(x>=0 && x<rejillaX && y>=0 && y<rejillaY)
 			matrizIP[x][y].changeParameter(ambrosia, true);
+	}
+
+	public void setPuerta(int x, int y){
+		if(x>=0 && x<rejillaX && y>=0 && y<rejillaY)
+			matrizIP[x][y].changeParameter(puerta, true);
+	}
+
+	public void setMina(int x, int y){
+		if(x>=0 && x<rejillaX && y>=0 && y<rejillaY)
+			matrizIP[x][y].changeParameter(mina, true);
 	}
 	
 	public boolean setPlayer(int x, int y){
