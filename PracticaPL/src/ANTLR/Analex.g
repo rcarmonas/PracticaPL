@@ -61,10 +61,11 @@ tokens
 	SET_FLECHA = "colocar_flecha";
 	SET_TESORO = "colocar_tesoro";
 	SET_JUGADOR = "colocar_jugador";
-	DEL_WUMPUS = "borrar_wumpus";
 	PAUSA = "pausa";
 	MOVER_JUGADOR = "mover_jugador";
+	MOVER_WUMPUS = "mover_wumpus";
 	ALEATORIO = "aleatorio";
+	DIR_ALEATORIO = "direccion_aleatoria";
 	LEER_TECLA="leer_tecla";
 	INFO_CASILLA="info_casilla";
 	

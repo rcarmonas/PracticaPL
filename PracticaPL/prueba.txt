@@ -6,9 +6,7 @@
  	@vidas 1
  	@flechas 1
 <ejecutar>
-x=aleatorio(@xtamano);
-y=aleatorio(@ytamano);
-colocar_wumpus(x,y);
+colocar_wumpus(9,9);
 mientras (verdadero) hacer
  	escribir('Pulse una direccion');
  	tecla = leer_tecla;
@@ -17,8 +15,6 @@ mientras (verdadero) hacer
  	si_no
  		mover_jugador(tecla);
  	fin_si;
- 	x=aleatorio(@xtamano);
-	y=aleatorio(@ytamano);
- 	colocar_wumpus(x,y);
+ 	mover_wumpus(direccion_aleatoria);
 fin_mientras;
-<fin>4
+<fin>

@@ -68,6 +68,11 @@ public class ImagePanel extends JPanel{
 		}    
 	}
 
+	/**
+	 * Cambia un parametro de una casilla
+	 * @param pos Posicion en el vector
+	 * @param value Valor que se le asignara
+	 */
 	void changeParameter(int pos, boolean value){
 		bVector[pos] = value;
 		if(!this.bVector[Inicio.desconocido])
