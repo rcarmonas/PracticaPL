@@ -422,7 +422,7 @@ leer
 			//borro la entrada
 			interfaz.jtEntrada.setText("");
 			//pongo la entrada en la consola
-			interfaz.jtConsola.setText(interfaz.jtConsola.getText()+valor);
+			interfaz.jtConsola.setText(interfaz.jtConsola.getText()+valor+"\n");
 		}
 	}
 		;
@@ -447,7 +447,7 @@ leerCadena
 			//borro la entrada
 			interfaz.jtEntrada.setText("");
 			//pongo la entrada en la consola
-			interfaz.jtConsola.setText(interfaz.jtConsola.getText()+valorCadena);
+			interfaz.jtConsola.setText(interfaz.jtConsola.getText()+valorCadena+"\n");
 		}
 	}
 		;
