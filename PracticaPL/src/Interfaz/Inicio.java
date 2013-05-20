@@ -32,7 +32,10 @@ public class Inicio {
 	JLabel lblFlechas;
 	public JTextField jtEntrada;
 	public JTextArea jtConsola;
-
+public static void main(String[] args)
+{
+	Inicio i=new Inicio(10, 10, 1, 1, 1, 3);
+}
 	public Inicio(int sizeX, int sizeY, int playerX, int playerY, int lives, int arrows){
 		int i, j;
 		this.rejillaX = sizeX;
