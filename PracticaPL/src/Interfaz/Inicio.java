@@ -48,7 +48,15 @@ public class Inicio {
 		i.eraseWumpus(5, 5);
 		i.setWumpus(6, 6);
 	}
-
+/**
+ * Constructor
+ * @param sizeX Tamaño X del tablero
+ * @param sizeY Tamaño Y del tablero
+ * @param playerX Coordenada x inicial
+ * @param playerY Coordenada y inicial
+ * @param lives Numero de vidas inicial
+ * @param arrows Numero de flechas inicial
+ */
 	public Inicio(int sizeX, int sizeY, int playerX, int playerY, int lives, int arrows){
 		int i, j;
 		this.rejillaX = sizeX;
@@ -188,12 +196,24 @@ public class Inicio {
 	{
 		return(ventana.getHeight()-porcentaje*ventana.getHeight()/100);
 	}
+	
+	/**
+	 * Mueve el jugador
+	 * @param iMovX Cantidad de casillas que se movera en horizontal
+	 * @param iMovY Cantidad de casillas que se movera en vertical
+	 * @return true en caso de exito y false en caso de error
+	 */
 	public boolean mover(int iMovX, int iMovY){
 
 		return setPlayer(iMovX + jJugador.getX(), iMovY + jJugador.getY());
 		
 	}
 
+	/**
+	 * Coloca un pozo en el tablero
+	 * @param x Coordenada x
+	 * @param y Coordenada y
+	 */
 	public void setHole(int x, int y){
 		if(x>=0 && x<rejillaX && y>=0 && y<rejillaY)
 		{
@@ -210,6 +230,11 @@ public class Inicio {
 		}
 	}
 
+	/**
+	 * Cambia la localización del wumpus
+	 * @param x Coordenada x
+	 * @param y Coordenada y
+	 */
 	public void setWumpus(int x, int y){
 		
 		if(x>=0 && x<rejillaX && y>=0 && y<rejillaY)
@@ -237,6 +262,11 @@ public class Inicio {
 		}
 	}
 
+	/**
+	 * Borra el wumpus y su olor del tablero
+	 * @param x Coordenada x
+	 * @param y Coordenada y
+	 */
 	public void eraseWumpus(int x, int y){
 		
 		if(x>=0 && x<rejillaX && y>=0 && y<rejillaY)
@@ -254,31 +284,62 @@ public class Inicio {
 		}
 	}
 
+	/**
+	 * Coloca una flecha en el tablero
+	 * @param x Coordenada x
+	 * @param y Coordenada y
+	 */
 	public void setArrow(int x, int y){
 		if(x>=0 && x<rejillaX && y>=0 && y<rejillaY)
 			matrizIP[x][y].changeParameter(flecha, true);
 	}
 
+	/**
+	 * Coloca un tesoro en el tablero
+	 * @param x Coordenada x
+	 * @param y Coordenada y
+	 */
 	public void setTreasure(int x, int y){
 		if(x>=0 && x<rejillaX && y>=0 && y<rejillaY)
 			matrizIP[x][y].changeParameter(tesoro, true);
 	}
 
+	/**
+	 * Coloca una ambrosía en el tablero
+	 * @param x Coordenada x
+	 * @param y Coordenada y
+	 */
 	public void setAmbrosia(int x, int y){
 		if(x>=0 && x<rejillaX && y>=0 && y<rejillaY)
 			matrizIP[x][y].changeParameter(ambrosia, true);
 	}
 
+	/**
+	 * Coloca la salida en el tablero
+	 * @param x Coordenada x
+	 * @param y Coordenada y
+	 */
 	public void setPuerta(int x, int y){
 		if(x>=0 && x<rejillaX && y>=0 && y<rejillaY)
 			matrizIP[x][y].changeParameter(puerta, true);
 	}
 
+	/**
+	 * Coloca una mina en el tablero
+	 * @param x Coordenada x
+	 * @param y Coordenada y
+	 */
 	public void setMina(int x, int y){
 		if(x>=0 && x<rejillaX && y>=0 && y<rejillaY)
 			matrizIP[x][y].changeParameter(mina, true);
 	}
 	
+	/**
+	 * Colocar el jugador en un lugar determinado
+	 * @param x Coordenada x
+	 * @param y Coordenada y
+	 * @return true en caso de exito y false en caso de error
+	 */
 	public boolean setPlayer(int x, int y){
 		
 		ImagePanel ipAux = matrizIP[jJugador.getX()][jJugador.getY()];
@@ -334,5 +395,14 @@ public class Inicio {
 			if(matrizIP[x][y].bVector[i])
 				aux+=Math.pow(2, i);
 		return aux;
+	}
+	/**
+	 * Mueve el wumpus
+	 * @param iMovX Cantidad de casillas que se movera en horizontal
+	 * @param iMovY Cantidad de casillas que se movera en vertical
+	 */
+	public void moverWumpus(int iMovX, int iMovY){
+		setWumpus(iMovX + jJugador.getX(), iMovY + jJugador.getY());
+		
 	}
 }

@@ -35,6 +35,10 @@ public class ImagePanel extends JPanel{
 			strMod = aux + "/";
 	}
 
+	/**
+	 * Hace desaparecer o aparecer la imagen del jugador
+	 * @param jugador Indica si se desea que este o no el jugador
+	 */
 	public void cambiarImagen(boolean jugador){
 		//quitas desconocido si es necesario
 		this.bVector[Inicio.desconocido] = false;
