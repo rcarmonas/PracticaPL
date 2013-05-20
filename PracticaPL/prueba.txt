@@ -7,6 +7,7 @@
  	@flechas 1
 <ejecutar>
 colocar_wumpus(9,9);
+colocar_salida(6,6);
 mientras (verdadero) hacer
  	escribir('Pulse una direccion');
  	tecla = leer_tecla;

@@ -1027,6 +1027,54 @@ colocarJugador
 			mostrarExcepcion(re);
 		 }
 
+colocarMina
+	[boolean ejecutar]
+	{Expresion e1, e2;}
+	:
+	SET_MINA PARENT_IZ e1=expresion[ejecutar] COMA e2=expresion[ejecutar] PARENT_DE PUNTO_COMA
+	{
+		if((e1.tipo.equals("cadena") || e2.tipo.equals("cadena"))&& ejecutar)
+		{
+			System.err.println("Se esperaba expresion numérica , no alfanumérica");
+			throw new RecognitionException();
+		}
+		else if(ejecutar)
+		{
+			int valX = (int)Double.parseDouble(e1._valor);
+			int valY = (int)Double.parseDouble(e2._valor);
+			interfaz.setMina(valX, valY);
+		}
+	}
+	;
+	exception
+ 		catch [RecognitionException re] {
+			mostrarExcepcion(re);
+		 }
+		
+colocarSalida
+	[boolean ejecutar]
+	{Expresion e1, e2;}
+	:
+	SET_SALIDA PARENT_IZ e1=expresion[ejecutar] COMA e2=expresion[ejecutar] PARENT_DE PUNTO_COMA
+	{
+		if((e1.tipo.equals("cadena") || e2.tipo.equals("cadena"))&& ejecutar)
+		{
+			System.err.println("Se esperaba expresion numérica , no alfanumérica");
+			throw new RecognitionException();
+		}
+		else if(ejecutar)
+		{
+			int valX = (int)Double.parseDouble(e1._valor);
+			int valY = (int)Double.parseDouble(e2._valor);
+			interfaz.setPuerta(valX, valY);
+		}
+	}
+	;
+	exception
+ 		catch [RecognitionException re] {
+			mostrarExcepcion(re);
+		 }
+
 moverWumpus
 [boolean ejecutar]
 	{Expresion e;}
@@ -1315,7 +1363,10 @@ comprobacion
 		(HAY_POZO{resultado = Inicio.pozo;})|
 		(HAY_VIENTO{resultado = Inicio.viento;})|
 		(HAY_OLOR{resultado = Inicio.olor;})|
+		(HAY_MINA{resultado = Inicio.mina;})|
+		(HAY_SALIDA{resultado = Inicio.mina;})|
 		(OCULTO{resultado = Inicio.desconocido;})
+		
 	;
 	exception
  		catch [RecognitionException re] {
@@ -1437,6 +1488,8 @@ sentenciaWumpus
 		|colocarFlecha[ejecutar]
 		|colocarTesoro[ejecutar]
 		|colocarJugador[ejecutar]
+		|colocarMina[ejecutar]
+		|colocarSalida[ejecutar]
 		|pausa[ejecutar]
 	;
 	exception
