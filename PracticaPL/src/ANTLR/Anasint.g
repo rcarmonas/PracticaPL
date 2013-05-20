@@ -31,7 +31,8 @@ options
 {		
 	//Variable que activa o desactiva la muestra de información de debug
 	boolean debug = false;
-	
+	boolean semilla=false;
+	Random rand;
 	Inicio interfaz;
 	Tecla tecla;
 	
@@ -1185,10 +1186,14 @@ aleatorio
 		}
 		else if(ejecutar)
 		{
+			if(!semilla)
+			{
+				rand=new Random();
+				rand.setSeed(System.currentTimeMillis());
+				semilla = true;
+			}
 			int valR = (int)(Double.parseDouble(e._valor));
-			Random r=new Random();
-			r.setSeed(System.currentTimeMillis());
-			resultado = r.nextInt(valR);
+			resultado = rand.nextInt(valR);
 		}
 	}
 	; 
