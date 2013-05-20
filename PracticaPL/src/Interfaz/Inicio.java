@@ -236,7 +236,7 @@ public class Inicio {
 	 * @param y Coordenada y
 	 */
 	public void setWumpus(int x, int y){
-		
+		System.out.println(x + " " + y);
 		if(x>=0 && x<rejillaX && y>=0 && y<rejillaY)
 		{
 			if(jWumpus==null)
@@ -402,7 +402,7 @@ public class Inicio {
 	 * @param iMovY Cantidad de casillas que se movera en vertical
 	 */
 	public void moverWumpus(int iMovX, int iMovY){
-		setWumpus(iMovX + jJugador.getX(), iMovY + jJugador.getY());
+		setWumpus(iMovX + jWumpus.getX(), iMovY + jWumpus.getY());
 		
 	}
 }

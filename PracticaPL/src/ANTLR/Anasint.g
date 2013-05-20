@@ -1027,28 +1027,44 @@ colocarJugador
 			mostrarExcepcion(re);
 		 }
 
-eliminarWumpus
-	[boolean ejecutar]
-	{Expresion e1, e2;}
+moverWumpus
+[boolean ejecutar]
+	{Expresion e;}
 	:
-	DEL_WUMPUS PARENT_IZ e1=expresion[ejecutar] COMA e2=expresion[ejecutar] PARENT_DE PUNTO_COMA
+	  MOVER_WUMPUS PARENT_IZ e=expresion[ejecutar] PARENT_DE PUNTO_COMA
 	{
-		if((e1.tipo.equals("cadena") || e2.tipo.equals("cadena"))&& ejecutar)
+		if(e.tipo.equals("cadena") && ejecutar)
 		{
 			System.err.println("Se esperaba expresion numérica , no alfanumérica");
 			throw new RecognitionException();
 		}
 		else if(ejecutar)
 		{
-			int valX = (int)Double.parseDouble(e1._valor);
-			int valY = (int)Double.parseDouble(e2._valor);
-			interfaz.eraseWumpus(valX, valY);
+			int valD = (int)(Double.parseDouble(e._valor));
+			int auxX=0, auxY=0;
+			
+			if(valD == Tecla.DERECHA)
+				auxX = 1;
+			else if(valD == Tecla.IZQUIERDA)
+				auxX = -1;
+			else if(valD == Tecla.ARRIBA)
+				auxY = -1;
+			else if(valD == Tecla.ABAJO)
+				auxY = 1;
+			else
+			{
+				System.err.println("Se esperaba una dirección");	
+				throw new RecognitionException();
+			}
+			interfaz.moverWumpus(auxX, auxY);
+			
 		}
 	}
-	;
+	; 
 	exception
  		catch [RecognitionException re] {
-			mostrarExcepcion(re);
+ 			if(ejecutar)
+				mostrarExcepcion(re);
 		 }
 
 pausa
@@ -1203,6 +1219,46 @@ aleatorio
 				mostrarExcepcion(re);
 		 }
 
+direccionAleatoria
+	[boolean ejecutar]
+	returns [int resultado=0;]
+	{int i;}
+	:
+	 DIR_ALEATORIO
+	{
+		if(ejecutar)
+		{
+			if(!semilla)
+			{
+				rand=new Random();
+				rand.setSeed(System.currentTimeMillis());
+				semilla = true;
+			}
+			int aux = rand.nextInt(4);
+			switch(aux)
+			{
+				case 0:
+					resultado = Tecla.DERECHA;
+					break;
+				case 1:
+					resultado = Tecla.IZQUIERDA;
+					break;
+				case 2:
+					resultado = Tecla.ARRIBA;
+					break;
+				case 3:
+					resultado = Tecla.ABAJO;
+					break;
+			}
+		}
+	}
+	; 
+	exception
+ 		catch [RecognitionException re] {
+ 			if(ejecutar)
+				mostrarExcepcion(re);
+		 }
+
 
 infoCasilla	
 	[boolean ejecutar]
@@ -1336,6 +1392,12 @@ terminoWumpus
 			resultado._valor = String.valueOf(i);
 		}
 	)|(
+		i=direccionAleatoria[ejecutar]
+		{
+			resultado.tipo = "numero";
+			resultado._valor = String.valueOf(i);
+		}
+	)|	(
 		e=leerTecla[ejecutar]
 		{
 			resultado = e;
@@ -1370,11 +1432,11 @@ sentenciaWumpus
 	:
 		colocarPozo[ejecutar]
 		|colocarWumpus[ejecutar]
+		|moverWumpus[ejecutar]
 		|colocarAmbrosia[ejecutar]
 		|colocarFlecha[ejecutar]
 		|colocarTesoro[ejecutar]
 		|colocarJugador[ejecutar]
-		|eliminarWumpus[ejecutar]
 		|pausa[ejecutar]
 	;
 	exception

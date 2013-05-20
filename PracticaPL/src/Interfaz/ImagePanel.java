@@ -82,5 +82,9 @@ public class ImagePanel extends JPanel{
 	//Igual que actualiza casilla...
 	void changeParameter(int pos, boolean value){
 		bVector[pos] = value;
+		try{
+		if(!this.bVector[Inicio.desconocido])
+			this.paintComponent(this.getGraphics());
+		} catch(NullPointerException e){}
 	}
 }
