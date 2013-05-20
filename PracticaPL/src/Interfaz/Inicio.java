@@ -352,6 +352,11 @@ public class Inicio {
 			jJugador.setY(y);
 			
 			ipAux = matrizIP[jJugador.getX()][jJugador.getY()];
+			if(ipAux.bVector[mina])
+			{
+				jJugador.setVidas(jJugador.getVidas() - 1);
+				this.lblVidas.setText("Vidas: " + jJugador.getVidas());
+			}
 			if(ipAux.bVector[flecha])
 			{
 				jJugador.setFlechas(jJugador.getFlechas() + 1);
@@ -362,7 +367,7 @@ public class Inicio {
 				jJugador.setVidas(jJugador.getVidas() + 1);
 				this.lblVidas.setText("Vidas: " + jJugador.getVidas());
 			}
-			if(ipAux.bVector[tesoro])
+			if(ipAux.bVector[pozo])
 			{
 				if(jJugador.getVidas() != 0){
 					jJugador.setVidas(jJugador.getVidas() - 1);

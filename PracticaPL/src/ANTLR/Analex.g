@@ -61,6 +61,8 @@ tokens
 	SET_FLECHA = "colocar_flecha";
 	SET_TESORO = "colocar_tesoro";
 	SET_JUGADOR = "colocar_jugador";
+	SET_MINA = "colocar_mina";
+	SET_SALIDA = "colocar_salida";
 	PAUSA = "pausa";
 	MOVER_JUGADOR = "mover_jugador";
 	MOVER_WUMPUS = "mover_wumpus";
@@ -78,6 +80,8 @@ tokens
 	HAY_POZO = "hay pozo";
 	HAY_VIENTO = "hay_viento";
 	HAY_OLOR = "hay_olor";
+	HAY_MINA = "hay_mina";
+	HAY_SALIDA = "hay_salida";
 	OCULTO = "oculto";
 	
 	// Literales lógicos
