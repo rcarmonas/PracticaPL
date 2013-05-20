@@ -35,10 +35,19 @@ public class ImagePanel extends JPanel{
 			strMod = aux + "/";
 	}
 
+	/**
+	 * Actualiza el valor de una casilla
+	 * @param index Indice del valor a actualizar
+	 * @param value Valor con el que se actualizara
+	 */
 	void actualizaCasilla(int index, boolean value){
 		this.bVector[index] = value;
 	}
 
+	/**
+	 * Hace desaparecer o aparecer la imagen del jugador
+	 * @param jugador Indica si se desea que este o no el jugador
+	 */
 	public void cambiarImagen(boolean jugador){
 		//quitas desconocido si es necesario
 			this.bVector[Inicio.desconocido] = false;
@@ -61,7 +70,7 @@ public class ImagePanel extends JPanel{
 		super.paintComponent(g);
 		try {
 			g.drawImage(ImageIO.read(new File("img/fondo.png")), 0, 0, null);
-			for(int iAux=0; iAux<=9; iAux++){
+			for(int iAux=0; iAux<=10; iAux++){
 				if(bVector[iAux])
 					g.drawImage(ImageIO.read(new File("img/" + strMod + imagen[iAux] + ".png")), 0, 0, null);
 			}
@@ -70,6 +79,7 @@ public class ImagePanel extends JPanel{
 		}    
 	}
 
+	//Igual que actualiza casilla...
 	void changeParameter(int pos, boolean value){
 		bVector[pos] = value;
 	}
