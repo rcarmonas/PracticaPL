@@ -70,6 +70,8 @@ tokens
 	DIR_ALEATORIO = "direccion_aleatoria";
 	LEER_TECLA="leer_tecla";
 	INFO_CASILLA="info_casilla";
+	DISPARAR = "disparar";
+	MOSTRAR_MENSAJE = "mensaje";
 	
 	//Comprobación de casillas:
 	HAY_WUMPUS = "hay_wumpus";
@@ -265,7 +267,8 @@ CONF_flechas: "@flechas"
 
 CONF_vidas: "@vidas"
 	;
-	
+RESULTADO: "@resultado"
+	;
 DERECHA: ":derecha"
 	;
 IZQUIERDA: ":izquierda"

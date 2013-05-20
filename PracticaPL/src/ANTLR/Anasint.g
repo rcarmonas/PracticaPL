@@ -510,7 +510,23 @@ escritura
 			mostrarExcepcion(re);
 		 }
 
-
+mensaje 
+		[boolean ejecutar]
+		//Variables locales
+		{Expresion s;}
+		: MOSTRAR_MENSAJE PARENT_IZ s=expresion[ejecutar] PARENT_DE PUNTO_COMA
+		{
+			if(ejecutar)
+				{
+				//interfaz.mostrarMensaje(s._valor);	TODO
+				}
+		}
+		;
+	exception
+ 		catch [RecognitionException re] {
+ 			if(ejecutar)
+				mostrarExcepcion(re);
+		 }
 
 //-------------------------------------------------------------------------------------------
 //Condición y los elementos de los que se compone
@@ -1214,6 +1230,32 @@ moverJugador
  			if(ejecutar)
 				mostrarExcepcion(re);
 		 }
+		
+disparar
+	[boolean ejecutar]
+	{Expresion e;}
+	:
+	  DISPARAR PARENT_IZ e=expresion[ejecutar] PARENT_DE PUNTO_COMA
+	{
+		if(e.tipo.equals("cadena") && ejecutar)
+		{
+			System.err.println("Se esperaba expresion numérica , no alfanumérica");
+			throw new RecognitionException();
+		}
+		else if(ejecutar)
+		{
+			int valD = (int)(Double.parseDouble(e._valor));
+			//interfaz.disparar(valD); TODO
+			
+						
+		}
+	}
+	; 
+	exception
+ 		catch [RecognitionException re] {
+ 			if(ejecutar)
+				mostrarExcepcion(re);
+		 }
 leerTecla
 	[boolean ejecutar]
 	returns [Expresion resultado = new Expresion()]
@@ -1379,7 +1421,8 @@ condicionWumpus
 	returns [boolean resultado = false]
 	{int tipo;
 	Expresion e;}
-	:tipo=comprobacion[ejecutar] PARENT_IZ e=expresion[ejecutar] PARENT_DE
+	:
+	(tipo=comprobacion[ejecutar] PARENT_IZ e=expresion[ejecutar] PARENT_DE
 	{
 		if(ejecutar && e.tipo.equals("cadena"))
 		{
@@ -1393,6 +1436,11 @@ condicionWumpus
 			resultado = ((aux%2)==1);
 		}
 	}
+	)|(RESULTADO
+		{
+			resultado = interfaz.resultado;
+		}			
+	)
 	;
 	exception
  		catch [RecognitionException re] {
@@ -1491,6 +1539,8 @@ sentenciaWumpus
 		|colocarMina[ejecutar]
 		|colocarSalida[ejecutar]
 		|pausa[ejecutar]
+		|disparar[ejecutar]
+		
 	;
 	exception
  		catch [RecognitionException re] {

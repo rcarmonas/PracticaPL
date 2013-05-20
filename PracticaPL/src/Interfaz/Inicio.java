@@ -35,6 +35,7 @@ public class Inicio {
 	JLabel lblFlechas;
 	public JTextField jtEntrada;
 	public JTextArea jtConsola;
+	public boolean resultado = false;
 
 	public static void main(String[] args)
 	{
@@ -205,7 +206,8 @@ public class Inicio {
 	 */
 	public boolean mover(int iMovX, int iMovY){
 
-		return setPlayer(iMovX + jJugador.getX(), iMovY + jJugador.getY());
+		resultado = setPlayer(iMovX + jJugador.getX(), iMovY + jJugador.getY());
+		return resultado;
 		
 	}
 
@@ -217,6 +219,7 @@ public class Inicio {
 	public void setHole(int x, int y){
 		if(x>=0 && x<rejillaX && y>=0 && y<rejillaY)
 		{
+			resultado = true;
 			if(x<rejillaX-1)
 				matrizIP[x+1][y].changeParameter(viento, true);
 			if(x>0)
@@ -227,6 +230,10 @@ public class Inicio {
 				matrizIP[x][y-1].changeParameter(viento, true);
 	
 			matrizIP[x][y].changeParameter(pozo, true);
+		}
+		else
+		{
+			resultado=false;
 		}
 	}
 
@@ -257,8 +264,11 @@ public class Inicio {
 				matrizIP[x][y-1].changeParameter(olor, true);
 	
 			matrizIP[x][y].changeParameter(wumpus, true);
+			resultado = true;
 
 		}
+		else
+			resultado = false;
 	}
 
 	/**
@@ -290,7 +300,12 @@ public class Inicio {
 	 */
 	public void setArrow(int x, int y){
 		if(x>=0 && x<rejillaX && y>=0 && y<rejillaY)
+		{
 			matrizIP[x][y].changeParameter(flecha, true);
+			resultado = true;
+		}
+		else
+			resultado = false;
 	}
 
 	/**
@@ -300,7 +315,11 @@ public class Inicio {
 	 */
 	public void setTreasure(int x, int y){
 		if(x>=0 && x<rejillaX && y>=0 && y<rejillaY)
+		{
 			matrizIP[x][y].changeParameter(tesoro, true);
+			resultado = true;
+		}else
+			resultado = false;
 	}
 
 	/**
@@ -310,7 +329,11 @@ public class Inicio {
 	 */
 	public void setAmbrosia(int x, int y){
 		if(x>=0 && x<rejillaX && y>=0 && y<rejillaY)
+		{
 			matrizIP[x][y].changeParameter(ambrosia, true);
+			resultado = true;
+		}else
+			resultado = false;			
 	}
 
 	/**
@@ -320,7 +343,11 @@ public class Inicio {
 	 */
 	public void setPuerta(int x, int y){
 		if(x>=0 && x<rejillaX && y>=0 && y<rejillaY)
+		{
 			matrizIP[x][y].changeParameter(puerta, true);
+			resultado = true;
+		}else
+			resultado = false;
 	}
 
 	/**
@@ -330,7 +357,11 @@ public class Inicio {
 	 */
 	public void setMina(int x, int y){
 		if(x>=0 && x<rejillaX && y>=0 && y<rejillaY)
+		{
 			matrizIP[x][y].changeParameter(mina, true);
+			resultado = true;
+		}else
+			resultado = false;
 	}
 	
 	/**
