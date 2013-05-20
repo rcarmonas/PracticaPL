@@ -70,8 +70,7 @@ public class Inicio {
 			for(j=0; j<sizeY; j++)
 				matrizIP[i][j] = new ImagePanel("");
 
-		matrizIP[playerX][playerY].changeParameter(jugador, true);
-		matrizIP[playerX][playerY].changeParameter(desconocido, false);
+
 		
 		//creacion de la ventana
 		ventana = new JFrame();
@@ -84,6 +83,7 @@ public class Inicio {
 		ventana.setLayout(null);
 		ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+		
 		for(i=0; i<sizeX; i++)
 			for(j=0; j<sizeY; j++){
 				ventana.add(matrizIP[i][j]);
@@ -191,6 +191,9 @@ public class Inicio {
 		ventana.add(jtEntrada);
 		
 		ventana.setVisible(true);
+		
+		matrizIP[playerX][playerY].changeParameter(jugador, true);
+		matrizIP[playerX][playerY].changeParameter(desconocido, false);
 	}
 	public int getAlturaMenos(int porcentaje)
 	{
@@ -236,7 +239,6 @@ public class Inicio {
 	 * @param y Coordenada y
 	 */
 	public void setWumpus(int x, int y){
-		System.out.println(x + " " + y);
 		if(x>=0 && x<rejillaX && y>=0 && y<rejillaY)
 		{
 			if(jWumpus==null)

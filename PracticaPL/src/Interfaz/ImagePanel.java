@@ -35,14 +35,6 @@ public class ImagePanel extends JPanel{
 			strMod = aux + "/";
 	}
 
-	/**
-	 * Actualiza el valor de una casilla
-	 * @param index Indice del valor a actualizar
-	 * @param value Valor con el que se actualizara
-	 */
-	void actualizaCasilla(int index, boolean value){
-		this.bVector[index] = value;
-	}
 
 	/**
 	 * Hace desaparecer o aparecer la imagen del jugador
@@ -79,12 +71,14 @@ public class ImagePanel extends JPanel{
 		}    
 	}
 
-	//Igual que actualiza casilla...
+	/**
+	 * Cambia un parametro de una casilla
+	 * @param pos Posicion en el vector
+	 * @param value Valor que se le asignara
+	 */
 	void changeParameter(int pos, boolean value){
 		bVector[pos] = value;
-		try{
 		if(!this.bVector[Inicio.desconocido])
 			this.paintComponent(this.getGraphics());
-		} catch(NullPointerException e){}
 	}
 }
