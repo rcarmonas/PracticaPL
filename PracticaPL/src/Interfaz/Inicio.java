@@ -61,9 +61,6 @@ public class Inicio {
 		for(i=0; i<sizeX; i++)
 			for(j=0; j<sizeY; j++)
 				matrizIP[i][j] = new ImagePanel("");
-
-		matrizIP[playerX][playerY].changeParameter(jugador, true);
-		matrizIP[playerX][playerY].changeParameter(desconocido, false);
 		
 		//creacion de la ventana
 		ventana = new JFrame();
@@ -183,6 +180,9 @@ public class Inicio {
 		ventana.add(jtEntrada);
 		
 		ventana.setVisible(true);
+
+		matrizIP[playerX][playerY].changeParameter(jugador, true);
+		matrizIP[playerX][playerY].changeParameter(desconocido, false);
 	}
 	public int getAlturaMenos(int porcentaje)
 	{

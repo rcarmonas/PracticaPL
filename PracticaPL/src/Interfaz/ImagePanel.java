@@ -35,33 +35,27 @@ public class ImagePanel extends JPanel{
 			strMod = aux + "/";
 	}
 
-	void actualizaCasilla(int index, boolean value){
-		this.bVector[index] = value;
-	}
-
 	public void cambiarImagen(boolean jugador){
 		//quitas desconocido si es necesario
-			this.bVector[Inicio.desconocido] = false;
+		this.bVector[Inicio.desconocido] = false;
 
 		//activas/desactivas jugador
-			this.bVector[Inicio.jugador] = jugador;
+		this.bVector[Inicio.jugador] = jugador;
 
 		if(!jugador){
 			bVector[Inicio.flecha] = false;
 			bVector[Inicio.ambrosia] = false;
 			bVector[Inicio.tesoro] = false;
 		}
-
 		//repintar
-			paintComponent(getGraphics());
+		paintComponent(getGraphics());
 	}
 
 	@Override
 	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
 		try {
 			g.drawImage(ImageIO.read(new File("img/fondo.png")), 0, 0, null);
-			for(int iAux=0; iAux<=9; iAux++){
+			for(int iAux=0; iAux<=10; iAux++){
 				if(bVector[iAux])
 					g.drawImage(ImageIO.read(new File("img/" + strMod + imagen[iAux] + ".png")), 0, 0, null);
 			}
@@ -72,5 +66,6 @@ public class ImagePanel extends JPanel{
 
 	void changeParameter(int pos, boolean value){
 		bVector[pos] = value;
+		paintComponent(getGraphics());
 	}
 }
