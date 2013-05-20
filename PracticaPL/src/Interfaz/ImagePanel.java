@@ -70,6 +70,7 @@ public class ImagePanel extends JPanel{
 
 	void changeParameter(int pos, boolean value){
 		bVector[pos] = value;
-		paintComponent(getGraphics());
+		if(!this.bVector[Inicio.desconocido])
+			paintComponent(getGraphics());
 	}
 }

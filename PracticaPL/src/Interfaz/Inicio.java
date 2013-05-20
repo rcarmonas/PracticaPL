@@ -188,9 +188,9 @@ public class Inicio {
 		ventana.add(jtEntrada);
 		
 		ventana.setVisible(true);
-
-		matrizIP[playerX][playerY].changeParameter(jugador, true);
+		//muestro al jugador
 		matrizIP[playerX][playerY].changeParameter(desconocido, false);
+		matrizIP[playerX][playerY].changeParameter(jugador, true);
 	}
 	public int getAlturaMenos(int porcentaje)
 	{
