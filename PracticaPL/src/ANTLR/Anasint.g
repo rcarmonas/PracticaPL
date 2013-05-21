@@ -518,7 +518,7 @@ mensaje
 		{
 			if(ejecutar)
 				{
-				//interfaz.mostrarMensaje(s._valor);	TODO
+				interfaz.mostrarMensaje(s._valor);
 				}
 		}
 		;

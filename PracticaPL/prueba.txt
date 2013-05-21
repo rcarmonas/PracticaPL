@@ -6,6 +6,8 @@
  	@vidas 3
  	@flechas 1
 <ejecutar>
+pausa(0.5);
+mensaje('Inicio');
 #Colocamos el wumpus
 repetir
 	colocar_wumpus(aleatorio(@xtamano), aleatorio(@ytamano));

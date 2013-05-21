@@ -27,6 +27,7 @@ public class Inicio {
 	public static int jugador = 9;
 	public static int desconocido = 10;
 
+	public boolean colisiones[] = {false, false, true, true, true, true, false, true, true, false, false};
 	public JFrame ventana;
 	public Jugador jJugador;
 	public Wumpus jWumpus=null;
@@ -191,8 +192,8 @@ public class Inicio {
 		
 		ventana.setVisible(true);
 		//muestro al jugador
-		matrizIP[playerX][playerY].changeParameter(desconocido, false);
-		matrizIP[playerX][playerY].changeParameter(jugador, true);
+		matrizIP[playerX][playerY].initializeParameter(desconocido, false);
+		matrizIP[playerX][playerY].initializeParameter(jugador, true);
 	}
 	public int getAlturaMenos(int porcentaje)
 	{
@@ -218,23 +219,29 @@ public class Inicio {
 	 * @param y Coordenada y
 	 */
 	public void setHole(int x, int y){
+		resultado = false;
 		if(x>=0 && x<rejillaX && y>=0 && y<rejillaY)
 		{
-			resultado = true;
-			if(x<rejillaX-1)
-				matrizIP[x+1][y].changeParameter(viento, true);
-			if(x>0)
-				matrizIP[x-1][y].changeParameter(viento, true);
-			if(y<rejillaY-1)
-				matrizIP[x][y+1].changeParameter(viento, true);
-			if(y>0)
-				matrizIP[x][y-1].changeParameter(viento, true);
-	
-			matrizIP[x][y].changeParameter(pozo, true);
-		}
-		else
-		{
-			resultado=false;
+			boolean colision = false;
+			for(int i=0; i<11; i++)
+			{
+				if(colisiones[i]&&matrizIP[x][y].bVector[i])
+					colision=true;
+			}
+			if(!colision)
+			{
+				resultado = true;
+				if(x<rejillaX-1)
+					matrizIP[x+1][y].changeParameter(viento, true);
+				if(x>0)
+					matrizIP[x-1][y].changeParameter(viento, true);
+				if(y<rejillaY-1)
+					matrizIP[x][y+1].changeParameter(viento, true);
+				if(y>0)
+					matrizIP[x][y-1].changeParameter(viento, true);
+		
+				matrizIP[x][y].changeParameter(pozo, true);
+			}
 		}
 	}
 
@@ -244,7 +251,10 @@ public class Inicio {
 	 * @param y Coordenada y
 	 */
 	public void setWumpus(int x, int y){
-		if(x>=0 && x<rejillaX && y>=0 && y<rejillaY)
+		resultado = false;
+		if(x>=0 && x<rejillaX && y>=0 && y<rejillaY && !matrizIP[x][y].bVector[pozo] 
+					&& !matrizIP[x][y].bVector[puerta]
+					&& !matrizIP[x][y].bVector[jugador])
 		{
 			if(jWumpus==null)
 				jWumpus= new Wumpus(x,y);
@@ -268,8 +278,6 @@ public class Inicio {
 			resultado = true;
 
 		}
-		else
-			resultado = false;
 	}
 
 	/**
@@ -300,13 +308,21 @@ public class Inicio {
 	 * @param y Coordenada y
 	 */
 	public void setArrow(int x, int y){
+		resultado = false;
 		if(x>=0 && x<rejillaX && y>=0 && y<rejillaY)
 		{
-			matrizIP[x][y].changeParameter(flecha, true);
-			resultado = true;
+			boolean colision = false;
+			for(int i=0; i<11; i++)
+			{
+				if(colisiones[i]&&matrizIP[x][y].bVector[i])
+					colision=true;
+			}
+			if(!colision)
+			{
+				matrizIP[x][y].changeParameter(flecha, true);
+				resultado = true;
+			}
 		}
-		else
-			resultado = false;
 	}
 
 	/**
@@ -315,12 +331,21 @@ public class Inicio {
 	 * @param y Coordenada y
 	 */
 	public void setTreasure(int x, int y){
+		resultado = false;
 		if(x>=0 && x<rejillaX && y>=0 && y<rejillaY)
 		{
-			matrizIP[x][y].changeParameter(tesoro, true);
-			resultado = true;
-		}else
-			resultado = false;
+			boolean colision = false;
+			for(int i=0; i<11; i++)
+			{
+				if(colisiones[i]&&matrizIP[x][y].bVector[i])
+					colision=true;
+			}
+			if(!colision)
+			{
+				matrizIP[x][y].changeParameter(tesoro, true);
+				resultado = true;
+			}
+		}
 	}
 
 	/**
@@ -329,12 +354,21 @@ public class Inicio {
 	 * @param y Coordenada y
 	 */
 	public void setAmbrosia(int x, int y){
+		resultado = false;
 		if(x>=0 && x<rejillaX && y>=0 && y<rejillaY)
 		{
-			matrizIP[x][y].changeParameter(ambrosia, true);
-			resultado = true;
-		}else
-			resultado = false;			
+			boolean colision = false;
+			for(int i=0; i<11; i++)
+			{
+				if(colisiones[i]&&matrizIP[x][y].bVector[i])
+					colision=true;
+			}
+			if(!colision)
+			{
+				matrizIP[x][y].changeParameter(ambrosia, true);
+				resultado = true;
+			}
+		}		
 	}
 
 	/**
@@ -357,12 +391,21 @@ public class Inicio {
 	 * @param y Coordenada y
 	 */
 	public void setMina(int x, int y){
+		resultado = false;
 		if(x>=0 && x<rejillaX && y>=0 && y<rejillaY)
 		{
-			matrizIP[x][y].changeParameter(mina, true);
-			resultado = true;
-		}else
-			resultado = false;
+			boolean colision = false;
+			for(int i=0; i<11; i++)
+			{
+				if(colisiones[i]&&matrizIP[x][y].bVector[i])
+					colision=true;
+			}
+			if(!colision)
+			{
+				matrizIP[x][y].changeParameter(mina, true);
+				resultado = true;
+			}
+		}
 	}
 	
 	/**
