@@ -527,6 +527,26 @@ mensaje
  			if(ejecutar)
 				mostrarExcepcion(re);
 		 }
+		
+pregunta
+		[boolean ejecutar]
+		returns [Expresion e = new Expresion()]
+		//Variables locales
+		{Expresion s;}
+		: MOSTRAR_PREGUNTA PARENT_IZ s=expresion[ejecutar] PARENT_DE
+		{
+			if(ejecutar)
+				{
+					e._valor = String.valueOf(interfaz.mostrarPregunta(s._valor));
+					e.tipo = "numero";
+				}
+		}
+		;
+	exception
+ 		catch [RecognitionException re] {
+ 			if(ejecutar)
+				mostrarExcepcion(re);
+		 }
 
 //-------------------------------------------------------------------------------------------
 //Condición y los elementos de los que se compone
@@ -1416,6 +1436,23 @@ comprobacion
 				mostrarExcepcion(re);
 		 }
 
+salir
+	[boolean ejecutar]
+	:
+	 SALIR PUNTO_COMA
+	{
+		if(ejecutar)
+		{
+			System.exit(0);
+		}
+	}
+	; 
+	exception
+ 		catch [RecognitionException re] {
+ 			if(ejecutar)
+				mostrarExcepcion(re);
+		 }
+
 condicionWumpus
 	[boolean ejecutar]
 	returns [boolean resultado = false]
@@ -1513,6 +1550,11 @@ terminoWumpus
 			resultado = e;
 		}	
 	)|(
+		e=pregunta[ejecutar]
+		{
+			resultado = e;
+		}	
+	)|(
 		CONF_X
 		{
 			resultado.tipo = "numero";
@@ -1546,6 +1588,7 @@ sentenciaWumpus
 		|colocarSalida[ejecutar]
 		|pausa[ejecutar]
 		|disparar[ejecutar]
+		|salir[ejecutar]
 		
 	;
 	exception

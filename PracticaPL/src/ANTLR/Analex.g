@@ -72,6 +72,8 @@ tokens
 	INFO_CASILLA="info_casilla";
 	DISPARAR = "disparar";
 	MOSTRAR_MENSAJE = "mensaje";
+	MOSTRAR_PREGUNTA = "pregunta";
+	SALIR = "salir";
 	
 	//Comprobación de casillas:
 	HAY_WUMPUS = "hay_wumpus";
@@ -85,6 +87,8 @@ tokens
 	HAY_MINA = "hay_mina";
 	HAY_SALIDA = "hay_salida";
 	OCULTO = "oculto";
+	
+	
 	
 	// Literales lógicos
 	LIT_CIERTO = "verdadero" ;

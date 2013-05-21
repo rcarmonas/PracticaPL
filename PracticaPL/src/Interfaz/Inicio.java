@@ -1,9 +1,6 @@
 package Interfaz;
 
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -40,6 +37,7 @@ public class Inicio {
 	public JTextField jtEntrada;
 	public JTextArea jtConsola;
 	public boolean resultado = false;
+	public JButton JBArriba, JBAbajo, JBIzquierda, JBDerecha;
 
 	public static void main(String[] args)
 	{
@@ -101,7 +99,7 @@ public class Inicio {
 		lblEstado.setBounds(0,0,50,50);
 		jpEstado.add(lblEstado);
 
-		ImageIcon imgIcon = new ImageIcon("img/ambrosia.png");
+		ImageIcon imgIcon = new ImageIcon("img/vida.png");
 	    Image img = imgIcon.getImage();
 	    img = img.getScaledInstance(20, 20,  java.awt.Image.SCALE_SMOOTH);  
 	    imgIcon = new ImageIcon(img);  
@@ -137,44 +135,23 @@ public class Inicio {
 
 		JLabel lblControles=new JLabel("Controles");
 		jpBotones.add(lblControles);
-		JButton JBArriba = new JButton("Arriba");
+		JBArriba = new JButton("Arriba");
 		jpBotones.add(JBArriba);
 		JBArriba.setFocusable(false);
 		
-		JButton JBIzquierda = new JButton("<");
+		JBIzquierda = new JButton("<");
 		jpBotones.add(JBIzquierda);
 		JBIzquierda.setFocusable(false);
 		
-		JButton JBDerecha = new JButton(">");
+		JBDerecha = new JButton(">");
 		jpBotones.add(JBDerecha);
 		JBDerecha.setFocusable(false);
 
-		JButton JBAbajo = new JButton("Abajo");
+		JBAbajo = new JButton("Abajo");
 		jpBotones.add(JBAbajo);
 		JBAbajo.setFocusable(false);
 
-		JBAbajo.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				mover(0, 1);
-			}
-		});
-		JBArriba.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				mover(0, -1);
-			}
-		});
-
-		JBDerecha.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				mover(1, 0);
-			}
-		});
-
-		JBIzquierda.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				mover(-1, 0);
-			}
-		});
+		
 
 		jpBotones.setBounds(50*sizeX+100, getAlturaMenos(70), 100, 120);
 		ventana.add(jpBotones);
@@ -461,27 +438,27 @@ public class Inicio {
 			if(ipAux.bVector[mina])
 			{
 				jJugador.setVidas(jJugador.getVidas() - 1);
-				this.lblVidas.setText("Vidas: " + jJugador.getVidas());
+				this.lblVidas.setText(jJugador.getVidas()+"");
 			}
 			if(ipAux.bVector[flecha])
 			{
 				jJugador.setFlechas(jJugador.getFlechas() + 1);
-				this.lblFlechas.setText("Flechas: " + jJugador.getFlechas());
+				this.lblFlechas.setText(jJugador.getFlechas()+"");
 			}
 			if(ipAux.bVector[ambrosia])
 			{
 				jJugador.setVidas(jJugador.getVidas() + 1);
-				this.lblVidas.setText("Vidas: " + jJugador.getVidas());
+				this.lblVidas.setText("" + jJugador.getVidas());
 			}
 			if(ipAux.bVector[wumpus])
 			{
 				jJugador.setVidas(jJugador.getVidas() - 1);
-				this.lblVidas.setText("Vidas: " + jJugador.getVidas());
+				this.lblVidas.setText("" + jJugador.getVidas());
 			}
 			if(ipAux.bVector[pozo])
 			{
 				jJugador.setVidas(jJugador.getVidas() - 1);
-					this.lblVidas.setText("Vidas: " + jJugador.getVidas());
+					this.lblVidas.setText(""+ jJugador.getVidas());
 			}
 			
 			ipAux.cambiarImagen(true);
@@ -515,9 +492,25 @@ public class Inicio {
 		setWumpus(iMovX + jWumpus.getX(), iMovY + jWumpus.getY());
 		
 	}
+	/**
+	 * Muestra un mensaje en una ventana de diálogo
+	 * @param mensaje Mensaje a mostrar
+	 */
 	public void mostrarMensaje(String mensaje){
 		JOptionPane.showMessageDialog(ventana,mensaje);
 	}
+	
+	/**
+	 * Muestra una pregunta al usuario con opciones si y no	
+	 * @param mensaje Mensaje que se mostrara
+	 * @return Opcion elegida
+	 */
+	public int mostrarPregunta(String mensaje){
+		return JOptionPane.showConfirmDialog(ventana,mensaje);
+	}
+	/**
+	 * Cierra la ventana actual
+	 */
 	public void salir()
 	{
 		ventana.setVisible(false);

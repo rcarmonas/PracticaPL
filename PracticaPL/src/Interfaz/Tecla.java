@@ -1,5 +1,7 @@
 package Interfaz;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
 
 /**
@@ -23,6 +25,8 @@ public class Tecla {
 	String texto;
 	Inicio interfaz;
 	KeyListener listener;
+	ActionListener abajo, arriba, derecha, izquierda;
+
 	
 	public Tecla(Inicio j){
 		interfaz=j;
@@ -35,6 +39,7 @@ public class Tecla {
 	{
 		listener = new MiKeyListener(this,true);
 		interfaz.ventana.addKeyListener(listener);
+		prepararBotones();
 		interfaz.ventana.requestFocusInWindow();
 		try {
 			wait();
@@ -43,6 +48,7 @@ public class Tecla {
 		}
 		return this.teclaPulsada;
 	}
+	
 	synchronized public String getTexto()
 	{
 		listener = new MiKeyListener(this,false);
@@ -68,13 +74,59 @@ public class Tecla {
 		interfaz.ventana.removeKeyListener(listener);
 		this.notify();
 	}
+	/**
+	 * Notificación de pulsación de tecla intro para la consola
+	 * @param tecla Texto que contiene el campo de la consola
+	 */
 	synchronized public void pulsacion(String tecla)
 	{
 		this.texto = tecla;
 		interfaz.jtEntrada.removeKeyListener(listener);
 		interfaz.jtEntrada.setEditable(false);
 		interfaz.jtEntrada.setFocusable(false);
+		eliminarListeners();
 		this.notify();
 	}
+	/**
+	 * Elimina los listeners de los botones
+	 */
+	public void eliminarListeners()
+	{
+		interfaz.JBArriba.removeActionListener(arriba);
+		interfaz.JBAbajo.removeActionListener(abajo);
+		interfaz.JBDerecha.removeActionListener(derecha);
+		interfaz.JBIzquierda.removeActionListener(izquierda);
 
+	}
+	/**
+	 * Prepara los listeners de los botones de la interfaz
+	 */
+	public void prepararBotones()
+	{
+		interfaz.JBAbajo.addActionListener(abajo = new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				pulsacion(Tecla.ABAJO);
+			}
+		});
+		interfaz.JBArriba.addActionListener(arriba = new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				pulsacion(Tecla.ARRIBA);
+
+			}
+		});
+
+		interfaz.JBDerecha.addActionListener(derecha = new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				pulsacion(Tecla.DERECHA);
+
+			}
+		});
+
+		interfaz.JBIzquierda.addActionListener(izquierda = new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				pulsacion(Tecla.IZQUIERDA);
+
+			}
+		});
+	}
 }
