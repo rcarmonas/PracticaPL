@@ -256,6 +256,13 @@ public class Inicio {
 					&& !matrizIP[x][y].bVector[puerta]
 					&& !matrizIP[x][y].bVector[jugador])
 		{
+			matrizIP[x][y].changeParameter(flecha, false);
+			if(matrizIP[x][y].bVector[ambrosia])
+			{
+				matrizIP[x][y].changeParameter(flecha, false);	
+				jWumpus.setVidas(jWumpus.getVidas()+1);
+			}
+
 			if(jWumpus==null)
 				jWumpus= new Wumpus(x,y);
 			else

@@ -8,6 +8,7 @@ public class Wumpus {
 	{
 		x=xx;
 		y=yy;
+		vidas = 1;
 	}
 	public int getX() {
 		return x;
