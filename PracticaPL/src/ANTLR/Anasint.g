@@ -1473,6 +1473,12 @@ terminoWumpus
 			resultado._valor = String.valueOf(interfaz.jJugador.getFlechas());
 		}
 	)|(
+		VIDAS_WUMPUS
+		{
+			resultado.tipo = "numero";
+			resultado._valor = String.valueOf(interfaz.jWumpus.getVidas());
+		}
+	)|(
 		CONF_XPlayer
 		{
 			resultado.tipo = "numero";

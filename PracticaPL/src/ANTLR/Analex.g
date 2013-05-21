@@ -269,6 +269,8 @@ CONF_vidas: "@vidas"
 	;
 RESULTADO: "@resultado"
 	;
+VIDAS_WUMPUS: "@wvidas"
+	;
 DERECHA: ":derecha"
 	;
 IZQUIERDA: ":izquierda"

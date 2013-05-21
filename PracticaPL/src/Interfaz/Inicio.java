@@ -449,17 +449,17 @@ public class Inicio {
 				jJugador.setVidas(jJugador.getVidas() + 1);
 				this.lblVidas.setText("Vidas: " + jJugador.getVidas());
 			}
+			if(ipAux.bVector[wumpus])
+			{
+				jJugador.setVidas(jJugador.getVidas() - 1);
+				this.lblVidas.setText("Vidas: " + jJugador.getVidas());
+			}
 			if(ipAux.bVector[pozo])
 			{
-				if(jJugador.getVidas() != 0){
-					jJugador.setVidas(jJugador.getVidas() - 1);
+				jJugador.setVidas(jJugador.getVidas() - 1);
 					this.lblVidas.setText("Vidas: " + jJugador.getVidas());
-				}
-				else
-					this.lblVidas.setText("Vidas: Muerto");
 			}
 			
-			//Pone al jugador en la nueva casilla
 			ipAux.cambiarImagen(true);
 		}
 		else
