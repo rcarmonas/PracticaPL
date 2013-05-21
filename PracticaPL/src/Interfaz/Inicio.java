@@ -41,6 +41,7 @@ public class Inicio {
 	public JButton JBArriba, JBAbajo, JBIzquierda, JBDerecha;
 	public boolean tengoTesoro = false;
 
+
 /**
  * Constructor
  * @param sizeX Tamaño X del tablero
@@ -307,6 +308,38 @@ public class Inicio {
 				matrizIP[x][y-1].changeParameter(olor, false);
 	
 			matrizIP[x][y].changeParameter(wumpus, false);
+		}
+	}
+
+	/**
+	 * Tira una flecha
+	 */
+	public void tiraFlecha(int direccion){
+		int iAuxX = 0, iAuxY = 0;
+
+		iAuxX = jJugador.x;
+		iAuxY = jJugador.y;
+//TODO meter bucle for
+		if(direccion == Tecla.DERECHA){
+			while(iAuxX < this.rejillaX && iAuxY < this.rejillaY){
+				matrizIP[iAuxX][iAuxY].changeParameter(flecha, true);
+				matrizIP[iAuxX][iAuxY].paintComponent(matrizIP[iAuxX][iAuxY].getGraphics());
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				matrizIP[iAuxX][iAuxY].changeParameter(flecha, false);
+				matrizIP[iAuxX][iAuxY].paintComponent(matrizIP[iAuxX][iAuxY].getGraphics());
+
+				if(iAuxX == jWumpus.getX() && iAuxY == jWumpus.getY()){
+					this.resultado = true;
+					break;
+				}
+				iAuxX++;
+			}
 		}
 	}
 
