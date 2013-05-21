@@ -888,7 +888,7 @@ borrar
 	: BORRAR PUNTO_COMA
 	{
 		if(ejecutar)
-			System.out.printf("\33[2J");
+			interfaz.jtConsola.setText("");
 	}
 	;
 	exception

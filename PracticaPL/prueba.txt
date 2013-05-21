@@ -59,7 +59,7 @@ mientras (vivo==1) hacer
  		 	escribir('Ha pisado una mina!');
  		 fin_si;
  		 si(hay_pozo(casilla)) entonces
- 		 	escribir('Ha caído en un pozo!');
+ 		 	escribir('Ha caido en un pozo!');
  		 fin_si;
  		 si(hay_wumpus(casilla)) entonces
  		 	escribir('El wumpus te ha comido!!');

@@ -83,7 +83,7 @@ public class Inicio {
 		ventana.setResizable(false);
 		ventana.setLayout(null);
 		ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+		
 		for(i=0; i<sizeX; i++)
 			for(j=0; j<sizeY; j++){
 				ventana.add(matrizIP[i][j]);
@@ -164,6 +164,7 @@ public class Inicio {
 		ventana.add(lblConsola);
 
 		jtConsola=new JTextArea();
+		jtConsola.setLineWrap(true);
 		jtConsola.setEditable(false);
 		jtConsola.setFocusable(false);
 		jtConsola.getDocument().addDocumentListener(new DocumentListener() {
