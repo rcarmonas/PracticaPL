@@ -1,8 +1,10 @@
 package Interfaz;
 
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -93,16 +95,38 @@ public class Inicio {
 		 * Panel de estado
 		 */
 		JPanel jpEstado = new JPanel();
+		jpEstado.setLayout(null);
 		JLabel lblEstado = new JLabel("Estado");
+		lblEstado.setBounds(0,0,50,50);
 		jpEstado.add(lblEstado);
 
-		lblVidas = new JLabel("Vidas: " + jJugador.getVidas());
+		ImageIcon imgIcon = new ImageIcon("img/ambrosia.png");
+	    Image img = imgIcon.getImage();
+	    img = img.getScaledInstance(20, 20,  java.awt.Image.SCALE_SMOOTH);  
+	    imgIcon = new ImageIcon(img);  
+
+		JLabel lblmVidas = new JLabel(imgIcon);
+		lblmVidas.setBounds(20,20,50,50);
+		jpEstado.add(lblmVidas);
+		
+		lblVidas = new JLabel(""+jJugador.getVidas());
+	    lblVidas.setBounds(0, 20,50,50);
 		jpEstado.add(lblVidas);
 
-		lblFlechas = new JLabel("Flechas: " + jJugador.getFlechas());
+		imgIcon = new ImageIcon("img/flecha.png");
+	    img = imgIcon.getImage();
+	    img = img.getScaledInstance(20, 20,  java.awt.Image.SCALE_SMOOTH);  
+	    imgIcon = new ImageIcon(img);
+
+		JLabel lblmFlechas = new JLabel(imgIcon);
+		lblmFlechas.setBounds(20,40,50,50);
+		jpEstado.add(lblmFlechas);
+		
+		lblFlechas = new JLabel(""+jJugador.getFlechas());
+		lblFlechas.setBounds(0,40,50,50);
 		jpEstado.add(lblFlechas);
 
-		jpEstado.setBounds(50*sizeX+100, getAlturaMenos(95), 100, 60);
+		jpEstado.setBounds(50*sizeX+100, getAlturaMenos(95), 100, 150);
 		ventana.add(jpEstado);
 		
 		/**
@@ -151,7 +175,7 @@ public class Inicio {
 			}
 		});
 
-		jpBotones.setBounds(50*sizeX+100, getAlturaMenos(80), 100, 120);
+		jpBotones.setBounds(50*sizeX+100, getAlturaMenos(70), 100, 120);
 		ventana.add(jpBotones);
 		
 		/**
@@ -443,5 +467,9 @@ public class Inicio {
 	}
 	public void mostrarMensaje(String mensaje){
 		JOptionPane.showMessageDialog(ventana,mensaje);
+	}
+	public void salir()
+	{
+		ventana.setVisible(false);
 	}
 }
