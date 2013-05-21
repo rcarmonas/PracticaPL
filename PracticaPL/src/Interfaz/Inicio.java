@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -439,5 +440,8 @@ public class Inicio {
 	public void moverWumpus(int iMovX, int iMovY){
 		setWumpus(iMovX + jWumpus.getX(), iMovY + jWumpus.getY());
 		
+	}
+	public void mostrarMensaje(String mensaje){
+		JOptionPane.showMessageDialog(ventana,mensaje);
 	}
 }
