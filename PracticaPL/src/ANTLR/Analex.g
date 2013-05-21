@@ -79,7 +79,7 @@ tokens
 	HAY_JUGADOR = "hay_jugador";
 	HAY_FLECHA = "hay_flecha";
 	HAY_AMBROSIA = "hay_ambrosia";
-	HAY_POZO = "hay pozo";
+	HAY_POZO = "hay_pozo";
 	HAY_VIENTO = "hay_viento";
 	HAY_OLOR = "hay_olor";
 	HAY_MINA = "hay_mina";

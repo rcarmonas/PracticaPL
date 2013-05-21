@@ -502,7 +502,7 @@ escribirCadena
 			
 escritura 
 	[boolean ejecutar]
-	: escribir[ejecutar] | escribirCadena[ejecutar]
+	: escribir[ejecutar] | escribirCadena[ejecutar] | mensaje[ejecutar]
 		;
 	exception
  		catch [RecognitionException re] {
