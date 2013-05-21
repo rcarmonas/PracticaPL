@@ -48,6 +48,11 @@ mientras (vivo==1) hacer
  		 	vivo = 0;
  		 	mensaje('Has muerto! :(');
  		 	salir;
+ 		 si_no
+ 		 	si(hay_salida(casilla) __y @tesoro) entonces
+ 		 		mensaje('Has ganado! :D');
+ 		 		salir;
+ 		 	fin_si;
  		 fin_si;
  		 si(hay_tesoro(casilla)) entonces
  		 	escribir('Enhorabuena! Ha encontrado el tesoro');

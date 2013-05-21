@@ -41,18 +41,6 @@ public class Inicio {
 	public JButton JBArriba, JBAbajo, JBIzquierda, JBDerecha;
 	public boolean tengoTesoro = false;
 
-	public static void main(String[] args)
-	{
-		Inicio i = new Inicio(10, 10, 1, 1, 1, 3);
-		i.setWumpus(1, 1);
-		i.setMina(1, 3);
-		i.setPuerta(1, 5);
-		i.setTreasure(3, 3);
-		i.setAmbrosia(2, 2);
-		i.setWumpus(5, 5);
-		i.eraseWumpus(5, 5);
-		i.setWumpus(6, 6);
-	}
 /**
  * Constructor
  * @param sizeX Tamaño X del tablero
