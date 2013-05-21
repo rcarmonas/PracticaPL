@@ -34,10 +34,12 @@ public class Inicio {
 	public int rejillaX, rejillaY;
 	JLabel lblVidas;
 	JLabel lblFlechas;
+	JLabel lblTesoro;
 	public JTextField jtEntrada;
 	public JTextArea jtConsola;
 	public boolean resultado = false;
 	public JButton JBArriba, JBAbajo, JBIzquierda, JBDerecha;
+	public boolean tengoTesoro = false;
 
 	public static void main(String[] args)
 	{
@@ -125,6 +127,15 @@ public class Inicio {
 		lblFlechas.setBounds(0,40,50,50);
 		jpEstado.add(lblFlechas);
 
+		imgIcon = new ImageIcon("img/tesoro.png");
+	    img = imgIcon.getImage();
+	    img = img.getScaledInstance(20, 20,  java.awt.Image.SCALE_SMOOTH);  
+	    imgIcon = new ImageIcon(img);
+		lblTesoro = new JLabel(imgIcon);
+		lblTesoro.setBounds(0,60,50,50);
+		lblTesoro.setVisible(false);
+		jpEstado.add(lblTesoro);
+	    
 		jpEstado.setBounds(50*sizeX+100, getAlturaMenos(95), 100, 150);
 		ventana.add(jpEstado);
 		
@@ -450,6 +461,11 @@ public class Inicio {
 			{
 				jJugador.setVidas(jJugador.getVidas() + 1);
 				this.lblVidas.setText("" + jJugador.getVidas());
+			}
+			if(ipAux.bVector[tesoro])
+			{
+				this.tengoTesoro = true;
+				this.lblTesoro.setVisible(true);
 			}
 			if(ipAux.bVector[wumpus])
 			{
