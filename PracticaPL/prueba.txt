@@ -8,6 +8,7 @@
  	@xwumpus 5
  	@ywumpus 5
  	@wvidas 1
+ 	@mod 'Monty'
 <ejecutar>
 #Colocamos el wumpus
 repetir
