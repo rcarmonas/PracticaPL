@@ -62,7 +62,7 @@ public class Inicio {
 		//inicializacion del tablero
 		for(i=0; i<sizeX; i++)
 			for(j=0; j<sizeY; j++)
-				matrizIP[i][j] = new ImagePanel("Monty");
+				matrizIP[i][j] = new ImagePanel("Zelda");
 		
 		//creacion de la ventana
 		ventana = new JFrame();
