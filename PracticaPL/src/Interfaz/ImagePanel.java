@@ -25,6 +25,7 @@ public class ImagePanel extends JPanel{
 	String imagen[] = {"olor", "viento", "flecha", "ambrosia", "tesoro", "pozo", "wumpus", "mina", "puerta", "jugador", "desconocido"};
 	public boolean bVector[] = {false, false, false, false, false, false, false, false, false, false, true};
 	String strMod = "";
+	boolean monty = false;
 
 	public ImagePanel(boolean vector[]) {
 		bVector = vector;
@@ -33,6 +34,9 @@ public class ImagePanel extends JPanel{
 	public ImagePanel(String aux) {
 		if(!aux.isEmpty())
 			strMod = aux + "/";
+
+		if(aux.compareTo("Monty")==0)
+			monty = true;
 	}
 
 	/**
@@ -58,8 +62,9 @@ public class ImagePanel extends JPanel{
 	@Override
 	protected void paintComponent(Graphics g) {
 		try {
-			g.drawImage(ImageIO.read(new File("img/fondo.png")), 0, 0, null);
-			for(int iAux=0; iAux<=10; iAux++){
+			g.drawImage(ImageIO.read(new File("img/" + strMod + "fondo.png")), 0, 0, null);
+
+			for(int iAux=0; iAux<=9; iAux++){
 				if(bVector[iAux])
 					g.drawImage(ImageIO.read(new File("img/" + strMod + imagen[iAux] + ".png")), 0, 0, null);
 			}
