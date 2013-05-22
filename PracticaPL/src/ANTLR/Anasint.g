@@ -1607,7 +1607,7 @@ sentenciaWumpus
 
 sentenciasConf
 	{
-		Expresion x, y, xP, yP, vidas, flechas;
+		Expresion x, y, xP, yP, vidas, flechas, wvidas;
 	}
 	:
 	CONF_X x=expresion[true]
@@ -1616,6 +1616,7 @@ sentenciasConf
 	CONF_YPlayer yP=expresion[true]
 	CONF_vidas vidas=expresion[true]
 	CONF_flechas flechas=expresion[true]
+	VIDAS_WUMPUS wvidas = expresion[true]
 	{
 		if(x.tipo.equals("cadena")
 			|| y.tipo.equals("cadena")
@@ -1633,7 +1634,9 @@ sentenciasConf
 		int valyP = (int)Double.parseDouble(yP._valor);
 		int valVidas = (int)Double.parseDouble(vidas._valor);
 		int valFlechas = (int)Double.parseDouble(flechas._valor);
+		int valWVidas = (int)Double.parseDouble(wvidas._valor);
 		interfaz=new Inicio(valy, valx, valxP, valyP, valVidas, valFlechas);
+		interfaz.jWumpus.setVidas(valWVidas);
 	}
 	;
 	exception

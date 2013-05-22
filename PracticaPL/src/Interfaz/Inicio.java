@@ -319,11 +319,11 @@ public class Inicio {
 
 		iAuxX = jJugador.x;
 		iAuxY = jJugador.y;
-//TODO meter bucle for
+		//TODO meter bucle for
 		if(direccion == Tecla.DERECHA){
 			while(iAuxX < this.rejillaX && iAuxY < this.rejillaY){
 				matrizIP[iAuxX][iAuxY].changeParameter(flecha, true);
-				matrizIP[iAuxX][iAuxY].paintComponent(matrizIP[iAuxX][iAuxY].getGraphics());
+				//matrizIP[iAuxX][iAuxY].paintComponent(matrizIP[iAuxX][iAuxY].getGraphics());
 				try {
 					Thread.sleep(100);
 				} catch (InterruptedException e) {
@@ -332,7 +332,7 @@ public class Inicio {
 				}
 				
 				matrizIP[iAuxX][iAuxY].changeParameter(flecha, false);
-				matrizIP[iAuxX][iAuxY].paintComponent(matrizIP[iAuxX][iAuxY].getGraphics());
+				//matrizIP[iAuxX][iAuxY].paintComponent(matrizIP[iAuxX][iAuxY].getGraphics());
 
 				if(iAuxX == jWumpus.getX() && iAuxY == jWumpus.getY()){
 					this.resultado = true;

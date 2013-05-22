@@ -5,13 +5,14 @@
  	@yjugador 0
  	@vidas 3
  	@flechas 1
+ 	@wvidas 1
 <ejecutar>
 #Colocamos el wumpus
 repetir
 	colocar_wumpus(aleatorio(@xtamano), aleatorio(@ytamano));
 hasta (@resultado);
 #Colocamos una mina
-para i desde 0 hasta 3 paso 1 hacer
+para i desde 0 hasta 1 paso 1 hacer
 	repetir
 		colocar_mina(aleatorio(@xtamano), aleatorio(@ytamano));
 	hasta (@resultado);
@@ -25,7 +26,7 @@ repetir
 	colocar_flecha(aleatorio(@xtamano), aleatorio(@ytamano));
 hasta (@resultado);
 #Colocamos 4 pozos:
-para i desde 0 hasta 4 paso 1 hacer
+para i desde 0 hasta 8 paso 1 hacer
 	repetir
 		colocar_pozo(aleatorio(@xtamano), aleatorio(@ytamano));
 	hasta (@resultado);
