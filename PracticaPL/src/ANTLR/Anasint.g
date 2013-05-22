@@ -1607,7 +1607,7 @@ sentenciaWumpus
 
 sentenciasConf
 	{
-		Expresion x, y, xP, yP, vidas, flechas, wvidas;
+		Expresion x, y, xP, yP, vidas, flechas, wvidas, xW, yW;
 	}
 	:
 	CONF_X x=expresion[true]
@@ -1616,6 +1616,8 @@ sentenciasConf
 	CONF_YPlayer yP=expresion[true]
 	CONF_vidas vidas=expresion[true]
 	CONF_flechas flechas=expresion[true]
+	CONF_XWUMPUS xW = expresion[true]
+	CONF_YWUMPUS yW = expresion[true]
 	VIDAS_WUMPUS wvidas = expresion[true]
 	{
 		if(x.tipo.equals("cadena")
@@ -1623,7 +1625,10 @@ sentenciasConf
 			|| xP.tipo.equals("cadena")
 			|| yP.tipo.equals("cadena")
 			|| vidas.tipo.equals("cadena")
-			|| flechas.tipo.equals("cadena"))
+			|| flechas.tipo.equals("cadena")
+			|| wvidas.tipo.equals("cadena")
+			|| xW.tipo.equals("cadena")
+			|| yW.tipo.equals("cadena"))
 		{
 			System.err.println("Se esperaba expresion numérica , no alfanumérica");
 			throw new RecognitionException();
@@ -1635,9 +1640,9 @@ sentenciasConf
 		int valVidas = (int)Double.parseDouble(vidas._valor);
 		int valFlechas = (int)Double.parseDouble(flechas._valor);
 		int valWVidas = (int)Double.parseDouble(wvidas._valor);
-		interfaz=new Inicio(valy, valx, valxP, valyP, valVidas, valFlechas);
-		interfaz.setWumpus(1,1);
-		interfaz.jWumpus.setVidas(valWVidas);
+		int valxW = (int)Double.parseDouble(xW._valor);
+		int valyW = (int)Double.parseDouble(yW._valor);
+		interfaz=new Inicio(valy, valx, valxP, valyP, valVidas, valFlechas, valxW, valyW, valWVidas, "");
 	}
 	;
 	exception

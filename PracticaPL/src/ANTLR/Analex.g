@@ -277,6 +277,10 @@ VIDAS_WUMPUS: "@wvidas"
 	;
 TESORO : "@tesoro"
 	;
+CONF_XWUMPUS : "@xwumpus"
+	;
+CONF_YWUMPUS: "@ywumpus"
+	;
 DERECHA: ":derecha"
 	;
 IZQUIERDA: ":izquierda"
