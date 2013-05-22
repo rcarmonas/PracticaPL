@@ -10,6 +10,12 @@ public class Wumpus {
 		y=yy;
 		vidas = 1;
 	}
+	public Wumpus(int xx,int yy, int iVidas)
+	{
+		x=xx;
+		y=yy;
+		vidas = iVidas;
+	}
 	public int getX() {
 		return x;
 	}

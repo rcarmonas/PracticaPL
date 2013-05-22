@@ -29,7 +29,7 @@ public class Inicio {
 	public boolean colisiones[] = {false, false, true, true, true, true, false, true, true, false, false};
 	public JFrame ventana;
 	public Jugador jJugador;
-	public Wumpus jWumpus=null;
+	public Wumpus jWumpus = null;
 	ImagePanel matrizIP[][];
 	public int rejillaX, rejillaY;
 	JLabel lblVidas;
@@ -55,19 +55,24 @@ public class Inicio {
  * @param playerY Coordenada y inicial
  * @param lives Numero de vidas inicial
  * @param arrows Numero de flechas inicial
+ * @param xWumpus Coordenada X wumpus
+ * @param yWumpus Coordenada Y Wumpus
+ * @param vidasWumpus Número de vidas del Wumpus
+ * @param mod Mod del juego
  */
-	public Inicio(int sizeX, int sizeY, int playerX, int playerY, int lives, int arrows){
+	public Inicio(int sizeX, int sizeY, int playerX, int playerY, int lives, int arrows, int xWumpus, int yWumpus, int vidasWumpus, String mod){
 		int i, j;
 		this.rejillaX = sizeX;
 		this.rejillaY = sizeY;
 
 		jJugador = new Jugador(playerX, playerY, lives, arrows);
 		matrizIP = new ImagePanel[sizeX][sizeY];
+		jWumpus = new Wumpus(xWumpus, yWumpus, vidasWumpus);
 
 		//inicializacion del tablero
 		for(i=0; i<sizeX; i++)
 			for(j=0; j<sizeY; j++)
-				matrizIP[i][j] = new ImagePanel("Zelda");
+				matrizIP[i][j] = new ImagePanel(mod);
 		
 		//creacion de la ventana
 		ventana = new JFrame();
@@ -265,7 +270,8 @@ public class Inicio {
 		resultado = false;
 		if(x>=0 && x<rejillaX && y>=0 && y<rejillaY && !matrizIP[x][y].bVector[pozo] 
 					&& !matrizIP[x][y].bVector[puerta]
-					&& !matrizIP[x][y].bVector[jugador])
+					&& !matrizIP[x][y].bVector[jugador]
+					&& jWumpus.getVidas() > 0)
 		{
 			matrizIP[x][y].changeParameter(flecha, false);
 			if(matrizIP[x][y].bVector[ambrosia])
@@ -349,6 +355,8 @@ public class Inicio {
 	
 					if(jWumpus.getVidas() == 0)
 						matrizIP[iAuxX][iAuxY].changeParameter(wumpus, false);
+
+					jWumpus.setX(-1);
 					break;
 				}
 	
