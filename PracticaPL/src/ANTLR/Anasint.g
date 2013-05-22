@@ -1426,7 +1426,7 @@ comprobacion
 		(HAY_VIENTO{resultado = Inicio.viento;})|
 		(HAY_OLOR{resultado = Inicio.olor;})|
 		(HAY_MINA{resultado = Inicio.mina;})|
-		(HAY_SALIDA{resultado = Inicio.mina;})|
+		(HAY_SALIDA{resultado = Inicio.puerta;})|
 		(OCULTO{resultado = Inicio.desconocido;})
 		
 	;
@@ -1476,6 +1476,10 @@ condicionWumpus
 	)|(RESULTADO
 		{
 			resultado = interfaz.resultado;
+		}			
+	)|(TESORO
+		{
+			resultado = interfaz.tengoTesoro;
 		}			
 	)
 	;

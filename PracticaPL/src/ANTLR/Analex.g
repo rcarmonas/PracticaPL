@@ -275,6 +275,8 @@ RESULTADO: "@resultado"
 	;
 VIDAS_WUMPUS: "@wvidas"
 	;
+TESORO : "@tesoro"
+	;
 DERECHA: ":derecha"
 	;
 IZQUIERDA: ":izquierda"
