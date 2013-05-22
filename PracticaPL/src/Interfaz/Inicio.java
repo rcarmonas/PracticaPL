@@ -100,7 +100,7 @@ public class Inicio {
 		lblEstado.setBounds(0,0,50,50);
 		jpEstado.add(lblEstado);
 
-		ImageIcon imgIcon = new ImageIcon("img/vida.png");
+		ImageIcon imgIcon = new ImageIcon("img/Iconos/vida.png");
 	    Image img = imgIcon.getImage();
 	    img = img.getScaledInstance(20, 20,  java.awt.Image.SCALE_SMOOTH);  
 	    imgIcon = new ImageIcon(img);  
@@ -126,7 +126,7 @@ public class Inicio {
 		lblFlechas.setBounds(0,40,50,50);
 		jpEstado.add(lblFlechas);
 
-		imgIcon = new ImageIcon("img/tesoro.png");
+		imgIcon = new ImageIcon("img/Iconos/tesoro.png");
 	    img = imgIcon.getImage();
 	    img = img.getScaledInstance(20, 20,  java.awt.Image.SCALE_SMOOTH);  
 	    imgIcon = new ImageIcon(img);
