@@ -54,6 +54,7 @@ public class ImagePanel extends JPanel{
 			bVector[Inicio.flecha] = false;
 			bVector[Inicio.ambrosia] = false;
 			bVector[Inicio.tesoro] = false;
+			bVector[Inicio.mina] = false;
 		}
 		//repintar
 		paintComponent(getGraphics());

@@ -465,6 +465,7 @@ public class Inicio {
 	 */
 	public void setMina(int x, int y){
 		resultado = false;
+
 		if(x>=0 && x<rejillaX && y>=0 && y<rejillaY)
 		{
 			boolean colision = false;
