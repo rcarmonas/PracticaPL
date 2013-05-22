@@ -8,7 +8,7 @@
  	@xwumpus 5
  	@ywumpus 5
  	@wvidas 1
- 	@mod 'Minecraft'
+ 	@mod 'Mario'
 <ejecutar>
 #Colocamos el wumpus
 repetir
