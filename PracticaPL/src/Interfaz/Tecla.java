@@ -128,5 +128,11 @@ public class Tecla {
 
 			}
 		});
+		interfaz.jBDisparar.addActionListener(izquierda = new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				pulsacion(Tecla.ESPACIO);
+
+			}
+		});
 	}
 }
