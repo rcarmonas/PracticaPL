@@ -4,7 +4,7 @@ package ANTLR;
 import java.io.*;
 import antlr.*;
 
-public class Test 
+public class Test
 {
 	public static void main(String args[]) 
 	{
