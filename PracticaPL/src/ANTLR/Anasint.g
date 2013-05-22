@@ -1636,6 +1636,7 @@ sentenciasConf
 		int valFlechas = (int)Double.parseDouble(flechas._valor);
 		int valWVidas = (int)Double.parseDouble(wvidas._valor);
 		interfaz=new Inicio(valy, valx, valxP, valyP, valVidas, valFlechas);
+		interfaz.setWumpus(1,1);
 		interfaz.jWumpus.setVidas(valWVidas);
 	}
 	;
