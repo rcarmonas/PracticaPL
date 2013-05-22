@@ -31,7 +31,6 @@ public class Test
 				System.out.println("\n\nContenido de la Tabla de Símbolos");
 				anasint.getTablaSimbolos().escribirSimbolos();
 			}
-						
 		}
 
 

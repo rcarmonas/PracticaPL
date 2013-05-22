@@ -1265,7 +1265,7 @@ disparar
 		else if(ejecutar)
 		{
 			int valD = (int)(Double.parseDouble(e._valor));
-			//interfaz.disparar(valD); TODO
+			interfaz.tiraFlecha(valD);
 			
 						
 		}
