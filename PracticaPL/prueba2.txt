@@ -83,7 +83,7 @@ mientras (vivo==1) hacer
 	 			si(tecla2==:derecha __o tecla2==:abajo __o tecla2==:izquierda __o tecla2==:arriba) entonces
 	 				disparar(leer_tecla);
 	 			si_no
-	 				escribir();
+	 				escribir('Se esperaba una direccion');
 	 			fin_si
 	 		fin_si;
 	 	fin_si;
