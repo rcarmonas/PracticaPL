@@ -84,7 +84,7 @@ mientras (vivo==1) hacer
 	 				disparar(leer_tecla);
 	 			si_no
 	 				escribir('Se esperaba una direccion');
-	 			fin_si
+	 			fin_si;
 	 		fin_si;
 	 	fin_si;
  	fin_si;

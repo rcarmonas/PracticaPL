@@ -3,7 +3,7 @@
  	@ytamano 10
  	@xjugador 0
  	@yjugador 0
- 	@vidas 3
+ 	@vidas 100
  	@flechas 1
  	@wvidas 1
 <ejecutar>
@@ -81,10 +81,10 @@ mientras (vivo==1) hacer
 	 			escribir('Pulse la direccion para disparar');
 	 			tecla2 = leer_tecla;
 	 			si(tecla2==:derecha __o tecla2==:abajo __o tecla2==:izquierda __o tecla2==:arriba) entonces
-	 				disparar(leer_tecla);
+	 				disparar(tecla2);
 	 			si_no
-	 				escribir();
-	 			fin_si
+	 				escribir('Se esperaba una direccion');
+	 			fin_si;
 	 		fin_si;
 	 	fin_si;
  	fin_si;
