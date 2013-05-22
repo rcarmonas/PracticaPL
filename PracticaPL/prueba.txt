@@ -76,8 +76,11 @@ mientras (vivo==1) hacer
  				salir;
  			fin_si;
  		si_no
- 		escribir('Se esperaba una direccion');
- 		fin_si;
+	 		si(tecla==:espacio) entonces
+	 			escribir('Pulse la direccion para disparar');
+	 			disparar(leer_tecla);
+	 		fin_si;
+	 	fin_si;
  	fin_si;
  	si(@wvidas>0) entonces
 	 	#Movemos el wumpus en una direccion aleatoria:
