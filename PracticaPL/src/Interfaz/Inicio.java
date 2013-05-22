@@ -231,7 +231,7 @@ public class Inicio {
 		{
 			boolean colision = false;
 			for(int i=0; i<11; i++)
-			{
+			{ 
 				if(colisiones[i]&&matrizIP[x][y].bVector[i])
 					colision=true;
 			}
