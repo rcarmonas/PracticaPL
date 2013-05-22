@@ -328,6 +328,7 @@ public class Inicio {
 
 		if(jJugador.getFlechas() > 0){
 			jJugador.setFlechas(jJugador.getFlechas() - 1);
+			lblFlechas.setText(String.valueOf(jJugador.getFlechas()));
 
 			while(iAuxX < this.rejillaX && iAuxX >= 0 && iAuxY < this.rejillaY && iAuxY >= 0){
 				matrizIP[iAuxX][iAuxY].changeParameter(flecha, true);
