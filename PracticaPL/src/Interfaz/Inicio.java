@@ -38,7 +38,7 @@ public class Inicio {
 	public JTextField jtEntrada;
 	public JTextArea jtConsola;
 	public boolean resultado = false;
-	public JButton JBArriba, JBAbajo, JBIzquierda, JBDerecha;
+	public JButton JBArriba, JBAbajo, JBIzquierda, JBDerecha,jBDisparar;
 	public boolean tengoTesoro = false;
 
 
@@ -125,7 +125,7 @@ public class Inicio {
 		lblTesoro.setVisible(false);
 		jpEstado.add(lblTesoro);
 	    
-		jpEstado.setBounds(50*sizeX+100, getAlturaMenos(95), 100, 150);
+		jpEstado.setBounds(50*sizeX+100, getAlturaMenos(95), 100, 100);
 		ventana.add(jpEstado);
 		
 		/**
@@ -150,10 +150,14 @@ public class Inicio {
 		JBAbajo = new JButton("Abajo");
 		jpBotones.add(JBAbajo);
 		JBAbajo.setFocusable(false);
+		
+		jBDisparar= new JButton("Disparar");
+		jpBotones.add(jBDisparar);
+		jBDisparar.setFocusable(false);
 
 		
 
-		jpBotones.setBounds(50*sizeX+100, getAlturaMenos(70), 100, 120);
+		jpBotones.setBounds(50*sizeX+100, getAlturaMenos(75), 100, 150);
 		ventana.add(jpBotones);
 		
 		/**
