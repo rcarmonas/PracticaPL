@@ -41,6 +41,11 @@ public class Inicio {
 	public JButton JBArriba, JBAbajo, JBIzquierda, JBDerecha;
 	public boolean tengoTesoro = false;
 
+/*	public static void main(String[] args){
+		Inicio i = new Inicio(10, 10, 0, 0, 3, 2);
+		i.setWumpus(5, 5);
+		i.tiraFlecha(Tecla.DERECHA);
+	}*/
 
 /**
  * Constructor
@@ -316,29 +321,43 @@ public class Inicio {
 	 */
 	public void tiraFlecha(int direccion){
 		int iAuxX = 0, iAuxY = 0;
+		this.resultado = false;
 
 		iAuxX = jJugador.x;
 		iAuxY = jJugador.y;
-//TODO meter bucle for
-		if(direccion == Tecla.DERECHA){
-			while(iAuxX < this.rejillaX && iAuxY < this.rejillaY){
-				matrizIP[iAuxX][iAuxY].changeParameter(flecha, true);
-				matrizIP[iAuxX][iAuxY].paintComponent(matrizIP[iAuxX][iAuxY].getGraphics());
-				try {
-					Thread.sleep(100);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-				matrizIP[iAuxX][iAuxY].changeParameter(flecha, false);
-				matrizIP[iAuxX][iAuxY].paintComponent(matrizIP[iAuxX][iAuxY].getGraphics());
 
+		if(jJugador.getFlechas() > 0){
+			jJugador.setFlechas(jJugador.getFlechas() - 1);
+
+			while(iAuxX < this.rejillaX && iAuxX >= 0 && iAuxY < this.rejillaY && iAuxY >= 0){
+				matrizIP[iAuxX][iAuxY].changeParameter(flecha, true);
+	
+				try {Thread.sleep(150);} catch (InterruptedException e){e.printStackTrace();}
+	
+				matrizIP[iAuxX][iAuxY].changeParameter(flecha, false);
+	
 				if(iAuxX == jWumpus.getX() && iAuxY == jWumpus.getY()){
 					this.resultado = true;
+					
+					if(jWumpus.getVidas() > 0)
+						jWumpus.setVidas(jWumpus.getVidas() - 1);
+	
+					if(jWumpus.getVidas() == 0)
+						matrizIP[iAuxX][iAuxY].changeParameter(wumpus, false);
 					break;
 				}
-				iAuxX++;
+	
+				if(direccion == Tecla.DERECHA)
+					iAuxX++;
+	
+				if(direccion == Tecla.IZQUIERDA)
+					iAuxX--;
+	
+				if(direccion == Tecla.ABAJO)
+					iAuxY++;
+	
+				if(direccion == Tecla.ARRIBA)
+					iAuxY--;
 			}
 		}
 	}

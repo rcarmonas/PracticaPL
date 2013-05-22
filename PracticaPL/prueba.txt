@@ -3,8 +3,8 @@
  	@ytamano 10
  	@xjugador 0
  	@yjugador 0
- 	@vidas 3
- 	@flechas 1
+ 	@vidas 30
+ 	@flechas 100
 <ejecutar>
 #Colocamos el wumpus
 repetir
