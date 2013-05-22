@@ -5,6 +5,8 @@
  	@yjugador 0
  	@vidas 100
  	@flechas 100
+ 	@xwumpus 5
+ 	@ywumpus 5
  	@wvidas 1
 <ejecutar>
 #Colocamos el wumpus
