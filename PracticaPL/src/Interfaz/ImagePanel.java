@@ -64,7 +64,7 @@ public class ImagePanel extends JPanel{
 		try {
 			g.drawImage(ImageIO.read(new File("img/" + strMod + "fondo.png")), 0, 0, null);
 
-			for(int iAux=0; iAux<=9; iAux++){
+			for(int iAux=0; iAux<=10; iAux++){
 				if(bVector[iAux])
 					g.drawImage(ImageIO.read(new File("img/" + strMod + imagen[iAux] + ".png")), 0, 0, null);
 			}
