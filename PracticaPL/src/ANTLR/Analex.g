@@ -281,6 +281,8 @@ CONF_XWUMPUS : "@xwumpus"
 	;
 CONF_YWUMPUS: "@ywumpus"
 	;
+CONF_MOD: "@mod"
+	;
 DERECHA: ":derecha"
 	;
 IZQUIERDA: ":izquierda"

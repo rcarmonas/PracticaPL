@@ -1608,6 +1608,8 @@ sentenciaWumpus
 sentenciasConf
 	{
 		Expresion x, y, xP, yP, vidas, flechas, wvidas, xW, yW;
+		Expresion mod = new Expresion();
+		boolean modActivo=false;
 	}
 	:
 	CONF_X x=expresion[true]
@@ -1619,6 +1621,7 @@ sentenciasConf
 	CONF_XWUMPUS xW = expresion[true]
 	CONF_YWUMPUS yW = expresion[true]
 	VIDAS_WUMPUS wvidas = expresion[true]
+	(CONF_MOD mod= expresion[true]{modActivo=true;})?
 	{
 		if(x.tipo.equals("cadena")
 			|| y.tipo.equals("cadena")
@@ -1628,7 +1631,8 @@ sentenciasConf
 			|| flechas.tipo.equals("cadena")
 			|| wvidas.tipo.equals("cadena")
 			|| xW.tipo.equals("cadena")
-			|| yW.tipo.equals("cadena"))
+			|| yW.tipo.equals("cadena")
+			|| (modActivo && mod.tipo.equals("numero")))
 		{
 			System.err.println("Se esperaba expresion numérica , no alfanumérica");
 			throw new RecognitionException();
@@ -1642,7 +1646,7 @@ sentenciasConf
 		int valWVidas = (int)Double.parseDouble(wvidas._valor);
 		int valxW = (int)Double.parseDouble(xW._valor);
 		int valyW = (int)Double.parseDouble(yW._valor);
-		interfaz=new Inicio(valy, valx, valxP, valyP, valVidas, valFlechas, valxW, valyW, valWVidas, "");
+		interfaz=new Inicio(valy, valx, valxP, valyP, valVidas, valFlechas, valxW, valyW, valWVidas, mod._valor);
 	}
 	;
 	exception
