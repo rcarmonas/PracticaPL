@@ -90,7 +90,7 @@ public class Tecla {
 	/**
 	 * Elimina los listeners de los botones
 	 */
-	public void eliminarListeners()
+	private void eliminarListeners()
 	{
 		interfaz.JBArriba.removeActionListener(arriba);
 		interfaz.JBAbajo.removeActionListener(abajo);
@@ -101,7 +101,7 @@ public class Tecla {
 	/**
 	 * Prepara los listeners de los botones de la interfaz
 	 */
-	public void prepararBotones()
+	private void prepararBotones()
 	{
 		interfaz.JBAbajo.addActionListener(abajo = new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {

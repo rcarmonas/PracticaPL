@@ -41,12 +41,6 @@ public class Inicio {
 	public JButton JBArriba, JBAbajo, JBIzquierda, JBDerecha,jBDisparar;
 	public boolean tengoTesoro = false;
 
-/*	public static void main(String[] args){
-		Inicio i = new Inicio(10, 10, 0, 0, 3, 2);
-		i.setWumpus(5, 5);
-		i.tiraFlecha(Tecla.DERECHA);
-	}*/
-
 /**
  * Constructor
  * @param sizeX Tamaño X del tablero
@@ -73,7 +67,8 @@ public class Inicio {
 		for(i=0; i<sizeX; i++)
 			for(j=0; j<sizeY; j++)
 				matrizIP[i][j] = new ImagePanel(mod);
-		
+		matrizIP[jJugador.getX()][jJugador.getY()].initializeParameter(desconocido, false);
+		matrizIP[jJugador.getX()][jJugador.getY()].initializeParameter(jugador, true);
 		//creacion de la ventana
 		ventana = new JFrame();
 		ventana.setTitle("Mundo Wumpus");
@@ -135,39 +130,39 @@ public class Inicio {
 		lblTesoro.setVisible(false);
 		jpEstado.add(lblTesoro);
 	    
-		jpEstado.setBounds(50*sizeX+100, getAlturaMenos(95), 100, 100);
+		jpEstado.setBounds(50*sizeX+120, getAlturaMenos(99), 100, 100);
 		ventana.add(jpEstado);
 		
 		/**
 		 * Panel de controles
 		 */
 		JPanel jpBotones = new JPanel();
-
+		jpBotones.setLayout(null);
 		JLabel lblControles=new JLabel("Controles");
 		jpBotones.add(lblControles);
-		JBArriba = new JButton("Arriba");
+		lblControles.setBounds(20, 0, 100, 20);
+
+		JBArriba=crearBoton("img/Iconos/Arriba.png","img/Iconos/Arribas.png",30,40);
 		jpBotones.add(JBArriba);
-		JBArriba.setFocusable(false);
+		JBArriba.setBounds(40, 20, 30, 40);
 		
-		JBIzquierda = new JButton("<");
+		JBIzquierda = crearBoton("img/Iconos/Izquierda.png","img/Iconos/Izquierdas.png",40,30);
 		jpBotones.add(JBIzquierda);
-		JBIzquierda.setFocusable(false);
+		JBIzquierda.setBounds(0,60,40,30);
 		
-		JBDerecha = new JButton(">");
+		JBDerecha = crearBoton("img/Iconos/Derecha.png","img/Iconos/Derechas.png",40,30);
 		jpBotones.add(JBDerecha);
-		JBDerecha.setFocusable(false);
-
-		JBAbajo = new JButton("Abajo");
+		JBDerecha.setBounds(70,60,40, 30);
+		
+		JBAbajo = crearBoton("img/Iconos/Abajo.png","img/Iconos/Abajos.png",30,40);
 		jpBotones.add(JBAbajo);
-		JBAbajo.setFocusable(false);
+		JBAbajo.setBounds(40,90,30,40);
 		
-		jBDisparar= new JButton("Disparar");
+		jBDisparar = crearBoton("img/Iconos/Disparar.png","img/Iconos/Disparars.png",30,30);
 		jpBotones.add(jBDisparar);
-		jBDisparar.setFocusable(false);
-
+		jBDisparar.setBounds(41,59,30,30);
 		
-
-		jpBotones.setBounds(50*sizeX+100, getAlturaMenos(75), 100, 150);
+		jpBotones.setBounds(50*sizeX+100, getAlturaMenos(78), 150, 150);
 		ventana.add(jpBotones);
 		
 		/**
@@ -197,19 +192,34 @@ public class Inicio {
 				}
 		});
 		JScrollPane jsScroll= new JScrollPane(jtConsola);
-		jsScroll.setBounds(50*sizeX+50, getAlturaMenos(45)+25, 210, getAlturaMenos(75));
+		jsScroll.setBounds(50*sizeX+50, getAlturaMenos(45)+25, 230, getAlturaMenos(75));
 		ventana.add(jsScroll);
 		
 		jtEntrada=new JTextField();
 		jtEntrada.setEditable(false);
 		jtEntrada.setFocusable(false);
-		jtEntrada.setBounds(50*sizeX+50, getAlturaMenos(45)+30+getAlturaMenos(75), 210, 20);
+		jtEntrada.setBounds(50*sizeX+50, getAlturaMenos(45)+30+getAlturaMenos(75), 230, 20);
 		ventana.add(jtEntrada);
+	}
+	public JButton crearBoton(String icono1,String icono2,int x,int y)
+	{
+		ImageIcon imgIcon = new ImageIcon(icono1);
+	    Image img = imgIcon.getImage();
+	    img = img.getScaledInstance(x, y,  java.awt.Image.SCALE_SMOOTH);  
+	    imgIcon = new ImageIcon(img);
+	    
+		JButton JB = new JButton(imgIcon);
+		JB.setOpaque(false);
+		JB.setContentAreaFilled(false);
+		JB.setBorderPainted(false);
 		
-		ventana.setVisible(true);
-		//muestro al jugador
-		matrizIP[playerX][playerY].initializeParameter(desconocido, false);
-		matrizIP[playerX][playerY].initializeParameter(jugador, true);
+		JB.setFocusable(false);
+		imgIcon = new ImageIcon(icono2);
+	    img = imgIcon.getImage();
+	    img = img.getScaledInstance(x, y,  java.awt.Image.SCALE_SMOOTH);
+	    imgIcon = new ImageIcon(img);
+		JB.setRolloverIcon(imgIcon);
+		return JB;
 	}
 	public int getAlturaMenos(int porcentaje)
 	{
@@ -276,18 +286,15 @@ public class Inicio {
 			matrizIP[x][y].changeParameter(flecha, false);
 			if(matrizIP[x][y].bVector[ambrosia])
 			{
-				matrizIP[x][y].changeParameter(flecha, false);	
+				matrizIP[x][y].changeParameter(ambrosia, false);	
 				jWumpus.setVidas(jWumpus.getVidas()+1);
 			}
 
-			if(jWumpus==null)
-				jWumpus= new Wumpus(x,y);
-			else
-			{
-				eraseWumpus(jWumpus.getX(),jWumpus.getY());
-				jWumpus.setX(x);
-				jWumpus.setY(y);
-			}
+
+			eraseWumpus(jWumpus.getX(),jWumpus.getY());
+			jWumpus.setX(x);
+			jWumpus.setY(y);
+			
 			
 			if(x<rejillaX-1)
 				matrizIP[x+1][y].changeParameter(olor, true);
@@ -352,13 +359,11 @@ public class Inicio {
 					
 					if(jWumpus.getVidas() > 0)
 						jWumpus.setVidas(jWumpus.getVidas() - 1);
-	
+
 					if(jWumpus.getVidas() == 0)
 						matrizIP[iAuxX][iAuxY].changeParameter(wumpus, false);
-
-					jWumpus.setX(-1);
 					break;
-				}
+				} 
 	
 				if(direccion == Tecla.DERECHA)
 					iAuxX++;

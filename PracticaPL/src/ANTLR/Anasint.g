@@ -1647,6 +1647,7 @@ sentenciasConf
 		int valxW = (int)Double.parseDouble(xW._valor);
 		int valyW = (int)Double.parseDouble(yW._valor);
 		interfaz=new Inicio(valy, valx, valxP, valyP, valVidas, valFlechas, valxW, valyW, valWVidas, mod._valor);
+		interfaz.ventana.setVisible(true);
 	}
 	;
 	exception
