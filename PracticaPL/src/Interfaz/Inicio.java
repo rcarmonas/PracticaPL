@@ -368,7 +368,10 @@ public class Inicio {
 						jWumpus.setVidas(jWumpus.getVidas() - 1);
 
 					if(jWumpus.getVidas() == 0)
+					{
 						matrizIP[iAuxX][iAuxY].changeParameter(wumpus, false);
+						jWumpus.setX(-1);
+					}
 					break;
 				} 
 	
@@ -533,7 +536,7 @@ public class Inicio {
 				this.tengoTesoro = true;
 				this.lblTesoro.setVisible(true);
 			}
-			if(ipAux.bVector[wumpus])
+			if(jJugador.getX()==jWumpus.getX()&&jJugador.getY()==jWumpus.getY())
 			{
 				jJugador.setVidas(jJugador.getVidas() - 1);
 				this.lblVidas.setText("" + jJugador.getVidas());
