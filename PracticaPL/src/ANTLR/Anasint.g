@@ -33,7 +33,7 @@ options
 	boolean debug = false;
 	boolean semilla=false;
 	Random rand;
-	Inicio interfaz;
+	public Inicio interfaz;
 	Tecla tecla;
 	
 	//Función para activar o desactivar la información adicional
@@ -106,6 +106,12 @@ options
 		catch (Exception e) 
 			{
 			}
+	}
+	
+	public void inicializar()
+	{
+		interfaz = new Inicio(10, 10, 0, 0, 1, 1, 9, 9, 1, "Mario");
+		interfaz.ventana.setVisible(true);
 	}
 }
 
@@ -1683,11 +1689,18 @@ instruccion
 //-------------------------------------------------------------------------------------------
 //Programa general
 prog: 
-	CONFIGURACION
-		sentenciasConf
-	EJECUCION
+	(
+		CONFIGURACION
+			sentenciasConf
+		EJECUCION
+			(instruccion[true])+
+		FIN
+	)
+	|
+	(
+		{inicializar();}
 		(instruccion[true])+
-	FIN
+	)
 	;
 	exception
  		catch [RecognitionException re] {

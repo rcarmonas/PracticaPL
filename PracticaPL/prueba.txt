@@ -3,19 +3,19 @@
  	@ytamano 10
  	@xjugador 0
  	@yjugador 0
- 	@vidas 100
- 	@flechas 100
- 	@xwumpus 5
- 	@ywumpus 5
+ 	@vidas 30
+ 	@flechas 1
+ 	@xwumpus aleatorio(10)
+ 	@ywumpus aleatorio(10)
  	@wvidas 1
- 	@mod 'Mario'
+ 	@mod 'Minecraft'
 <ejecutar>
 #Colocamos el wumpus
 repetir
 	colocar_wumpus(aleatorio(@xtamano), aleatorio(@ytamano));
 hasta (@resultado);
 #Colocamos una mina
-para i desde 0 hasta 1 paso 1 hacer
+para i desde 0 hasta 2 paso 1 hacer
 	repetir
 		colocar_mina(aleatorio(@xtamano), aleatorio(@ytamano));
 	hasta (@resultado);
@@ -28,7 +28,7 @@ hasta (@resultado);
 repetir
 	colocar_flecha(aleatorio(@xtamano), aleatorio(@ytamano));
 hasta (@resultado);
-#Colocamos 4 pozos:
+#Colocamos 8 pozos:
 para i desde 0 hasta 8 paso 1 hacer
 	repetir
 		colocar_pozo(aleatorio(@xtamano), aleatorio(@ytamano));
@@ -85,6 +85,9 @@ mientras (vivo==1) hacer
 	 			tecla2 = leer_tecla;
 	 			si(tecla2==:derecha __o tecla2==:abajo __o tecla2==:izquierda __o tecla2==:arriba) entonces
 	 				disparar(tecla2);
+	 				si(@resultado) entonces
+	 					escribir('Se ha oido un chillido de dolor!');
+	 				fin_si;
 	 			si_no
 	 				escribir('Se esperaba una direccion');
 	 			fin_si;
