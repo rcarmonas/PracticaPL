@@ -40,6 +40,13 @@ public class Inicio {
 	public boolean resultado = false;
 	public JButton JBArriba, JBAbajo, JBIzquierda, JBDerecha,jBDisparar;
 	public boolean tengoTesoro = false;
+	
+
+/*	public static void main(String[] args){
+		Inicio i = new Inicio(10, 10, 0, 0, 3, 2);
+		i.setWumpus(5, 5);
+		i.tiraFlecha(Tecla.DERECHA);
+	}*/
 
 /**
  * Constructor
