@@ -190,7 +190,7 @@ public class Inicio {
 				@Override
 				public void insertUpdate(DocumentEvent arg0) {
 					try{
-						jtConsola.setCaretPosition(jtConsola.getLineStartOffset(jtConsola.getLineCount()-1));
+						//jtConsola.setCaretPosition(jtConsola.getLineStartOffset(jtConsola.getLineCount()-1));
 					}catch(Exception ex){}
 					
 				}
@@ -600,5 +600,13 @@ public class Inicio {
 	public void salir()
 	{
 		ventana.setVisible(false);
+	}
+	/**
+	 * Cambia el cursor de la consola
+	 * @param x posicion donde se pondra el cursor
+	 */
+	public void setCursor(int x)
+	{
+		jtConsola.setCaretPosition(x);
 	}
 }

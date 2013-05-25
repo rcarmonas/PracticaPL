@@ -429,7 +429,8 @@ leer
 			//borro la entrada
 			interfaz.jtEntrada.setText("");
 			//pongo la entrada en la consola
-			interfaz.jtConsola.setText(interfaz.jtConsola.getText()+valor+"\n");
+			interfaz.jtConsola.append(valor+"\n");
+			interfaz.jtConsola.setCaretPosition(interfaz.jtConsola.getCaretPosition()+2);
 		}
 	}
 		;
@@ -454,7 +455,8 @@ leerCadena
 			//borro la entrada
 			interfaz.jtEntrada.setText("");
 			//pongo la entrada en la consola
-			interfaz.jtConsola.setText(interfaz.jtConsola.getText()+valorCadena+"\n");
+			interfaz.jtConsola.append(valorCadena+"\n");
+			interfaz.jtConsola.setCaretPosition(interfaz.jtConsola.getCaretPosition()+valorCadena.length()+1);
 		}
 	}
 		;
@@ -481,7 +483,10 @@ escribir
 		: ESCRIBIR PARENT_IZ e=expresion[ejecutar] PARENT_DE PUNTO_COMA
 		{
 			if(ejecutar)
-				interfaz.jtConsola.setText(interfaz.jtConsola.getText()+e._valor+"\n");
+			{
+				interfaz.jtConsola.insert(e._valor+"\n",interfaz.jtConsola.getCaretPosition());
+				interfaz.jtConsola.setCaretPosition(interfaz.jtConsola.getCaretPosition()+e._valor.length()+1);
+			}
 		}
 		;
 	exception
@@ -496,8 +501,10 @@ escribirCadena
 		{Expresion s;}
 		: ESCRIBIR_CADENA PARENT_IZ s=expresion[ejecutar] PARENT_DE PUNTO_COMA
 		{
-			if(ejecutar)
-				interfaz.jtConsola.setText(interfaz.jtConsola.getText()+s._valor);
+			if(ejecutar){
+				interfaz.jtConsola.insert(s._valor,interfaz.jtConsola.getCaretPosition());
+				interfaz.jtConsola.setCaretPosition(interfaz.jtConsola.getCaretPosition()+s._valor.length());
+			}
 		}
 		;
 	exception
