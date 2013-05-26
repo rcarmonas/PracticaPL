@@ -80,9 +80,10 @@ public class Inicio {
 		ventana = new JFrame();
 		ventana.setTitle("Mundo Wumpus");
 		if(sizeY*50+80<450)
-			ventana.setBounds(100, 100, sizeX*50+300, 450);
+			ventana.setSize(sizeX*50+300, 450);
 		else
-			ventana.setBounds(100, 100, sizeX*50+300, sizeY*50+80);
+			ventana.setSize(sizeX*50+300, sizeY*50+80);
+
 		ventana.setResizable(false);
 		ventana.setLayout(null);
 		ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
