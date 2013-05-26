@@ -79,6 +79,7 @@ mientras (vivo==1) hacer
  			si(respuesta==0) entonces
  				salir;
  			fin_si;
+ 			lugar(5,5);
  		si_no
 	 		si(tecla==:espacio) entonces
 	 			escribir('Pulse la direccion para disparar');

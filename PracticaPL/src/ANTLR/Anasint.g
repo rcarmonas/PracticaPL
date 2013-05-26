@@ -14,7 +14,7 @@ header{
 	import Interfaz.*;
 	import java.lang.*;
 	import java.util.Random;
-	
+	import javax.swing.text.BadLocationException;
 
 	}
 class Anasint extends Parser;
@@ -919,12 +919,18 @@ lugar
 		double valx = Double.parseDouble(x._valor);
 		double valy = Double.parseDouble(y._valor);
 		if(ejecutar)
-			System.out.printf("\033[%d;%dH",(int)valx,(int)valy);
+		{
+			interfaz.jtConsola.setCaretPosition(interfaz.jtConsola.getLineStartOffset((int)valy)+(int)valx);
+		}
 	}
 	;
 	exception
  		catch [RecognitionException re] {
 			mostrarExcepcion(re);
+		 }
+		catch [BadLocationException be] {
+		 }
+		catch [IllegalArgumentException ie] {
 		 }
 
 

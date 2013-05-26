@@ -183,6 +183,8 @@ public class Inicio {
 		jtConsola.setLineWrap(true);
 		jtConsola.setEditable(false);
 		jtConsola.setFocusable(false);
+		jtConsola.getCaret().setVisible(true);
+		
 		jtConsola.getDocument().addDocumentListener(new DocumentListener() {
 				@Override
 				public void changedUpdate(DocumentEvent arg0) {
