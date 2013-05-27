@@ -80,9 +80,9 @@ public class Inicio {
 		ventana = new JFrame();
 		ventana.setTitle("Mundo Wumpus");
 		if(sizeY*50+80<450)
-			ventana.setSize(sizeX*50+300, 450);
+			ventana.setSize(sizeX*50+400, 450);
 		else
-			ventana.setSize(sizeX*50+300, sizeY*50+80);
+			ventana.setSize(sizeX*50+400, sizeY*50+80);
 
 		ventana.setResizable(false);
 		ventana.setLayout(null);
@@ -138,7 +138,7 @@ public class Inicio {
 		lblTesoro.setVisible(false);
 		jpEstado.add(lblTesoro);
 	    
-		jpEstado.setBounds(50*sizeX+120, getAlturaMenos(99), 100, 100);
+		jpEstado.setBounds(50*sizeX+180, getAlturaMenos(99), 100, 100);
 		ventana.add(jpEstado);
 		
 		/**
@@ -170,7 +170,7 @@ public class Inicio {
 		jpBotones.add(jBDisparar);
 		jBDisparar.setBounds(41,59,30,30);
 		
-		jpBotones.setBounds(50*sizeX+100, getAlturaMenos(78), 150, 150);
+		jpBotones.setBounds(50*sizeX+150, getAlturaMenos(75), 150, 150);
 		ventana.add(jpBotones);
 		
 		/**
@@ -202,13 +202,13 @@ public class Inicio {
 				}
 		});
 		JScrollPane jsScroll= new JScrollPane(jtConsola);
-		jsScroll.setBounds(50*sizeX+50, getAlturaMenos(45)+25, 230, getAlturaMenos(75));
+		jsScroll.setBounds(50*sizeX+50, getAlturaMenos(45)+25, 330, getAlturaMenos(75));
 		ventana.add(jsScroll);
 		
 		jtEntrada=new JTextField();
 		jtEntrada.setEditable(false);
 		jtEntrada.setFocusable(false);
-		jtEntrada.setBounds(50*sizeX+50, getAlturaMenos(45)+30+getAlturaMenos(75), 230, 20);
+		jtEntrada.setBounds(50*sizeX+50, getAlturaMenos(45)+30+getAlturaMenos(75), 330, 20);
 		ventana.add(jtEntrada);
 	}
 	public JButton crearBoton(String icono1,String icono2,int x,int y)
