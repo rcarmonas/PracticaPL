@@ -429,7 +429,7 @@ leer
 			//borro la entrada
 			interfaz.jtEntrada.setText("");
 			//pongo la entrada en la consola
-			interfaz.jtConsola.append(valor+"\n");
+			interfaz.jtConsola.insert(valor+"\n",interfaz.jtConsola.getCaretPosition());
 			interfaz.jtConsola.setCaretPosition(interfaz.jtConsola.getCaretPosition()+2);
 		}
 	}
@@ -455,7 +455,7 @@ leerCadena
 			//borro la entrada
 			interfaz.jtEntrada.setText("");
 			//pongo la entrada en la consola
-			interfaz.jtConsola.append(valorCadena+"\n");
+			interfaz.jtConsola.insert(valorCadena+"\n",interfaz.jtConsola.getCaretPosition());
 			interfaz.jtConsola.setCaretPosition(interfaz.jtConsola.getCaretPosition()+valorCadena.length()+1);
 		}
 	}
