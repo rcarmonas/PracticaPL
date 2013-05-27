@@ -25,7 +25,6 @@ public class ImagePanel extends JPanel{
 	String imagen[] = {"olor", "viento", "flecha", "ambrosia", "tesoro", "pozo", "wumpus", "mina", "puerta", "jugador", "desconocido"};
 	public boolean bVector[] = {false, false, false, false, false, false, false, false, false, false, true};
 	String strMod = "";
-	boolean monty = false;
 
 	public ImagePanel(boolean vector[]) {
 		bVector = vector;
@@ -34,9 +33,6 @@ public class ImagePanel extends JPanel{
 	public ImagePanel(String aux) {
 		if(!aux.isEmpty())
 			strMod = aux + "/";
-
-		if(aux.compareTo("Monty")==0)
-			monty = true;
 	}
 
 	/**
