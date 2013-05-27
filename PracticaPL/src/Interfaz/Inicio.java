@@ -518,11 +518,14 @@ public class Inicio {
 			jJugador.setX(x);
 			jJugador.setY(y);
 			
+
 			ipAux = matrizIP[jJugador.getX()][jJugador.getY()];
+			ipAux.cambiarImagen(true);
 			if(ipAux.bVector[mina])
 			{
 				jJugador.setVidas(jJugador.getVidas() - 1);
 				this.lblVidas.setText(jJugador.getVidas()+"");
+				setPlayer(jJugador.xIni, jJugador.yIni);
 			}
 			if(ipAux.bVector[flecha])
 			{
@@ -543,14 +546,15 @@ public class Inicio {
 			{
 				jJugador.setVidas(jJugador.getVidas() - 1);
 				this.lblVidas.setText("" + jJugador.getVidas());
+				setPlayer(jJugador.xIni, jJugador.yIni);
 			}
 			if(ipAux.bVector[pozo])
 			{
 				jJugador.setVidas(jJugador.getVidas() - 1);
-					this.lblVidas.setText(""+ jJugador.getVidas());
+				this.lblVidas.setText(""+ jJugador.getVidas());
+				setPlayer(jJugador.xIni, jJugador.yIni);
 			}
 			
-			ipAux.cambiarImagen(true);
 		}
 		else
 			return false;

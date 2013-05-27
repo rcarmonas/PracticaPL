@@ -4,8 +4,11 @@ public class Jugador {
 	int vidas;
 	int flechas;
 	int x, y;
+	public int xIni, yIni;
 
 	Jugador(int i, int j, int vidas, int flechas){
+		this.xIni = i;
+		this.yIni = j;
 		this.x = i;
 		this.y = j;
 		this.vidas = vidas;
@@ -42,6 +45,12 @@ public class Jugador {
 
 	public void setY(int y) {
 		this.y = y;
+	}
+	
+	public void restart()
+	{
+		this.x = this.xIni;
+		this.y = this.yIni;
 	}
 
 

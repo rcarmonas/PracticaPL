@@ -1,6 +1,6 @@
 <config>
- 	@xtamano 10
- 	@ytamano 10
+ 	@xtamano 13
+ 	@ytamano 13
  	@xjugador 0
  	@yjugador 0
  	@vidas 30
@@ -10,6 +10,7 @@
  	@wvidas 1
  	@mod 'Minecraft'
 <ejecutar>
+colocar_salida(0,0);
 #Colocamos el wumpus
 repetir
 	colocar_wumpus(aleatorio(@xtamano), aleatorio(@ytamano));
@@ -39,7 +40,6 @@ repetir
 	colocar_tesoro(aleatorio(@xtamano), aleatorio(@ytamano));
 hasta (@resultado);
 #Colocamos la salida en el lugar inicial
-colocar_salida(0,0);
 #Bucle principal
 escribir('Para jugar, use las teclas de direccion');
 vivo = 1;
