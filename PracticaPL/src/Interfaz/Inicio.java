@@ -196,21 +196,6 @@ public class Inicio {
 		jtConsola.setEditable(false);
 		jtConsola.setFocusable(false);
 		
-		jtConsola.getDocument().addDocumentListener(new DocumentListener() {
-				@Override
-				public void changedUpdate(DocumentEvent arg0) {
-				}
-				@Override
-				public void insertUpdate(DocumentEvent arg0) {
-					try{
-						//jtConsola.setCaretPosition(jtConsola.getLineStartOffset(jtConsola.getLineCount()-1));
-					}catch(Exception ex){}
-					
-				}
-				@Override
-				public void removeUpdate(DocumentEvent arg0) {					
-				}
-		});
 		JScrollPane jsScroll= new JScrollPane(jtConsola);
 		jsScroll.setBounds(50*sizeX+50, getAlturaMenos(45)+25, 330, getAlturaMenos(75));
 		ventana.add(jsScroll);
