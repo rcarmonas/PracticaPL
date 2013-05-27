@@ -178,8 +178,7 @@ LIT_NUMERO :
       
 // Cadena que permite incluir saltos de línea
 LIT_CADENA: '\''! 
-                ( options {greedy=false;}: ~('\\')
-                 | "\\\'")* 
+                ( options {greedy=false;}: ~('\\') | "\\"("\'"|'n'))*
             '\''!
           ;
 

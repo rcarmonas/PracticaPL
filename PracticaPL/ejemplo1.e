@@ -25,7 +25,7 @@ borrar;
 lugar(10,10);
 escribir_cadena(' Bienvenido/a << ');
 escribir_cadena(nombre);
-escribir_cadena(' >> al intÃ©rprete de pseudocódigo en español:\'ipe.exe\'.');
+escribir_cadena(' >> al intérprete de pseudocódigo en español:\'ipe.exe\'.');
 
 lugar(40,10);
 escribir_cadena('Pulsa una tecla para continuar');
