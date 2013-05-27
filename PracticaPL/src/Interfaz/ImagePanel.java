@@ -56,18 +56,9 @@ public class ImagePanel extends JPanel{
 			bVector[Inicio.tesoro] = false;
 
 			if(bVector[Inicio.mina] == true){
-				new Thread(){
-					public void run(){
-						try {
-							Thread.sleep(2000);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-					}
-				};
+				Runnable r = new BorraMina(this);
+				new Thread(r).start();
 			}
-
-			bVector[Inicio.mina] = false;
 		}
 		//repintar
 		paintComponent(getGraphics());
