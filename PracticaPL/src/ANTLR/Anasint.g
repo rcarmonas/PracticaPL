@@ -916,8 +916,8 @@ lugar
 	{Expresion x, y;}
 	: LUGAR PARENT_IZ x=expresion[ejecutar] COMA y=expresion[ejecutar] PARENT_DE PUNTO_COMA
 	{
-		double valx = Double.parseDouble(x._valor);
-		double valy = Double.parseDouble(y._valor);
+		double valx = Double.parseDouble(y._valor);
+		double valy = Double.parseDouble(x._valor);
 		if(ejecutar)
 		{
 			if(interfaz.jtConsola.getLineCount()<valy)
