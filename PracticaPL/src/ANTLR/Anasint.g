@@ -1092,7 +1092,7 @@ colocarJugador
 		{
 			int valX = (int)Double.parseDouble(e1._valor);
 			int valY = (int)Double.parseDouble(e2._valor);
-			interfaz.setPlayer(valX, valY);
+			interfaz.setPlayer(valX, valY, false);
 		}
 	}
 	;
@@ -1437,8 +1437,8 @@ infoCasilla
 			}
 			else
 			{	
-					int valX = interfaz.jJugador.getX();
-					int valY = interfaz.jJugador.getY();
+					int valX = interfaz.lastX;
+					int valY = interfaz.lastY;
 					resultado.tipo = "numero";
 					resultado._valor = String.valueOf(interfaz.getInfoCasilla(valX, valY));
 			}

@@ -41,6 +41,7 @@ public class Inicio {
 	public boolean resultado = false;
 	public JButton JBArriba, JBAbajo, JBIzquierda, JBDerecha,jBDisparar;
 	public boolean tengoTesoro = false;
+	public int lastX, lastY;
 	
 
 /*	public static void main(String[] args){
@@ -254,7 +255,7 @@ public class Inicio {
 	 */
 	public boolean mover(int iMovX, int iMovY){
 
-		resultado = setPlayer(iMovX + jJugador.getX(), iMovY + jJugador.getY());
+		resultado = setPlayer(iMovX + jJugador.getX(), iMovY + jJugador.getY(), false);
 		return resultado;
 		
 	}
@@ -526,10 +527,10 @@ public class Inicio {
 	 * @param y Coordenada y
 	 * @return true en caso de exito y false en caso de error
 	 */
-	public boolean setPlayer(int x, int y){
+	public boolean setPlayer(int x, int y, boolean reinicio){
 		
 		ImagePanel ipAux = matrizIP[jJugador.getX()][jJugador.getY()];
-
+		
 		if(x >= 0 && x < rejillaX && y >= 0 && y < rejillaY){
 			//Quita al jugador de la casilla donde estaba
 			ipAux.cambiarImagen(false);
@@ -538,6 +539,11 @@ public class Inicio {
 			jJugador.setX(x);
 			jJugador.setY(y);
 			
+			if(!reinicio)
+			{
+				lastX = x;
+				lastY = y;
+			}
 
 			ipAux = matrizIP[jJugador.getX()][jJugador.getY()];
 			ipAux.cambiarImagen(true);
@@ -582,7 +588,7 @@ public class Inicio {
 		this.lblVidas.setText("" + jJugador.getVidas());
 
 		//Mover a la casilla de salida
-		setPlayer(jJugador.xIni, jJugador.yIni);
+		setPlayer(jJugador.xIni, jJugador.yIni, true);
 
 		//Quitar tesoro
 		this.tengoTesoro = false;
