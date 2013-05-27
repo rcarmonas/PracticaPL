@@ -70,7 +70,6 @@ public class Test
 			}
 		}
 
-
 		// Control de excepciones de ANTLR
 		catch(ANTLRException ae) 
 		{

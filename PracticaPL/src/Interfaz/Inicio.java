@@ -31,7 +31,7 @@ public class Inicio {
 	public Jugador jJugador;
 	public Wumpus jWumpus = null;
 	ImagePanel matrizIP[][];
-	public int rejillaX, rejillaY;
+	public int rejillaX, rejillaY, tesoroX, tesoroY;
 	JLabel lblVidas;
 	JLabel lblFlechas;
 	JLabel lblTesoro;
@@ -422,6 +422,15 @@ public class Inicio {
 	 * @param y Coordenada y
 	 */
 	public void setTreasure(int x, int y){
+		if(x == -1 && y == -1){
+			x = tesoroX;
+			y = tesoroY;
+		}
+		else{
+			tesoroX = x;
+			tesoroY = y;
+		}
+		
 		resultado = false;
 		if(x>=0 && x<rejillaX && y>=0 && y<rejillaY)
 		{
@@ -521,12 +530,10 @@ public class Inicio {
 
 			ipAux = matrizIP[jJugador.getX()][jJugador.getY()];
 			ipAux.cambiarImagen(true);
+			
 			if(ipAux.bVector[mina])
-			{
-				jJugador.setVidas(jJugador.getVidas() - 1);
-				this.lblVidas.setText(jJugador.getVidas()+"");
-				setPlayer(jJugador.xIni, jJugador.yIni);
-			}
+				muerto();
+
 			if(ipAux.bVector[flecha])
 			{
 				jJugador.setFlechas(jJugador.getFlechas() + 1);
@@ -543,23 +550,34 @@ public class Inicio {
 				this.lblTesoro.setVisible(true);
 			}
 			if(jJugador.getX()==jWumpus.getX()&&jJugador.getY()==jWumpus.getY())
-			{
-				jJugador.setVidas(jJugador.getVidas() - 1);
-				this.lblVidas.setText("" + jJugador.getVidas());
-				setPlayer(jJugador.xIni, jJugador.yIni);
-			}
+				muerto();
+
 			if(ipAux.bVector[pozo])
-			{
-				jJugador.setVidas(jJugador.getVidas() - 1);
-				this.lblVidas.setText(""+ jJugador.getVidas());
-				setPlayer(jJugador.xIni, jJugador.yIni);
-			}
+				muerto();
 			
 		}
 		else
 			return false;
 
 		return true;
+	}
+	
+	/**
+	 * Función llamada cuando el jugador pierde una vida
+	 */
+	void muerto(){
+		//Quitar vida
+		jJugador.setVidas(jJugador.getVidas() - 1);
+		this.lblVidas.setText("" + jJugador.getVidas());
+
+		//Mover a la casilla de salida
+		setPlayer(jJugador.xIni, jJugador.yIni);
+
+		//Quitar tesoro
+		this.tengoTesoro = false;
+		this.lblTesoro.setVisible(false);
+		setTreasure(-1, -1);
+		
 	}
 	
 	/**

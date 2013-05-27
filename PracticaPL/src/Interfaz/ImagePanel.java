@@ -54,6 +54,19 @@ public class ImagePanel extends JPanel{
 			bVector[Inicio.flecha] = false;
 			bVector[Inicio.ambrosia] = false;
 			bVector[Inicio.tesoro] = false;
+
+			if(bVector[Inicio.mina] == true){
+				new Thread(){
+					public void run(){
+						try {
+							Thread.sleep(2000);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					}
+				};
+			}
+
 			bVector[Inicio.mina] = false;
 		}
 		//repintar
