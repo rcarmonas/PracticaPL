@@ -35,6 +35,7 @@ public class Inicio {
 	JLabel lblVidas;
 	JLabel lblFlechas;
 	JLabel lblTesoro;
+	JLabel lblWumpus;
 	public JTextField jtEntrada;
 	public JTextArea jtConsola;
 	public boolean resultado = false;
@@ -79,8 +80,8 @@ public class Inicio {
 		//creacion de la ventana
 		ventana = new JFrame();
 		ventana.setTitle("Mundo Wumpus");
-		if(sizeY*50+80<450)
-			ventana.setSize(sizeX*50+400, 450);
+		if(sizeY*50+80<500)
+			ventana.setSize(sizeX*50+400, 500);
 		else
 			ventana.setSize(sizeX*50+400, sizeY*50+80);
 
@@ -131,14 +132,23 @@ public class Inicio {
 
 		imgIcon = new ImageIcon("img/tesoro.png");
 	    img = imgIcon.getImage();
-	    img = img.getScaledInstance(20, 20,  java.awt.Image.SCALE_SMOOTH);  
+	    img = img.getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH);  
 	    imgIcon = new ImageIcon(img);
 		lblTesoro = new JLabel(imgIcon);
-		lblTesoro.setBounds(0,60,50,50);
+		lblTesoro.setBounds(0,80,30,30);
 		lblTesoro.setVisible(false);
 		jpEstado.add(lblTesoro);
+		
+		imgIcon = new ImageIcon("img/Iconos/Wumpus_muerto.png");
+	    img = imgIcon.getImage();
+	    img = img.getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH);  
+	    imgIcon = new ImageIcon(img);
+		lblWumpus = new JLabel(imgIcon);
+		lblWumpus.setBounds(40,80,30,30);
+		lblWumpus.setVisible(false);
+		jpEstado.add(lblWumpus);
 	    
-		jpEstado.setBounds(50*sizeX+180, getAlturaMenos(99), 100, 100);
+		jpEstado.setBounds(50*sizeX+180, getAlturaMenos(99), 100, 120);
 		ventana.add(jpEstado);
 		
 		/**
@@ -170,7 +180,7 @@ public class Inicio {
 		jpBotones.add(jBDisparar);
 		jBDisparar.setBounds(41,59,30,30);
 		
-		jpBotones.setBounds(50*sizeX+150, getAlturaMenos(75), 150, 150);
+		jpBotones.setBounds(50*sizeX+150, getAlturaMenos(73), 150, 150);
 		ventana.add(jpBotones);
 		
 		/**
@@ -374,6 +384,7 @@ public class Inicio {
 					{
 						matrizIP[iAuxX][iAuxY].changeParameter(wumpus, false);
 						jWumpus.setX(-1);
+						lblWumpus.setVisible(true);
 					}
 					break;
 				} 
