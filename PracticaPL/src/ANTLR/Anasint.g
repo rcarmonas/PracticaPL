@@ -920,7 +920,26 @@ lugar
 		double valy = Double.parseDouble(y._valor);
 		if(ejecutar)
 		{
-			interfaz.jtConsola.setCaretPosition(interfaz.jtConsola.getLineStartOffset((int)valy)+(int)valx);
+			if(interfaz.jtConsola.getLineCount()<valy)
+			{
+				int diferencia=(int)valy-interfaz.jtConsola.getLineCount();
+				for(int i=0;i<diferencia;i++)
+				{
+					interfaz.jtConsola.append("\n");
+					interfaz.jtConsola.setCaretPosition(interfaz.jtConsola.getCaretPosition()+1);
+				}
+			}
+			int diferencia=interfaz.jtConsola.getLineEndOffset((int)valy-1)-interfaz.jtConsola.getLineStartOffset((int)valy-1);
+			if(diferencia<valx)
+			{
+				interfaz.jtConsola.setCaretPosition(interfaz.jtConsola.getLineStartOffset((int)valy-1));
+				for(int i=0;i<valx-diferencia;i++)
+				{
+					interfaz.jtConsola.insert(" ",interfaz.jtConsola.getCaretPosition());
+					interfaz.jtConsola.setCaretPosition(interfaz.jtConsola.getCaretPosition()+1);
+				}
+			}
+			interfaz.jtConsola.setCaretPosition(interfaz.jtConsola.getLineStartOffset((int)valy-1)+(int)valx);
 		}
 	}
 	;
