@@ -40,13 +40,6 @@ public class Inicio {
 	public JButton JBArriba, JBAbajo, JBIzquierda, JBDerecha,jBDisparar;
 	public boolean tengoTesoro = false;
 	public int lastX, lastY;
-	
-
-/*	public static void main(String[] args){
-		Inicio i = new Inicio(10, 10, 0, 0, 3, 2);
-		i.setWumpus(5, 5);
-		i.tiraFlecha(Tecla.DERECHA);
-	}*/
 
 /**
  * Constructor
@@ -74,11 +67,14 @@ public class Inicio {
 		for(i=0; i<sizeX; i++)
 			for(j=0; j<sizeY; j++)
 				matrizIP[i][j] = new ImagePanel(mod);
+
 		matrizIP[jJugador.getX()][jJugador.getY()].initializeParameter(desconocido, false);
 		matrizIP[jJugador.getX()][jJugador.getY()].initializeParameter(jugador, true);
+
 		//creacion de la ventana
 		ventana = new JFrame();
 		ventana.setTitle("Mundo Wumpus");
+
 		if(sizeY*50+80<500)
 			ventana.setSize(sizeX*50+400, 500);
 		else
@@ -111,7 +107,7 @@ public class Inicio {
 		JLabel lblmVidas = new JLabel(imgIcon);
 		lblmVidas.setBounds(20,20,50,50);
 		jpEstado.add(lblmVidas);
-		
+
 		lblVidas = new JLabel(""+jJugador.getVidas());
 	    lblVidas.setBounds(0, 20,50,50);
 		jpEstado.add(lblVidas);
@@ -129,7 +125,7 @@ public class Inicio {
 		lblFlechas.setBounds(0,40,50,50);
 		jpEstado.add(lblFlechas);
 
-		imgIcon = new ImageIcon("img/tesoro.png");
+		imgIcon = new ImageIcon("img/Iconos/tesoro.png");
 	    img = imgIcon.getImage();
 	    img = img.getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH);  
 	    imgIcon = new ImageIcon(img);
@@ -204,6 +200,7 @@ public class Inicio {
 		jtEntrada.setBounds(50*sizeX+50, getAlturaMenos(45)+30+getAlturaMenos(75), 330, 20);
 		ventana.add(jtEntrada);
 	}
+
 	public JButton crearBoton(String icono1,String icono2,int x,int y)
 	{
 		ImageIcon imgIcon = new ImageIcon(icono1);
@@ -224,6 +221,7 @@ public class Inicio {
 		JB.setRolloverIcon(imgIcon);
 		return JB;
 	}
+
 	public int getAlturaMenos(int porcentaje)
 	{
 		return(ventana.getHeight()-porcentaje*ventana.getHeight()/100);
@@ -252,6 +250,7 @@ public class Inicio {
 		if(x>=0 && x<rejillaX && y>=0 && y<rejillaY)
 		{
 			boolean colision = false;
+
 			for(int i=0; i<11; i++)
 			{ 
 				if(colisiones[i]&&matrizIP[x][y].bVector[i])
@@ -281,12 +280,14 @@ public class Inicio {
 	 */
 	public void setWumpus(int x, int y){
 		resultado = false;
+
 		if(x>=0 && x<rejillaX && y>=0 && y<rejillaY && !matrizIP[x][y].bVector[pozo] 
 					&& !matrizIP[x][y].bVector[puerta]
 					&& !matrizIP[x][y].bVector[jugador]
 					&& jWumpus.getVidas() > 0)
 		{
 			matrizIP[x][y].changeParameter(flecha, false);
+
 			if(matrizIP[x][y].bVector[ambrosia])
 			{
 				matrizIP[x][y].changeParameter(ambrosia, false);	
@@ -297,8 +298,7 @@ public class Inicio {
 			eraseWumpus(jWumpus.getX(),jWumpus.getY());
 			jWumpus.setX(x);
 			jWumpus.setY(y);
-			
-			
+
 			if(x<rejillaX-1)
 				matrizIP[x+1][y].changeParameter(olor, true);
 			if(x>0)
@@ -310,7 +310,6 @@ public class Inicio {
 	
 			matrizIP[x][y].changeParameter(wumpus, true);
 			resultado = true;
-
 		}
 	}
 
@@ -325,10 +324,13 @@ public class Inicio {
 		{
 			if(x<rejillaX-1)
 				matrizIP[x+1][y].changeParameter(olor, false);
+
 			if(x>0)
 				matrizIP[x-1][y].changeParameter(olor, false);
+
 			if(y<rejillaY-1)
 				matrizIP[x][y+1].changeParameter(olor, false);
+
 			if(y>0)
 				matrizIP[x][y-1].changeParameter(olor, false);
 	
@@ -452,11 +454,13 @@ public class Inicio {
 		if(x>=0 && x<rejillaX && y>=0 && y<rejillaY)
 		{
 			boolean colision = false;
+
 			for(int i=0; i<11; i++)
 			{
 				if(colisiones[i]&&matrizIP[x][y].bVector[i])
 					colision=true;
 			}
+
 			if(!colision)
 			{
 				matrizIP[x][y].changeParameter(ambrosia, true);
@@ -491,10 +495,9 @@ public class Inicio {
 		{
 			boolean colision = false;
 			for(int i=0; i<11; i++)
-			{
 				if(colisiones[i]&&matrizIP[x][y].bVector[i])
 					colision=true;
-			}
+
 			if(!colision)
 			{
 				matrizIP[x][y].changeParameter(mina, true);
@@ -538,16 +541,19 @@ public class Inicio {
 				jJugador.setFlechas(jJugador.getFlechas() + 1);
 				this.lblFlechas.setText(jJugador.getFlechas()+"");
 			}
+
 			if(ipAux.bVector[ambrosia])
 			{
 				jJugador.setVidas(jJugador.getVidas() + 1);
 				this.lblVidas.setText("" + jJugador.getVidas());
 			}
+
 			if(ipAux.bVector[tesoro])
 			{
 				this.tengoTesoro = true;
 				this.lblTesoro.setVisible(true);
 			}
+
 			if(jJugador.getX()==jWumpus.getX()&&jJugador.getY()==jWumpus.getY())
 				muerto();
 
@@ -593,6 +599,7 @@ public class Inicio {
 				aux+=Math.pow(2, i);
 		return aux;
 	}
+
 	/**
 	 * Mueve el wumpus
 	 * @param iMovX Cantidad de casillas que se movera en horizontal
@@ -600,8 +607,8 @@ public class Inicio {
 	 */
 	public void moverWumpus(int iMovX, int iMovY){
 		setWumpus(iMovX + jWumpus.getX(), iMovY + jWumpus.getY());
-		
 	}
+
 	/**
 	 * Muestra un mensaje en una ventana de diálogo
 	 * @param mensaje Mensaje a mostrar
@@ -618,6 +625,7 @@ public class Inicio {
 	public int mostrarPregunta(String mensaje){
 		return JOptionPane.showConfirmDialog(ventana,mensaje);
 	}
+
 	/**
 	 * Cierra la ventana actual
 	 */
@@ -625,6 +633,7 @@ public class Inicio {
 	{
 		ventana.setVisible(false);
 	}
+
 	/**
 	 * Cambia el cursor de la consola
 	 * @param x posicion donde se pondra el cursor
