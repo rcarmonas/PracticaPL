@@ -12,6 +12,7 @@ header{
 	package ANTLR;
 	import java.util.Scanner;
 	import Interfaz.*;
+	import Excepciones.*;
 	import java.lang.*;
 	import java.util.Random;
 	import javax.swing.text.BadLocationException;
@@ -92,15 +93,26 @@ options
 			}
 		}
 		
-	//Muestra una excepción por consola
-	private	void mostrarExcepcion(RecognitionException re)
+	//Elimina los elementos de una línea para favorecer la recuperación de un error
+	private void recuperacionError(int fin)
 	{
-		System.out.println("Error en la línea " + re.getLine() + " --> " + re.getMessage());
+		try {
+				consume(); 
+    			consumeUntil(fin);
+			} 
+		catch (Exception e) 
+			{
+			}
+	}
+	//Muestra una excepción por consola
+	private	void mostrarExcepcion(RecognitionException re, int fin)
+	{
+		System.err.println("Error en la línea " + re.getLine() + " : " + re.getMessage());
 		if(debug)
 			this.tablaSimbolos.escribirSimbolos();
 		try {
 				consume(); 
-    			consumeUntil(PUNTO_COMA);
+    			consumeUntil(fin);
     			consume();
 			} 
 		catch (Exception e) 
@@ -147,7 +159,7 @@ asignacion
 				if (indice >= 0)
 					tipo = tablaSimbolos.getSimbolo(indice).getTipo();
 				else
-					throw new RecognitionException();
+					throw new UndefinedIdentException(id.getLine(), id.getText());
 					
 				if (!tipo.equals("numero"))
 					throw new RecognitionException();
@@ -191,8 +203,16 @@ asignacion
  		catch [RecognitionException re] {
  			if(debug&&ejecutar)System.out.println("Error en asignacion");
  			if(ejecutar)
-			mostrarExcepcion(re);
+				mostrarExcepcion(re, PUNTO_COMA);
 		 }
+		catch [UndefinedIdentException ex]
+		{
+			if(ejecutar)
+			{
+				ex.printError();
+				recuperacionError(PUNTO_COMA);
+			}
+		}
 
 //-------------------------------------------------------------------------------------------
 //Expresión, y elementos de los que se compone
@@ -204,26 +224,26 @@ expresion
 	(
 		//Suma
 		(
-			OP_MAS e2 = sumando[ejecutar]
+			m:OP_MAS e2 = sumando[ejecutar]
 			{
 				double val1 = Double.parseDouble(resultado._valor);
 				double val2 = Double.parseDouble(e2._valor);
 				if(ejecutar && resultado.tipo.equals(e2.tipo) && resultado.tipo.equals("numero"))
 					resultado._valor = String.valueOf(val1+val2);
 				else if(ejecutar)
-					throw new RecognitionException();
+					throw new WrongTypeException(m.getLine(), "Se esperaba dato numérico");
 			}
 		)
 		|
 		(//Resta
-			OP_MENOS e2 = sumando[ejecutar]
+			me:OP_MENOS e2 = sumando[ejecutar]
 			{
 				double val1 = Double.parseDouble(resultado._valor);
 				double val2 = Double.parseDouble(e2._valor);
 				if(ejecutar && resultado.tipo.equals(e2.tipo) && resultado.tipo.equals("numero"))
 					resultado._valor = String.valueOf(val1-val2);
 				else if(ejecutar)
-					throw new RecognitionException();
+					throw new WrongTypeException(me.getLine(), "Se esperaba dato numérico");
 			}
 		)
 	)*
@@ -234,8 +254,16 @@ expresion
  		catch [RecognitionException re] {
  			if(debug&&ejecutar)System.out.println("Error en expresion");
  			if(ejecutar)
-			mostrarExcepcion(re);
-		 }		
+			mostrarExcepcion(re, PUNTO_COMA);
+		 }
+		catch [WrongTypeException ex]
+		{
+			if(ejecutar)
+			{
+				ex.printError();
+				recuperacionError(PUNTO_COMA);	
+			}
+		}
 
 
 sumando
@@ -248,38 +276,38 @@ sumando
 	(
 		//Producto
 		(
-			OP_PRODUCTO e2 = factor[ejecutar]
+			p:OP_PRODUCTO e2 = factor[ejecutar]
 			{
 				double val1 = Double.parseDouble(resultado._valor);
 				double val2 = Double.parseDouble(e2._valor);
 				if(ejecutar && resultado.tipo.equals(e2.tipo)&& resultado.tipo.equals("numero"))
 					resultado._valor = String.valueOf(val1*val2);
 				else if(ejecutar)
-					throw new RecognitionException();			
+					throw new WrongTypeException(p.getLine(), "Se esperaba dato numérico");
 			}
 		)
 		|
 		(//División
-			OP_DIVISION e2 = factor[ejecutar]
+			d:OP_DIVISION e2 = factor[ejecutar]
 				{
 					double val1 = Double.parseDouble(resultado._valor);
 					double val2 = Double.parseDouble(e2._valor);
 					if(ejecutar && resultado.tipo.equals(e2.tipo) && resultado.tipo.equals("numero")) 
 						resultado._valor = String.valueOf(val1/val2);
 					else if(ejecutar)
-						throw new RecognitionException();	
+						throw new WrongTypeException(d.getLine(), "Se esperaba dato numérico");
 				}
 		)
 		|
 		(//Módulo
-			MOD e2 = factor[ejecutar]
+			m:MOD e2 = factor[ejecutar]
 				{
 					double val1 = Double.parseDouble(resultado._valor);
 					double val2 = Double.parseDouble(e2._valor);
 					if(ejecutar && resultado.tipo.equals(e2.tipo) && resultado.tipo.equals("numero"))
 						resultado._valor = String.valueOf((int)val1%(int)val2);
 					else if(ejecutar)
-						throw new RecognitionException();	
+						throw new WrongTypeException(m.getLine(), "Se esperaba dato numérico");
 				}
 		)
 	)*
@@ -289,8 +317,16 @@ sumando
  		catch [RecognitionException re] {
  			if(debug&&ejecutar)System.out.println("Error en sumando");
  			if(ejecutar)
-			mostrarExcepcion(re);
+			mostrarExcepcion(re, PUNTO_COMA);
 		 }
+		catch [WrongTypeException ex]
+		{
+			if(ejecutar)
+			{
+				ex.printError();
+				recuperacionError(PUNTO_COMA);	
+			}
+		}
 		
 factor
 	[boolean ejecutar]
@@ -299,24 +335,24 @@ factor
 	:(e1=termino[ejecutar]{resultado = e1;})
 	(
 		(
-			OP_POTENCIA e2 = termino[ejecutar]
+			p:OP_POTENCIA e2 = termino[ejecutar]
 			{
 				double val1 = Double.parseDouble(resultado._valor);
 				double val2 = Double.parseDouble(e2._valor);
 				if(ejecutar && resultado.tipo.equals(e2.tipo) && resultado.tipo.equals("numero"))
 					resultado._valor = String.valueOf(Math.pow(val1, val2));
 				else if(ejecutar)
-					throw new RecognitionException();			
+					throw new WrongTypeException(p.getLine(), "Se esperaba dato numérico");
 			}
 		)
 		|
 		(
-			OP_CONCATENACION e2 = termino[ejecutar]
+			c:OP_CONCATENACION e2 = termino[ejecutar]
 				{
 					if(ejecutar && resultado.tipo.equals(e2.tipo)&& resultado.tipo.equals("cadena"))
 						resultado._valor = resultado._valor + e2._valor;
 					else if(ejecutar)
-						throw new RecognitionException();	
+						throw new WrongTypeException(c.getLine(), "Se esperaba dato alfanumérico");
 				}
 		)
 	)*
@@ -326,8 +362,16 @@ factor
  		catch [RecognitionException re] {
  			if(debug&&ejecutar)System.out.println("Error en factor");
  			if(ejecutar)
-			mostrarExcepcion(re);
+			mostrarExcepcion(re, PUNTO_COMA);
 		 }
+		catch [WrongTypeException ex]
+		{
+			if(ejecutar)
+			{
+				ex.printError();
+				recuperacionError(PUNTO_COMA);	
+			}
+		}
 	
 termino
 	[boolean ejecutar]
@@ -365,8 +409,7 @@ termino
 			}
 			else if(ejecutar)
 			{
-				System.err.println("Error: el identificador " + i.getText() + " está indefinido");
-				throw new RecognitionException();
+				throw new UndefinedIdentException(i.getLine(), i.getText());
 			}
 			else
 			{
@@ -378,7 +421,7 @@ termino
       	  {
 	      		resultado = e;	      	
 	      } 
-	   )|( OP_MENOS e=termino[ejecutar]
+	   )|( m:OP_MENOS e=termino[ejecutar]
 	   	{
 	   		if(e.tipo.equals("numero"))
 	   		{
@@ -386,7 +429,7 @@ termino
 	   			resultado.tipo = "numero";
 	   		}
 	   		else if(ejecutar)
-	   			throw new RecognitionException();
+				throw new WrongTypeException(m.getLine(), "Se esperaba dato numérico");
 	   		else
 	   		{
 	   			resultado._valor = "0";
@@ -399,7 +442,7 @@ termino
 	   		 	resultado = e;
 	   		else if(!ejecutar)
 	   		{
-				System.err.println("Se esperaba expresion numérica , no alfanumérica");
+				throw new WrongTypeException(-1, "Se esperaba dato numérico");
 	   		}
 	   }
 	   )
@@ -410,8 +453,24 @@ termino
  		catch [RecognitionException re] {
  			if(debug&&ejecutar)System.out.println("Error en termino");
  			if(ejecutar)
-				mostrarExcepcion(re);
+				mostrarExcepcion(re, PUNTO_COMA);
 		 }
+		catch [WrongTypeException ex]
+		{
+			if(ejecutar)
+			{
+				ex.printError();
+				recuperacionError(PUNTO_COMA);	
+			}
+		}
+		catch [UndefinedIdentException exId]
+		{
+			if(ejecutar)
+			{
+				exId.printError();
+				recuperacionError(PUNTO_COMA);	
+			}
+		}
 
 //-------------------------------------------------------------------------------------------
 //Funciones de lectura/escritura
@@ -438,7 +497,7 @@ leer
  		catch [RecognitionException re] {
  			if(debug&&ejecutar)System.out.println("Error en leer");
  			if(ejecutar)
-			mostrarExcepcion(re);
+			mostrarExcepcion(re, PUNTO_COMA);
 		 }
 
 
@@ -463,7 +522,7 @@ leerCadena
 	exception
  		catch [RecognitionException re] {
  			if(ejecutar)
-			mostrarExcepcion(re);
+			mostrarExcepcion(re, PUNTO_COMA);
 		 }
 		
 lectura
@@ -473,7 +532,7 @@ lectura
 	exception
  		catch [RecognitionException re] {
  			if(ejecutar)
-			mostrarExcepcion(re);
+			mostrarExcepcion(re, PUNTO_COMA);
 		 }
 		
 escribir 
@@ -492,7 +551,7 @@ escribir
 	exception
  		catch [RecognitionException re] {
  			if(ejecutar)
-			mostrarExcepcion(re);
+			mostrarExcepcion(re, PUNTO_COMA);
 		 }
 
 escribirCadena 
@@ -510,7 +569,7 @@ escribirCadena
 	exception
  		catch [RecognitionException re] {
  			if(ejecutar)
-				mostrarExcepcion(re);
+				mostrarExcepcion(re, PUNTO_COMA);
 		 }
 			
 escritura 
@@ -520,7 +579,7 @@ escritura
 	exception
  		catch [RecognitionException re] {
  			if(ejecutar)
-			mostrarExcepcion(re);
+			mostrarExcepcion(re, PUNTO_COMA);
 		 }
 
 mensaje 
@@ -538,7 +597,7 @@ mensaje
 	exception
  		catch [RecognitionException re] {
  			if(ejecutar)
-				mostrarExcepcion(re);
+				mostrarExcepcion(re, PUNTO_COMA);
 		 }
 		
 pregunta
@@ -558,7 +617,7 @@ pregunta
 	exception
  		catch [RecognitionException re] {
  			if(ejecutar)
-				mostrarExcepcion(re);
+				mostrarExcepcion(re, PUNTO_COMA);
 		 }
 
 //-------------------------------------------------------------------------------------------
@@ -600,11 +659,11 @@ termino_cond
 					}
 			}
 		)|(
-			OP_MAYOR e2=expresion[ejecutar]
+			m:OP_MAYOR e2=expresion[ejecutar]
 			{
 				if(ejecutar)
 					if(e2.tipo.equals("cadena"))
-						throw new RecognitionException();
+						throw new WrongTypeException(m.getLine(), "Se esperadaba dato numérico");
 					else
 					{
 						double val1 = Double.parseDouble(e1._valor);
@@ -613,11 +672,11 @@ termino_cond
 					}
 			}
 		)|(
-			OP_MENOR e2=expresion[ejecutar]
+			me:OP_MENOR e2=expresion[ejecutar]
 			{
 				if(ejecutar)
 					if(e2.tipo.equals("cadena"))
-						throw new RecognitionException();
+						throw new WrongTypeException(me.getLine(), "Se esperadaba dato numérico");
 					else
 					{
 						double val1 = Double.parseDouble(e1._valor);
@@ -626,11 +685,11 @@ termino_cond
 					}
 			}
 		)|(
-			OP_MAYOR_IGUAL e2=expresion[ejecutar]
+			mi:OP_MAYOR_IGUAL e2=expresion[ejecutar]
 			{
 				if(ejecutar)
 					if(e2.tipo.equals("cadena"))
-						throw new RecognitionException();
+						throw new WrongTypeException(mi.getLine(), "Se esperadaba dato numérico");
 					else
 					{
 						double val1 = Double.parseDouble(e1._valor);
@@ -639,11 +698,11 @@ termino_cond
 					}
 			}
 		)|(
-			OP_MENOR_IGUAL e2=expresion[ejecutar]
+			mei:OP_MENOR_IGUAL e2=expresion[ejecutar]
 			{
 						if(ejecutar)
 					if(e2.tipo.equals("cadena"))
-						throw new RecognitionException();
+						throw new WrongTypeException(mei.getLine(), "Se esperadaba dato numérico");
 					else
 					{
 						double val1 = Double.parseDouble(e1._valor);
@@ -672,8 +731,14 @@ termino_cond
 
  			if(debug&&ejecutar)System.out.println("Error en termino_cond");
  			if(ejecutar)
-			mostrarExcepcion(re);
+				mostrarExcepcion(re, PARENT_DE);
+			resultado = false;
 		 }
+		catch [WrongTypeException ex]
+		{
+			ex.printError();
+			recuperacionError(PARENT_DE);
+		}
 		
 
 factor_cond
@@ -702,7 +767,7 @@ factor_cond
  		catch [RecognitionException re] {
  			 if(debug&&ejecutar)System.out.println("Error en factor_cond");
  			 if(ejecutar)
-			mostrarExcepcion(re);
+			mostrarExcepcion(re, PARENT_DE);
 		 }
 
 		
@@ -724,7 +789,7 @@ sumando_cond
  		catch [RecognitionException re] {
  			if(debug&&ejecutar)System.out.println("Error en sumando_cond");
  			if(ejecutar)
-			mostrarExcepcion(re);
+			mostrarExcepcion(re, PARENT_DE);
 		 }
 	
 	
@@ -747,7 +812,7 @@ condicion
  		catch [RecognitionException re] {
 			if(debug&&ejecutar)System.out.println("Error en condicion");
 			if(ejecutar)
-			mostrarExcepcion(re);
+			mostrarExcepcion(re, PARENT_DE);
 		 }
 
 
@@ -770,7 +835,10 @@ sentencia_si
 	exception
  		catch [RecognitionException re] {
  			if(ejecutar)
-			mostrarExcepcion(re);
+ 			{
+				mostrarExcepcion(re, FIN_SI);
+				consume();
+ 			}
 		 }
 		
 //-------------------------------------------------------------------------------------------
@@ -797,7 +865,10 @@ bucle_mientras
 	exception
  		catch [RecognitionException re] {
  			if(ejecutar)
-				mostrarExcepcion(re);
+ 			{
+				mostrarExcepcion(re, FIN_MIENTRAS);
+ 			}
+				consume();
 		 }
 		catch [StackOverflowError re]
 		{
@@ -831,7 +902,10 @@ bucle_repetir
 	exception
  		catch [RecognitionException re] {
  			if(ejecutar)
-			mostrarExcepcion(re);
+ 			{
+				mostrarExcepcion(re, PUNTO_COMA);
+				consume();
+ 			}
 		 }
 		catch [StackOverflowError re]
 		{
@@ -884,7 +958,10 @@ cuerpo_bucle_para
 	exception
  		catch [RecognitionException re] {
  			if(ejecutar)
-			mostrarExcepcion(re);
+ 			{
+				mostrarExcepcion(re, FIN_PARA);
+				consume();
+ 			}
 		 }
 		catch [StackOverflowError re]
 		{
@@ -914,7 +991,11 @@ bucle_para
 	;
 	exception
  		catch [RecognitionException re] {
-			mostrarExcepcion(re);
+ 			if(ejecutar)
+ 			{
+				mostrarExcepcion(re, FIN_PARA );
+				consume();
+ 			}
 		 }
 		
 //-------------------------------------------------------------------------------------------
@@ -930,7 +1011,7 @@ borrar
 	exception
  		catch [RecognitionException re] {
  			if(ejecutar)
-			mostrarExcepcion(re);
+				mostrarExcepcion(re, PUNTO_COMA);
 		 }
 		
 		
@@ -968,11 +1049,13 @@ lugar
 	;
 	exception
  		catch [RecognitionException re] {
-			mostrarExcepcion(re);
+			mostrarExcepcion(re, PUNTO_COMA);
 		 }
 		catch [BadLocationException be] {
+			System.err.println("Error en el cursor de la consola");
 		 }
 		catch [IllegalArgumentException ie] {
+			System.err.println("Error en el cursor de la consola");
 		 }
 
 
@@ -984,12 +1067,11 @@ colocarAmbrosia
 	[boolean ejecutar]
 	{Expresion e1, e2;}
 	:
-	SET_AMBROSIA PARENT_IZ e1=expresion[ejecutar] COMA e2=expresion[ejecutar] PARENT_DE PUNTO_COMA
+	s:SET_AMBROSIA PARENT_IZ e1=expresion[ejecutar] COMA e2=expresion[ejecutar] PARENT_DE PUNTO_COMA
 	{
 		if((e1.tipo.equals("cadena") || e2.tipo.equals("cadena"))&& ejecutar)
 		{
-			System.err.println("Se esperaba expresion numérica , no alfanumérica");
-			throw new RecognitionException();
+			throw new WrongTypeException(s.getLine(), "Se esperaba dato numérico");
 		}
 		else if(ejecutar)
 		{
@@ -1001,19 +1083,23 @@ colocarAmbrosia
 	;
 	exception
  		catch [RecognitionException re] {
-			mostrarExcepcion(re);
+			mostrarExcepcion(re, PUNTO_COMA);
 		 }
+		catch [WrongTypeException ex]
+		{
+			ex.printError();
+			recuperacionError(PUNTO_COMA);
+		}
 		
 colocarFlecha
 	[boolean ejecutar]
 	{Expresion e1, e2;}
 	:
-	SET_FLECHA PARENT_IZ e1=expresion[ejecutar] COMA e2=expresion[ejecutar] PARENT_DE PUNTO_COMA
+	s:SET_FLECHA PARENT_IZ e1=expresion[ejecutar] COMA e2=expresion[ejecutar] PARENT_DE PUNTO_COMA
 	{
 		if((e1.tipo.equals("cadena") || e2.tipo.equals("cadena"))&& ejecutar)
 		{
-			System.err.println("Se esperaba expresion numérica , no alfanumérica");
-			throw new RecognitionException();
+			throw new WrongTypeException(s.getLine(), "Se esperaba dato numérico");
 		}
 		else if(ejecutar)
 		{
@@ -1025,19 +1111,24 @@ colocarFlecha
 	;
 	exception
  		catch [RecognitionException re] {
-			mostrarExcepcion(re);
+			mostrarExcepcion(re, PUNTO_COMA);
 		 }
+		catch [WrongTypeException ex]
+		{
+			ex.printError();
+			recuperacionError(PUNTO_COMA);
+		}
 		
 colocarPozo
 	[boolean ejecutar]
 	{Expresion e1, e2;}
 	:
-	SET_POZO PARENT_IZ e1=expresion[ejecutar] COMA e2=expresion[ejecutar] PARENT_DE PUNTO_COMA
+	s:SET_POZO PARENT_IZ e1=expresion[ejecutar] COMA e2=expresion[ejecutar] PARENT_DE PUNTO_COMA
 	{
 		if((e1.tipo.equals("cadena") || e2.tipo.equals("cadena"))&& ejecutar)
 		{
-			System.err.println("Se esperaba expresion numérica , no alfanumérica");
-			throw new RecognitionException();
+			throw new WrongTypeException(s.getLine(), "Se esperaba dato numérico");
+
 		}
 		else if(ejecutar)
 		{
@@ -1049,19 +1140,22 @@ colocarPozo
 	;
 	exception
  		catch [RecognitionException re] {
-			mostrarExcepcion(re);
+			mostrarExcepcion(re, PUNTO_COMA);
 		 }
-
+		catch [WrongTypeException ex]
+		{
+			ex.printError();
+			recuperacionError(PUNTO_COMA);
+		}
 colocarWumpus
 	[boolean ejecutar]
 	{Expresion e1, e2;}
 	:
-	SET_WUMPUS PARENT_IZ e1=expresion[ejecutar] COMA e2=expresion[ejecutar] PARENT_DE PUNTO_COMA
+	s:SET_WUMPUS PARENT_IZ e1=expresion[ejecutar] COMA e2=expresion[ejecutar] PARENT_DE PUNTO_COMA
 	{
 		if((e1.tipo.equals("cadena") || e2.tipo.equals("cadena"))&& ejecutar)
 		{
-			System.err.println("Se esperaba expresion numérica , no alfanumérica");
-			throw new RecognitionException();
+			throw new WrongTypeException(s.getLine(), "Se esperaba dato numérico");
 		}
 		else if(ejecutar)
 		{
@@ -1073,19 +1167,23 @@ colocarWumpus
 	;
 	exception
  		catch [RecognitionException re] {
-			mostrarExcepcion(re);
+			mostrarExcepcion(re, PUNTO_COMA);
 		 }
+		catch [WrongTypeException ex]
+		{
+			ex.printError();
+			recuperacionError(PUNTO_COMA);
+		}
 		
 colocarTesoro
 	[boolean ejecutar]
 	{Expresion e1, e2;}
 	:
-	SET_TESORO PARENT_IZ e1=expresion[ejecutar] COMA e2=expresion[ejecutar] PARENT_DE PUNTO_COMA
+	s:SET_TESORO PARENT_IZ e1=expresion[ejecutar] COMA e2=expresion[ejecutar] PARENT_DE PUNTO_COMA
 	{
 		if((e1.tipo.equals("cadena") || e2.tipo.equals("cadena"))&& ejecutar)
 		{
-			System.err.println("Se esperaba expresion numérica , no alfanumérica");
-			throw new RecognitionException();
+			throw new WrongTypeException(s.getLine(), "Se esperaba dato numérico");
 		}
 		else if(ejecutar)
 		{
@@ -1097,19 +1195,23 @@ colocarTesoro
 	;
 	exception
  		catch [RecognitionException re] {
-			mostrarExcepcion(re);
+			mostrarExcepcion(re, PUNTO_COMA);
 		 }
+		catch [WrongTypeException ex]
+		{
+			ex.printError();
+			recuperacionError(PUNTO_COMA);
+		}
 
 colocarJugador
 	[boolean ejecutar]
 	{Expresion e1, e2;}
 	:
-	SET_JUGADOR PARENT_IZ e1=expresion[ejecutar] COMA e2=expresion[ejecutar] PARENT_DE PUNTO_COMA
+	s:SET_JUGADOR PARENT_IZ e1=expresion[ejecutar] COMA e2=expresion[ejecutar] PARENT_DE PUNTO_COMA
 	{
 		if((e1.tipo.equals("cadena") || e2.tipo.equals("cadena"))&& ejecutar)
 		{
-			System.err.println("Se esperaba expresion numérica , no alfanumérica");
-			throw new RecognitionException();
+			throw new WrongTypeException(s.getLine(), "Se esperaba dato numérico");
 		}
 		else if(ejecutar)
 		{
@@ -1121,19 +1223,23 @@ colocarJugador
 	;
 	exception
  		catch [RecognitionException re] {
-			mostrarExcepcion(re);
+			mostrarExcepcion(re, PUNTO_COMA);
 		 }
+		catch [WrongTypeException ex]
+		{
+			ex.printError();
+			recuperacionError(PUNTO_COMA);
+		}
 
 colocarMina
 	[boolean ejecutar]
 	{Expresion e1, e2;}
 	:
-	SET_MINA PARENT_IZ e1=expresion[ejecutar] COMA e2=expresion[ejecutar] PARENT_DE PUNTO_COMA
+	s:SET_MINA PARENT_IZ e1=expresion[ejecutar] COMA e2=expresion[ejecutar] PARENT_DE PUNTO_COMA
 	{
 		if((e1.tipo.equals("cadena") || e2.tipo.equals("cadena"))&& ejecutar)
 		{
-			System.err.println("Se esperaba expresion numérica , no alfanumérica");
-			throw new RecognitionException();
+			throw new WrongTypeException(s.getLine(), "Se esperaba dato numérico");
 		}
 		else if(ejecutar)
 		{
@@ -1145,19 +1251,23 @@ colocarMina
 	;
 	exception
  		catch [RecognitionException re] {
-			mostrarExcepcion(re);
+			mostrarExcepcion(re, PUNTO_COMA);
 		 }
+		catch [WrongTypeException ex]
+		{
+			ex.printError();
+			recuperacionError(PUNTO_COMA);
+		}
 		
 colocarSalida
 	[boolean ejecutar]
 	{Expresion e1, e2;}
 	:
-	SET_SALIDA PARENT_IZ e1=expresion[ejecutar] COMA e2=expresion[ejecutar] PARENT_DE PUNTO_COMA
+	s:SET_SALIDA PARENT_IZ e1=expresion[ejecutar] COMA e2=expresion[ejecutar] PARENT_DE PUNTO_COMA
 	{
 		if((e1.tipo.equals("cadena") || e2.tipo.equals("cadena"))&& ejecutar)
 		{
-			System.err.println("Se esperaba expresion numérica , no alfanumérica");
-			throw new RecognitionException();
+			throw new WrongTypeException(s.getLine(), "Se esperaba dato numérico");
 		}
 		else if(ejecutar)
 		{
@@ -1169,19 +1279,23 @@ colocarSalida
 	;
 	exception
  		catch [RecognitionException re] {
-			mostrarExcepcion(re);
+			mostrarExcepcion(re, PUNTO_COMA);
 		 }
+		catch [WrongTypeException ex]
+		{
+			ex.printError();
+			recuperacionError(PUNTO_COMA);
+		}
 
 moverWumpus
 [boolean ejecutar]
 	{Expresion e;}
 	:
-	  MOVER_WUMPUS PARENT_IZ e=expresion[ejecutar] PARENT_DE PUNTO_COMA
+	  m:MOVER_WUMPUS PARENT_IZ e=expresion[ejecutar] PARENT_DE PUNTO_COMA
 	{
 		if(e.tipo.equals("cadena") && ejecutar)
 		{
-			System.err.println("Se esperaba expresion numérica , no alfanumérica");
-			throw new RecognitionException();
+			throw new WrongTypeException(m.getLine(), "Se esperaba dato numérico");
 		}
 		else if(ejecutar)
 		{
@@ -1209,19 +1323,23 @@ moverWumpus
 	exception
  		catch [RecognitionException re] {
  			if(ejecutar)
-				mostrarExcepcion(re);
+				mostrarExcepcion(re, PUNTO_COMA);
 		 }
+		catch [WrongTypeException ex]
+		{
+			ex.printError();
+			recuperacionError(PUNTO_COMA);
+		}
 
 pausa
 	[boolean ejecutar]
 	{Expresion e;}
 	:
-	 PAUSA PARENT_IZ e=expresion[ejecutar] PARENT_DE PUNTO_COMA
+	 p:PAUSA PARENT_IZ e=expresion[ejecutar] PARENT_DE PUNTO_COMA
 	{
 		if(e.tipo.equals("cadena") && ejecutar)
 		{
-			System.err.println("Se esperaba expresion numérica , no alfanumérica");
-			throw new RecognitionException();
+			throw new WrongTypeException(p.getLine(), "Se esperaba dato numérico");
 		}
 		else if(ejecutar)
 		{
@@ -1238,8 +1356,13 @@ pausa
 	exception
  		catch [RecognitionException re] {
   			if(ejecutar)
-				mostrarExcepcion(re);
+				mostrarExcepcion(re, PUNTO_COMA);
 		 }
+		catch [WrongTypeException ex]
+		{
+			ex.printError();
+			recuperacionError(PUNTO_COMA);
+		}
 
 pulsacion
 	[boolean ejecutar]
@@ -1268,19 +1391,18 @@ pulsacion
 	exception
  		catch [RecognitionException re] {
  			if(ejecutar)
-				mostrarExcepcion(re);
+				mostrarExcepcion(re, PUNTO_COMA);
 		 }
 		
 moverJugador
 	[boolean ejecutar]
 	{Expresion e;}
 	:
-	  MOVER_JUGADOR PARENT_IZ e=expresion[ejecutar] PARENT_DE PUNTO_COMA
+	  m:MOVER_JUGADOR PARENT_IZ e=expresion[ejecutar] PARENT_DE PUNTO_COMA
 	{
 		if(e.tipo.equals("cadena") && ejecutar)
 		{
-			System.err.println("Se esperaba expresion numérica , no alfanumérica");
-			throw new RecognitionException();
+			throw new WrongTypeException(m.getLine(), "Se esperaba dato numérico");
 		}
 		else if(ejecutar)
 		{
@@ -1309,19 +1431,23 @@ moverJugador
 	exception
  		catch [RecognitionException re] {
  			if(ejecutar)
-				mostrarExcepcion(re);
+				mostrarExcepcion(re, PUNTO_COMA);
 		 }
+		catch [WrongTypeException ex]
+		{
+			ex.printError();
+			recuperacionError(PUNTO_COMA);
+		}
 		
 disparar
 	[boolean ejecutar]
 	{Expresion e;}
 	:
-	  DISPARAR PARENT_IZ e=expresion[ejecutar] PARENT_DE PUNTO_COMA
+	  d:DISPARAR PARENT_IZ e=expresion[ejecutar] PARENT_DE PUNTO_COMA
 	{
 		if(e.tipo.equals("cadena") && ejecutar)
 		{
-			System.err.println("Se esperaba expresion numérica , no alfanumérica");
-			throw new RecognitionException();
+			throw new WrongTypeException(d.getLine(), "Se esperaba dato numérico");
 		}
 		else if(ejecutar)
 		{
@@ -1335,8 +1461,14 @@ disparar
 	exception
  		catch [RecognitionException re] {
  			if(ejecutar)
-				mostrarExcepcion(re);
+				mostrarExcepcion(re, PUNTO_COMA);
 		 }
+		catch [WrongTypeException ex]
+		{
+			ex.printError();
+			recuperacionError(PUNTO_COMA);
+		}
+		
 leerTecla
 	[boolean ejecutar]
 	returns [Expresion resultado = new Expresion()]
@@ -1355,7 +1487,7 @@ leerTecla
 	exception
  		catch [RecognitionException re] {
  			if(ejecutar)
-				mostrarExcepcion(re);
+				mostrarExcepcion(re, PUNTO_COMA);
 		 }
 	
 aleatorio
@@ -1387,7 +1519,7 @@ aleatorio
 	exception
  		catch [RecognitionException re] {
  			if(ejecutar)
-				mostrarExcepcion(re);
+				mostrarExcepcion(re, PUNTO_COMA);
 		 }
 
 direccionAleatoria
@@ -1427,7 +1559,7 @@ direccionAleatoria
 	exception
  		catch [RecognitionException re] {
  			if(ejecutar)
-				mostrarExcepcion(re);
+				mostrarExcepcion(re, PUNTO_COMA);
 		 }
 
 
@@ -1471,7 +1603,7 @@ infoCasilla
 	exception
  		catch [RecognitionException re] {
  			if(ejecutar)
-				mostrarExcepcion(re);
+				mostrarExcepcion(re, PUNTO_COMA);
 		 }
 	
 comprobacion
@@ -1494,7 +1626,7 @@ comprobacion
 	exception
  		catch [RecognitionException re] {
  			if(ejecutar)
-				mostrarExcepcion(re);
+				mostrarExcepcion(re, PUNTO_COMA);
 		 }
 
 salir
@@ -1511,7 +1643,7 @@ salir
 	exception
  		catch [RecognitionException re] {
  			if(ejecutar)
-				mostrarExcepcion(re);
+				mostrarExcepcion(re, PUNTO_COMA);
 		 }
 
 condicionWumpus
@@ -1520,12 +1652,11 @@ condicionWumpus
 	{int tipo;
 	Expresion e;}
 	:
-	(tipo=comprobacion[ejecutar] PARENT_IZ e=expresion[ejecutar] PARENT_DE
+	(tipo=comprobacion[ejecutar] p:PARENT_IZ e=expresion[ejecutar] PARENT_DE
 	{
 		if(ejecutar && e.tipo.equals("cadena"))
 		{
-			System.err.println("Se esperaba dato numérico, no cadena");	
-			throw new RecognitionException();
+			throw new WrongTypeException(p.getLine(), "Se esperaba dato numérico");
 		}
 		else if(ejecutar)
 		{
@@ -1547,8 +1678,13 @@ condicionWumpus
 	exception
  		catch [RecognitionException re] {
  			if(ejecutar)
-				mostrarExcepcion(re);
+				mostrarExcepcion(re, PUNTO_COMA);
 		 }
+		catch [WrongTypeException ex]
+		{
+			ex.printError();
+			recuperacionError(PUNTO_COMA);
+		}
 	
 terminoWumpus
 	[boolean ejecutar]
@@ -1636,7 +1772,7 @@ terminoWumpus
 	exception
  		catch [RecognitionException re] {
  			if(ejecutar)
-				mostrarExcepcion(re);
+				mostrarExcepcion(re, PUNTO_COMA);
 		 }
 
 sentenciaWumpus
@@ -1658,7 +1794,7 @@ sentenciaWumpus
 	;
 	exception
  		catch [RecognitionException re] {
-			mostrarExcepcion(re);
+			mostrarExcepcion(re, PUNTO_COMA);
 		 }
 
 
@@ -1713,7 +1849,7 @@ sentenciasConf
 	;
 	exception
  		catch [RecognitionException re] {
-			mostrarExcepcion(re);
+			mostrarExcepcion(re, PUNTO_COMA);
 		 }
 
 
@@ -1737,7 +1873,7 @@ instruccion
 	exception
  		catch [RecognitionException re] {
  			if(ejecutar)
-			mostrarExcepcion(re);
+			mostrarExcepcion(re, PUNTO_COMA);
 		 }
 		
 
@@ -1759,7 +1895,7 @@ prog:
 	;
 	exception
  		catch [RecognitionException re] {
-			mostrarExcepcion(re);
+			mostrarExcepcion(re, PUNTO_COMA);
 		 }
 
 

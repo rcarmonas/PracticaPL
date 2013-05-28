@@ -16,7 +16,7 @@ repetir
 	colocar_wumpus(aleatorio(@xtamano), aleatorio(@ytamano));
 hasta (@resultado);
 #Colocamos una mina
-para i desde 0 hasta 2000 paso 1 hacer
+para i desde 0 hasta 2 paso 1 hacer
 	repetir
 		colocar_mina(aleatorio(@xtamano), aleatorio(@ytamano));
 	hasta (@resultado);
