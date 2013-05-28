@@ -797,8 +797,16 @@ bucle_mientras
 	exception
  		catch [RecognitionException re] {
  			if(ejecutar)
-			mostrarExcepcion(re);
+				mostrarExcepcion(re);
 		 }
+		catch [StackOverflowError re]
+		{
+			if(ejecutar)
+			{
+				System.err.println("ERROR: Bucle mientras infinito.");
+				System.exit(0);
+			}
+		}
 		
 //-------------------------------------------------------------------------------------------
 // Bucle repetir
@@ -825,7 +833,14 @@ bucle_repetir
  			if(ejecutar)
 			mostrarExcepcion(re);
 		 }
-		
+		catch [StackOverflowError re]
+		{
+			if(ejecutar)
+			{
+				System.err.println("ERROR: Bucle repetir infinito");
+				System.exit(0);
+			}
+		}
 //-------------------------------------------------------------------------------------------
 // Bucle para y partes de las que se compone
 cuerpo_bucle_para
@@ -871,6 +886,14 @@ cuerpo_bucle_para
  			if(ejecutar)
 			mostrarExcepcion(re);
 		 }
+		catch [StackOverflowError re]
+		{
+			if(ejecutar)
+			{
+				System.err.println("ERROR: Bucle para infinito.");
+				System.exit(0);
+			}
+		}
 		
 		
 bucle_para

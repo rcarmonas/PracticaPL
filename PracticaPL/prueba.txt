@@ -8,7 +8,7 @@
  	@xwumpus aleatorio(10)
  	@ywumpus aleatorio(10)
  	@wvidas 1
- 	@mod 'Minecraft'
+ 	@mod 'Mario'
 <ejecutar>
 colocar_salida(0,0);
 #Colocamos el wumpus
@@ -16,7 +16,7 @@ repetir
 	colocar_wumpus(aleatorio(@xtamano), aleatorio(@ytamano));
 hasta (@resultado);
 #Colocamos una mina
-para i desde 0 hasta 2 paso 1 hacer
+para i desde 0 hasta 2000 paso 1 hacer
 	repetir
 		colocar_mina(aleatorio(@xtamano), aleatorio(@ytamano));
 	hasta (@resultado);
