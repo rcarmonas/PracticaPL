@@ -1592,8 +1592,8 @@ infoCasilla
 			}
 			else
 			{	
-					int valX = interfaz.lastX;
-					int valY = interfaz.lastY;
+					int valX = interfaz.jJugador.lastX;
+					int valY = interfaz.jJugador.lastY;
 					resultado.tipo = "numero";
 					resultado._valor = String.valueOf(interfaz.getInfoCasilla(valX, valY));
 			}

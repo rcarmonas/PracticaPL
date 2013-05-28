@@ -40,6 +40,8 @@ tokens
 	ESCRIBIR = "escribir";
 	ESCRIBIR_CADENA = "escribir_cadena";
     ENTONCES = "entonces";
+    SI="si";
+	SI_NO="si_no";
     FIN_SI = "fin_si";
 	MIENTRAS = "mientras";
 	HACER = "hacer";
@@ -148,11 +150,7 @@ IDENT
 	options {testLiterals=true;} 
 	: LETRA(LETRA|DIGITO|('_'(LETRA|DIGITO)))*
 	;
-SI : "si"
-	;
 
-SI_NO : "si_no"
-	;
 
 //Operadores lógicos y de módulo:
 MOD : "__mod"

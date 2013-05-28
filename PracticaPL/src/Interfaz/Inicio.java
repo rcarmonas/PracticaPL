@@ -39,7 +39,6 @@ public class Inicio {
 	public boolean resultado = false;
 	public JButton JBArriba, JBAbajo, JBIzquierda, JBDerecha,jBDisparar;
 	public boolean tengoTesoro = false;
-	public int lastX, lastY;
 
 /**
  * Constructor
@@ -526,8 +525,8 @@ public class Inicio {
 			
 			if(!reinicio)
 			{
-				lastX = x;
-				lastY = y;
+				jJugador.lastX = x;
+				jJugador.lastY = y;
 			}
 
 			ipAux = matrizIP[jJugador.getX()][jJugador.getY()];

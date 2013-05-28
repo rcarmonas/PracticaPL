@@ -5,6 +5,7 @@ public class Jugador {
 	int flechas;
 	int x, y;
 	public int xIni, yIni;
+	public int lastX, lastY;
 
 	Jugador(int i, int j, int vidas, int flechas){
 		this.xIni = i;
