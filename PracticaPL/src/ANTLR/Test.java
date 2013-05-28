@@ -22,6 +22,13 @@ public class Test
 			// Se abre el fichero pasado como argumento de entrada
 			if(args.length>0)
 			{
+				String[] aux = args[0].split("\\.");
+				
+				if(!aux[aux.length-1].equals("e"))
+				{
+					System.err.println("Error: Extensión de fichero errónea");
+					System.exit(0);
+				}
 				FileInputStream fichero =new FileInputStream(args[0]);
 				// Analizador léxico
 				analex = new Analex(fichero);
