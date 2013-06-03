@@ -29,7 +29,7 @@ escribir_cadena(' >> al intérprete de pseudocódigo en español:\'ipe.exe\'.');
 
 lugar(40,10);
 escribir_cadena('Pulsa una tecla para continuar');
-leer_cadena(pausa1);
+leer_cadena(pausa);
 
 
 repetir 
@@ -137,7 +137,7 @@ fin_si;
 
  lugar(40,10); 
  escribir_cadena(' Pulse una tecla para continuar --> ');
- leer_cadena(pausa1);
+ leer_cadena(pausa);
  
 escribir_cadena('La opcion es:');
 escribir(opcion);

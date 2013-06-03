@@ -1806,6 +1806,7 @@ sentenciasConf
 	{
 		Expresion x, y, xP, yP, vidas, flechas, wvidas, xW, yW;
 		Expresion mod = new Expresion();
+		mod._valor = "";
 		boolean modActivo=false;
 	}
 	:

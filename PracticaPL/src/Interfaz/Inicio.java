@@ -61,7 +61,7 @@ public class Inicio {
 		jJugador = new Jugador(playerX, playerY, lives, arrows);
 		matrizIP = new ImagePanel[sizeX][sizeY];
 		jWumpus = new Wumpus(xWumpus, yWumpus, vidasWumpus);
-
+		
 		//inicializacion del tablero
 		for(i=0; i<sizeX; i++)
 			for(j=0; j<sizeY; j++)

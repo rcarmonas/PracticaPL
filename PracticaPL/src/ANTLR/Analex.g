@@ -65,7 +65,7 @@ tokens
 	SET_JUGADOR = "colocar_jugador";
 	SET_MINA = "colocar_mina";
 	SET_SALIDA = "colocar_salida";
-	PAUSA = "pausa";
+	PAUSA = "pausar";
 	MOVER_JUGADOR = "mover_jugador";
 	MOVER_WUMPUS = "mover_wumpus";
 	ALEATORIO = "aleatorio";
