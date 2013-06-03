@@ -938,7 +938,7 @@ cuerpo_bucle_para
 	{
 		double valh = Double.parseDouble(h._valor);
 		double valp = Double.parseDouble(p._valor);
-		if((valp<0 && n>valh)|(valp>0 && n<valh))
+		if((valp<0 && n>=valh)|(valp>0 && n<=valh))
 			valor = true;
 		else
 			valor = false;

@@ -3,7 +3,7 @@
  	@ytamano 13
  	@xjugador 0
  	@yjugador 0
- 	@vidas 30
+ 	@vidas 3
  	@flechas 1
  	@xwumpus aleatorio(10)
  	@ywumpus aleatorio(10)
