@@ -88,9 +88,9 @@ mientras (verdadero) hacer
 		escribir(n1 ** n2);
 	fin_si;
 	si(eleccion==6) entonces #Raiz cuadrada
-				borrar;
+		borrar;
 		lugar(1, 30);
-		escribir_cadena('Resta');
+		escribir_cadena('Raiz cuadrada');
 		lugar(2, 0);
 		escribir_cadena('Introduzca operando: ');
 		leer(n1);
