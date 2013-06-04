@@ -13,12 +13,12 @@ import java.awt.event.KeyListener;
  */
 public class Tecla {
 
-	public static int ARRIBA = 38;
-	public static int ABAJO = 40;
-	public static int DERECHA = 39;
-	public static int IZQUIERDA = 37;
-	public static int ESPACIO = 32;
-	public static int ESCAPE = 27;
+	public final static int ARRIBA = 38;
+	public final static int ABAJO = 40;
+	public final static int DERECHA = 39;
+	public final static int IZQUIERDA = 37;
+	public final static int ESPACIO = 32;
+	public final static int ESCAPE = 27;
 
 
 	int teclaPulsada;

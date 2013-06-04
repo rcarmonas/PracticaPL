@@ -385,6 +385,24 @@ public class Inicio {
 				if(direccion == Tecla.ARRIBA)
 					iAuxY--;
 			}
+			if(!this.resultado)
+			{
+				switch(direccion)
+				{
+				case Tecla.DERECHA:
+					matrizIP[rejillaX-1][iAuxY].changeParameter(flecha, true);
+				break;
+				case Tecla.IZQUIERDA:
+					matrizIP[0][iAuxY].changeParameter(flecha, true);
+				break;
+				case Tecla.ARRIBA:
+					matrizIP[iAuxX][0].changeParameter(flecha, true);
+				break;
+				case Tecla.ABAJO:
+					matrizIP[iAuxX][rejillaY-1].changeParameter(flecha, true);
+				break;
+				}
+			}
 		}
 	}
 
