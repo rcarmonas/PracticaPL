@@ -499,6 +499,11 @@ leer
  			if(ejecutar)
 			mostrarExcepcion(re, PUNTO_COMA);
 		 }
+		catch [NumberFormatException e]
+		{
+			System.err.println("Error en el formato del número a leer");
+			insertarIdentificador(id.getText(), "numero", "0");
+		}
 
 
 leerCadena 
