@@ -1,8 +1,8 @@
 
 FUENTES_AUXILIARES_LEXICOS = src/ANTLR/Analex.java src/ANTLR/AnalexTokenTypes.java
 FUENTES_AUXILIARES_SINTACTICOS = src/ANTLR/Anasint.java  src/ANTLR/AnasintTokenTypes.java src/ANTLR/Variable.java src/ANTLR/TablaSimbolos.java
-FUENTES_INTERFAZ= src/Interfaz/Inicio.java src/Interfaz/BorrarMina.java src/Interfaz/ImagePanel.java src/Interfaz/Jugador.java src/Interfaz/MiKeyListener.java src/Interfaz/Tecla.java src/Interfaz/Wumpus.java
-CLASS = Analex.class Anasint.class  AnalexTokenTypes.class AnasintTokenTypes.class Test.class BorrarMina.class ImagePanel.class Inicio.class Jugador.class MiKeyListener.class Tecla.class Wumpus.class UndefinedIdentException.class WrongTypeException.class
+FUENTES_INTERFAZ= src/Interfaz/Inicio.java src/Interfaz/BorraMina.java src/Interfaz/ImagePanel.java src/Interfaz/Jugador.java src/Interfaz/MiKeyListener.java src/Interfaz/Tecla.java src/Interfaz/Wumpus.java
+CLASS = Analex.class Anasint.class  AnalexTokenTypes.class AnasintTokenTypes.class Test.class BorraMina.class ImagePanel.class Inicio.class Jugador.class MiKeyListener.class Tecla.class Wumpus.class UndefinedIdentException.class WrongTypeException.class
 SMAP = src/ANTLR/Analex.smap  src/ANTLR/Anasint.smap
 TXT = src/ANTLR/AnalexTokenTypes.txt src/ANTLR/AnasintTokenTypes.txt
 FUENTES_EXCEPCIONES= UndefinedIdentException.java WrongTypeException.java
