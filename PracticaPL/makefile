@@ -6,10 +6,10 @@ FUENTES_INTERFAZ= src/Interfaz/Inicio.java src/Interfaz/BorraMina.java src/Inter
 CLASS = Analex.class Anasint.class  AnalexTokenTypes.class AnasintTokenTypes.class Test.class BorraMina.class ImagePanel.class Inicio.class Jugador.class MiKeyListener.class Tecla.class Wumpus.class UndefinedIdentException.class WrongTypeException.class
 SMAP = Analex.smap  Anasint.smap
 TXT = AnalexTokenTypes.txt AnasintTokenTypes.txt
-FUENTES_EXCEPCIONES= UndefinedIdentException.java WrongTypeException.java
+FUENTES_EXCEPCIONES= /src/Excepciones/UndefinedIdentException.java /src/Excepciones/WrongTypeException.java
 
 Test.class: src/ANTLR/Test.java $(FUENTES_AUXILIARES_LEXICOS) $(FUENTES_AUXILIARES_SINTACTICOS) $(TABLA_SIMBOLOS) $(FUENTES_INTERFAZ) $(FUENTES_EXCEPCIONES)
-	javac src/ANTLR/Test.java $(FUENTES_AUXILIARES_LEXICOS) $(FUENTES_AUXILIARES_SINTACTICOS) $(FUENTES_INTERFAZ)
+	javac src/ANTLR/Test.java $(FUENTES_AUXILIARES_LEXICOS) $(FUENTES_AUXILIARES_SINTACTICOS) $(FUENTES_INTERFAZ) $(FUENTES_EXCEPCIONES)
 
 $(FUENTES_AUXILIARES_SINTACTICOS) AnasintTokenTypes.txt: src/ANTLR/Anasint.g
 	java antlr.Tool src/ANTLR/Anasint.g
